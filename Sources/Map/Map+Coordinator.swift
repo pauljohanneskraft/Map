@@ -105,6 +105,7 @@ extension Map {
             #if !os(tvOS)
             mapView.isRotateEnabled = newView.interactionModes.contains(.rotate)
             #endif
+            mapView.isPitchEnabled = newView.interactionModes.contains(.pitch)
         }
 
         private func updateOverlays(on mapView: MKMapView, from previousView: Map?, to newView: Map) {

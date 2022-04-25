@@ -18,10 +18,13 @@ public struct MapInteractionModes: OptionSet {
     @available(tvOS, unavailable)
     public static let rotate = MapInteractionModes(rawValue: 1 << 2)
 
+    @available(tvOS, unavailable)
+    public static let pitch = MapInteractionModes(rawValue: 1 << 3)
+
     #if os(tvOS)
     public static let all = MapInteractionModes(arrayLiteral: .pan, .zoom)
     #else
-    public static let all = MapInteractionModes(arrayLiteral: .pan, .zoom, .rotate)
+    public static let all = MapInteractionModes(arrayLiteral: .pan, .zoom, .rotate, .pitch)
     #endif
 
     // MARK: Stored Properties
