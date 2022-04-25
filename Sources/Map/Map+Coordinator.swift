@@ -95,6 +95,26 @@ extension Map {
             }
         }
 
+        private func updateInformationVisibility(on mapView: MKMapView, from previousView: Map?, to newView: Map) {
+            guard previousView?.informationVisibility != newView.informationVisibility else {
+                return
+            }
+
+            mapView.showsBuildings = newView.informationVisibility.contains(.buildings)
+            #if !os(tvOS)
+            mapView.showsCompass = newView.informationVisibility.contains(.compass)
+            #endif
+            mapView.showsScale = newView.informationVisibility.contains(.scale)
+            mapView.showsTraffic = newView.informationVisibility.contains(.traffic)
+            mapView.showsUserLocation = newView.informationVisibility.contains(.userLocation)
+            #if !os(iOS) && !os(tvOS)
+            mapView.showsZoomControls = newView.informationVisibility.contains(.zoomControls)
+            if #available(macOS 11, *) {
+                mapView.showsPitchControl = newView.informationVisibility.contains(.pitchControl)
+            }
+            #endif
+        }
+
         private func updateInteractionModes(on mapView: MKMapView, from previousView: Map?, to newView: Map) {
             guard previousView?.interactionModes != newView.interactionModes else {
                 return
@@ -104,8 +124,8 @@ extension Map {
             mapView.isZoomEnabled = newView.interactionModes.contains(.zoom)
             #if !os(tvOS)
             mapView.isRotateEnabled = newView.interactionModes.contains(.rotate)
-            #endif
             mapView.isPitchEnabled = newView.interactionModes.contains(.pitch)
+            #endif
         }
 
         private func updateOverlays(on mapView: MKMapView, from previousView: Map?, to newView: Map) {
@@ -131,7 +151,11 @@ extension Map {
                     }
                     overlayContentByObject[objectKey] = content
                     overlayContentByID[item.id] = content
-                    mapView.insertOverlay(content.overlay, at: index)
+                    if let level = content.level {
+                        mapView.insertOverlay(content.overlay, at: index, level: level)
+                    } else {
+                        mapView.insertOverlay(content.overlay, at: index)
+                    }
                 case let .remove(_, item, _):
                     guard let content = overlayContentByID[item.id] else {
                         assertionFailure("Missing overlay content for item \(item) encountered.")
@@ -171,9 +195,6 @@ extension Map {
         }
 
         private func updateUserTracking(on mapView: MKMapView, from previousView: Map?, to newView: Map) {
-            if previousView?.showsUserLocation != newView.showsUserLocation {
-                mapView.showsUserLocation = newView.showsUserLocation
-            }
             if #available(macOS 11, *) {
                 let newTrackingMode = newView.userTrackingMode.actualValue
                 if newView.usesUserTrackingMode, mapView.userTrackingMode != newTrackingMode {

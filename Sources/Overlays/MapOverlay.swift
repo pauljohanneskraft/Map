@@ -15,6 +15,7 @@ public protocol MapOverlay {
     // MARK: Properties
 
     var overlay: MKOverlay { get }
+    var level: MKOverlayLevel? { get }
 
     // MARK: Methods
 

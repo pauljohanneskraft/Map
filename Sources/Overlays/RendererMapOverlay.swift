@@ -15,12 +15,14 @@ public struct RendererMapOverlay: MapOverlay {
     // MARK: Stored Properties
 
     public let overlay: MKOverlay
+    public let level: MKOverlayLevel?
     private let _renderer: (MKMapView, MKOverlay) -> MKOverlayRenderer
 
     // MARK: Initialization
 
-    public init(overlay: MKOverlay, renderer: @escaping (MKMapView, MKOverlay) -> MKOverlayRenderer) {
+    public init(overlay: MKOverlay, level: MKOverlayLevel? = nil, renderer: @escaping (MKMapView, MKOverlay) -> MKOverlayRenderer) {
         self.overlay = overlay
+        self.level = level
         self._renderer = renderer
     }
 

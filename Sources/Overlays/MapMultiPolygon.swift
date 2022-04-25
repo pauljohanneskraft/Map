@@ -15,6 +15,7 @@ public struct MapMultiPolygon: MapOverlay {
     // MARK: Stored Properties
 
     public let overlay: MKOverlay
+    public let level: MKOverlayLevel?
 
     private let fillColor: Color?
     private let nativeFillColor: NativeColor?
@@ -24,8 +25,9 @@ public struct MapMultiPolygon: MapOverlay {
 
     // MARK: Initialization
 
-    public init(polygons: [MKPolygon], fillColor: NativeColor? = nil, lineWidth: CGFloat? = nil, strokeColor: NativeColor? = nil) {
+    public init(polygons: [MKPolygon], level: MKOverlayLevel? = nil, fillColor: NativeColor? = nil, lineWidth: CGFloat? = nil, strokeColor: NativeColor? = nil) {
         self.overlay = MKMultiPolygon(polygons)
+        self.level = level
         self.fillColor = nil
         self.nativeFillColor = fillColor
         self.lineWidth = lineWidth
@@ -33,8 +35,9 @@ public struct MapMultiPolygon: MapOverlay {
         self.nativeStrokeColor = strokeColor
     }
 
-    public init(multiPolygon: MKMultiPolygon, fillColor: NativeColor? = nil, lineWidth: CGFloat? = nil, strokeColor: NativeColor? = nil) {
+    public init(multiPolygon: MKMultiPolygon, level: MKOverlayLevel? = nil, fillColor: NativeColor? = nil, lineWidth: CGFloat? = nil, strokeColor: NativeColor? = nil) {
         self.overlay = multiPolygon
+        self.level = level
         self.fillColor = nil
         self.nativeFillColor = fillColor
         self.lineWidth = lineWidth
@@ -43,8 +46,9 @@ public struct MapMultiPolygon: MapOverlay {
     }
 
     @available(iOS 14, macOS 11, tvOS 14, *)
-    public init(polygons: [MKPolygon], fillColor: Color?, lineWidth: CGFloat? = nil, strokeColor: Color?) {
+    public init(polygons: [MKPolygon], level: MKOverlayLevel? = nil, fillColor: Color?, lineWidth: CGFloat? = nil, strokeColor: Color?) {
         self.overlay = MKMultiPolygon(polygons)
+        self.level = level
         self.fillColor = fillColor
         self.nativeFillColor = nil
         self.lineWidth = lineWidth
@@ -53,8 +57,9 @@ public struct MapMultiPolygon: MapOverlay {
     }
 
     @available(iOS 14, macOS 11, tvOS 14, *)
-    public init(multiPolygon: MKMultiPolygon, fillColor: Color?, lineWidth: CGFloat? = nil, strokeColor: Color?) {
+    public init(multiPolygon: MKMultiPolygon, level: MKOverlayLevel? = nil, fillColor: Color?, lineWidth: CGFloat? = nil, strokeColor: Color?) {
         self.overlay = multiPolygon
+        self.level = level
         self.fillColor = fillColor
         self.nativeFillColor = nil
         self.lineWidth = lineWidth

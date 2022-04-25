@@ -15,6 +15,7 @@ public struct MapPolyline: MapOverlay {
     // MARK: Stored Properties
 
     public let overlay: MKOverlay
+    public let level: MKOverlayLevel?
 
     private let lineWidth: CGFloat?
     private let strokeColor: Color?
@@ -22,46 +23,52 @@ public struct MapPolyline: MapOverlay {
     
     // MARK: Initialization
 
-    public init(coordinates: [CLLocationCoordinate2D], strokeColor: NativeColor? = nil, lineWidth: CGFloat? = nil) {
+    public init(coordinates: [CLLocationCoordinate2D], level: MKOverlayLevel? = nil, strokeColor: NativeColor? = nil, lineWidth: CGFloat? = nil) {
         self.overlay = MKPolyline(coordinates: coordinates, count: coordinates.count)
+        self.level = level
         self.strokeColor = nil
         self.nativeStrokeColor = strokeColor
         self.lineWidth = lineWidth
     }
 
-    public init(points: [MKMapPoint], strokeColor: NativeColor? = nil, lineWidth: CGFloat? = nil) {
+    public init(points: [MKMapPoint], level: MKOverlayLevel? = nil, strokeColor: NativeColor? = nil, lineWidth: CGFloat? = nil) {
         self.overlay = MKPolyline(points: points, count: points.count)
+        self.level = level
         self.strokeColor = nil
         self.nativeStrokeColor = strokeColor
         self.lineWidth = lineWidth
     }
 
-    public init(polyline: MKPolyline, strokeColor: NativeColor? = nil, lineWidth: CGFloat? = nil) {
+    public init(polyline: MKPolyline, level: MKOverlayLevel? = nil, strokeColor: NativeColor? = nil, lineWidth: CGFloat? = nil) {
         self.overlay = polyline
+        self.level = level
         self.strokeColor = nil
         self.nativeStrokeColor = strokeColor
         self.lineWidth = lineWidth
     }
 
     @available(iOS 14, macOS 11, tvOS 14, *)
-    public init(coordinates: [CLLocationCoordinate2D], strokeColor: Color?, lineWidth: CGFloat? = nil) {
+    public init(coordinates: [CLLocationCoordinate2D], level: MKOverlayLevel? = nil, strokeColor: Color?, lineWidth: CGFloat? = nil) {
         self.overlay = MKPolyline(coordinates: coordinates, count: coordinates.count)
+        self.level = level
         self.strokeColor = strokeColor
         self.nativeStrokeColor = nil
         self.lineWidth = lineWidth
     }
 
     @available(iOS 14, macOS 11, tvOS 14, *)
-    public init(points: [MKMapPoint], strokeColor: Color?, lineWidth: CGFloat? = nil) {
+    public init(points: [MKMapPoint], level: MKOverlayLevel? = nil, strokeColor: Color?, lineWidth: CGFloat? = nil) {
         self.overlay = MKPolyline(points: points, count: points.count)
+        self.level = level
         self.strokeColor = strokeColor
         self.nativeStrokeColor = nil
         self.lineWidth = lineWidth
     }
 
     @available(iOS 14, macOS 11, tvOS 14, *)
-    public init(polyline: MKPolyline, strokeColor: Color?, lineWidth: CGFloat? = nil) {
+    public init(polyline: MKPolyline, level: MKOverlayLevel? = nil, strokeColor: Color?, lineWidth: CGFloat? = nil) {
         self.overlay = polyline
+        self.level = level
         self.strokeColor = strokeColor
         self.nativeStrokeColor = nil
         self.lineWidth = lineWidth

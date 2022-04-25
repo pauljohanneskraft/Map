@@ -15,6 +15,7 @@ public struct MapMultiPolyline: MapOverlay {
     // MARK: Stored Properties
 
     public let overlay: MKOverlay
+    public let level: MKOverlayLevel?
 
     private let lineWidth: CGFloat?
     private let strokeColor: Color?
@@ -22,31 +23,35 @@ public struct MapMultiPolyline: MapOverlay {
 
     // MARK: Initialization
 
-    public init(polylines: [MKPolyline], lineWidth: CGFloat? = nil, strokeColor: NativeColor? = nil) {
+    public init(polylines: [MKPolyline], level: MKOverlayLevel? = nil, lineWidth: CGFloat? = nil, strokeColor: NativeColor? = nil) {
         self.overlay = MKMultiPolyline(polylines)
+        self.level = level
         self.lineWidth = lineWidth
         self.strokeColor = nil
         self.nativeStrokeColor = strokeColor
     }
 
-    public init(multiPolyline: MKMultiPolyline, lineWidth: CGFloat? = nil, strokeColor: NativeColor? = nil) {
+    public init(multiPolyline: MKMultiPolyline, level: MKOverlayLevel? = nil, lineWidth: CGFloat? = nil, strokeColor: NativeColor? = nil) {
         self.overlay = multiPolyline
+        self.level = level
         self.lineWidth = lineWidth
         self.strokeColor = nil
         self.nativeStrokeColor = strokeColor
     }
 
     @available(iOS 14, macOS 11, tvOS 14, *)
-    public init(polylines: [MKPolyline], lineWidth: CGFloat? = nil, strokeColor: Color?) {
+    public init(polylines: [MKPolyline], level: MKOverlayLevel? = nil, lineWidth: CGFloat? = nil, strokeColor: Color?) {
         self.overlay = MKMultiPolyline(polylines)
+        self.level = level
         self.lineWidth = lineWidth
         self.strokeColor = strokeColor
         self.nativeStrokeColor = nil
     }
 
     @available(iOS 14, macOS 11, tvOS 14, *)
-    public init(multiPolyline: MKMultiPolyline, lineWidth: CGFloat? = nil, strokeColor: Color?) {
+    public init(multiPolyline: MKMultiPolyline, level: MKOverlayLevel? = nil, lineWidth: CGFloat? = nil, strokeColor: Color?) {
         self.overlay = multiPolyline
+        self.level = level
         self.lineWidth = lineWidth
         self.strokeColor = strokeColor
         self.nativeStrokeColor = nil

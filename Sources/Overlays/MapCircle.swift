@@ -15,6 +15,7 @@ public struct MapCircle: MapOverlay {
     // MARK: Stored Properties
 
     public let overlay: MKOverlay
+    public let level: MKOverlayLevel?
 
     private let fillColor: Color?
     private let nativeFillColor: NativeColor?
@@ -24,8 +25,9 @@ public struct MapCircle: MapOverlay {
 
     // MARK: Initialization
 
-    public init(center: CLLocationCoordinate2D, radius: CLLocationDistance, fillColor: NativeColor? = nil, lineWidth: CGFloat? = nil, strokeColor: NativeColor? = nil) {
+    public init(center: CLLocationCoordinate2D, radius: CLLocationDistance, level: MKOverlayLevel? = nil, fillColor: NativeColor? = nil, lineWidth: CGFloat? = nil, strokeColor: NativeColor? = nil) {
         self.overlay = MKCircle(center: center, radius: radius)
+        self.level = level
         self.fillColor = nil
         self.nativeFillColor = fillColor
         self.lineWidth = lineWidth
@@ -33,8 +35,9 @@ public struct MapCircle: MapOverlay {
         self.nativeStrokeColor = strokeColor
     }
 
-    public init(mapRect: MKMapRect, fillColor: NativeColor? = nil, lineWidth: CGFloat? = nil, strokeColor: NativeColor? = nil) {
+    public init(mapRect: MKMapRect, level: MKOverlayLevel? = nil, fillColor: NativeColor? = nil, lineWidth: CGFloat? = nil, strokeColor: NativeColor? = nil) {
         self.overlay = MKCircle(mapRect: mapRect)
+        self.level = level
         self.fillColor = nil
         self.nativeFillColor = fillColor
         self.lineWidth = lineWidth
@@ -42,8 +45,9 @@ public struct MapCircle: MapOverlay {
         self.nativeStrokeColor = strokeColor
     }
 
-    public init(circle: MKCircle, fillColor: NativeColor? = nil, lineWidth: CGFloat? = nil, strokeColor: NativeColor? = nil) {
+    public init(circle: MKCircle, level: MKOverlayLevel? = nil, fillColor: NativeColor? = nil, lineWidth: CGFloat? = nil, strokeColor: NativeColor? = nil) {
         self.overlay = circle
+        self.level = level
         self.fillColor = nil
         self.nativeFillColor = fillColor
         self.lineWidth = lineWidth
@@ -52,8 +56,9 @@ public struct MapCircle: MapOverlay {
     }
 
     @available(iOS 14, macOS 11, tvOS 14, *)
-    public init(center: CLLocationCoordinate2D, radius: CLLocationDistance, fillColor: Color?, lineWidth: CGFloat? = nil, strokeColor: Color?) {
+    public init(center: CLLocationCoordinate2D, radius: CLLocationDistance, level: MKOverlayLevel? = nil, fillColor: Color?, lineWidth: CGFloat? = nil, strokeColor: Color?) {
         self.overlay = MKCircle(center: center, radius: radius)
+        self.level = level
         self.fillColor = fillColor
         self.nativeFillColor = nil
         self.lineWidth = lineWidth
@@ -62,8 +67,9 @@ public struct MapCircle: MapOverlay {
     }
 
     @available(iOS 14, macOS 11, tvOS 14, *)
-    public init(mapRect: MKMapRect, fillColor: Color?, lineWidth: CGFloat? = nil, strokeColor: Color?) {
+    public init(mapRect: MKMapRect, level: MKOverlayLevel? = nil, fillColor: Color?, lineWidth: CGFloat? = nil, strokeColor: Color?) {
         self.overlay = MKCircle(mapRect: mapRect)
+        self.level = level
         self.fillColor = fillColor
         self.nativeFillColor = nil
         self.lineWidth = lineWidth
@@ -72,8 +78,9 @@ public struct MapCircle: MapOverlay {
     }
 
     @available(iOS 14, macOS 11, tvOS 14, *)
-    public init(circle: MKCircle, fillColor: Color?, lineWidth: CGFloat? = nil, strokeColor: Color?) {
+    public init(circle: MKCircle, level: MKOverlayLevel? = nil, fillColor: Color?, lineWidth: CGFloat? = nil, strokeColor: Color?) {
         self.overlay = circle
+        self.level = level
         self.fillColor = fillColor
         self.nativeFillColor = nil
         self.lineWidth = lineWidth

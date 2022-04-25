@@ -15,6 +15,7 @@ public struct MapPolygon: MapOverlay {
     // MARK: Stored Properties
 
     public let overlay: MKOverlay
+    public let level: MKOverlayLevel?
 
     private let fillColor: Color?
     private let nativeFillColor: NativeColor?
@@ -24,8 +25,9 @@ public struct MapPolygon: MapOverlay {
 
     // MARK: Initialization
 
-    public init(coordinates: [CLLocationCoordinate2D], interiorPolygons: [MapPolygon]? = nil, radius: CLLocationDistance, fillColor: NativeColor? = nil, lineWidth: CGFloat? = nil, strokeColor: NativeColor? = nil) {
+    public init(coordinates: [CLLocationCoordinate2D], interiorPolygons: [MapPolygon]? = nil, level: MKOverlayLevel? = nil, fillColor: NativeColor? = nil, lineWidth: CGFloat? = nil, strokeColor: NativeColor? = nil) {
         self.overlay = MKPolygon(coordinates: coordinates, count: coordinates.count, interiorPolygons: interiorPolygons?.compactMap { $0.overlay as? MKPolygon })
+        self.level = level
         self.fillColor = nil
         self.nativeFillColor = fillColor
         self.lineWidth = lineWidth
@@ -33,8 +35,9 @@ public struct MapPolygon: MapOverlay {
         self.nativeStrokeColor = strokeColor
     }
 
-    public init(points: [MKMapPoint], interiorPolygons: [MapPolygon]? = nil, fillColor: NativeColor? = nil, lineWidth: CGFloat? = nil, strokeColor: NativeColor? = nil) {
+    public init(points: [MKMapPoint], interiorPolygons: [MapPolygon]? = nil, level: MKOverlayLevel? = nil, fillColor: NativeColor? = nil, lineWidth: CGFloat? = nil, strokeColor: NativeColor? = nil) {
         self.overlay = MKPolygon(points: points, count: points.count, interiorPolygons: interiorPolygons?.compactMap { $0.overlay as? MKPolygon })
+        self.level = level
         self.fillColor = nil
         self.nativeFillColor = fillColor
         self.lineWidth = lineWidth
@@ -42,8 +45,9 @@ public struct MapPolygon: MapOverlay {
         self.nativeStrokeColor = strokeColor
     }
 
-    public init(polygon: MKPolygon, fillColor: NativeColor? = nil, lineWidth: CGFloat? = nil, strokeColor: NativeColor? = nil) {
+    public init(polygon: MKPolygon, level: MKOverlayLevel? = nil, fillColor: NativeColor? = nil, lineWidth: CGFloat? = nil, strokeColor: NativeColor? = nil) {
         self.overlay = polygon
+        self.level = level
         self.fillColor = nil
         self.nativeFillColor = fillColor
         self.lineWidth = lineWidth
@@ -52,8 +56,9 @@ public struct MapPolygon: MapOverlay {
     }
 
     @available(iOS 14, macOS 11, tvOS 14, *)
-    public init(coordinates: [CLLocationCoordinate2D], interiorPolygons: [MapPolygon]? = nil, fillColor: Color?, lineWidth: CGFloat? = nil, strokeColor: Color?) {
+    public init(coordinates: [CLLocationCoordinate2D], interiorPolygons: [MapPolygon]? = nil, level: MKOverlayLevel? = nil, fillColor: Color?, lineWidth: CGFloat? = nil, strokeColor: Color?) {
         self.overlay = MKPolygon(coordinates: coordinates, count: coordinates.count, interiorPolygons: interiorPolygons?.compactMap { $0.overlay as? MKPolygon })
+        self.level = level
         self.fillColor = fillColor
         self.nativeFillColor = nil
         self.lineWidth = lineWidth
@@ -62,8 +67,9 @@ public struct MapPolygon: MapOverlay {
     }
 
     @available(iOS 14, macOS 11, tvOS 14, *)
-    public init(points: [MKMapPoint], interiorPolygons: [MapPolygon]? = nil, fillColor: Color?, lineWidth: CGFloat? = nil, strokeColor: Color?) {
+    public init(points: [MKMapPoint], interiorPolygons: [MapPolygon]? = nil, level: MKOverlayLevel? = nil, fillColor: Color?, lineWidth: CGFloat? = nil, strokeColor: Color?) {
         self.overlay = MKPolygon(points: points, count: points.count, interiorPolygons: interiorPolygons?.compactMap { $0.overlay as? MKPolygon })
+        self.level = level
         self.fillColor = fillColor
         self.nativeFillColor = nil
         self.lineWidth = lineWidth
@@ -72,8 +78,9 @@ public struct MapPolygon: MapOverlay {
     }
 
     @available(iOS 14, macOS 11, tvOS 14, *)
-    public init(polygon: MKPolygon, fillColor: Color?, lineWidth: CGFloat? = nil, strokeColor: Color?) {
+    public init(polygon: MKPolygon, level: MKOverlayLevel? = nil, fillColor: Color?, lineWidth: CGFloat? = nil, strokeColor: Color?) {
         self.overlay = polygon
+        self.level = level
         self.fillColor = fillColor
         self.nativeFillColor = nil
         self.lineWidth = lineWidth
