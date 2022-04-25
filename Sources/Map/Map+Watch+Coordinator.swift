@@ -84,10 +84,10 @@ extension Map: WKInterfaceObjectRepresentable {
 
         @available(watchOS 6.1, *)
         private func updateUserTracking(on mapView: WKInterfaceMap, from previousView: Map?, to newView: Map, animated: Bool) {
-            if previousView?.showsUserLocation != newView.showsUserLocation {
-                mapView.setShowsUserLocation(newView.showsUserLocation)
+            if previousView?.informationVisibility != newView.informationVisibility {
+                mapView.setShowsUserHeading(newView.informationVisibility.contains(.userHeading))
+                mapView.setShowsUserLocation(newView.informationVisibility.contains(.userLocation))
             }
-
             if newView.usesUserTrackingMode, previousView?.userTrackingMode != newView.userTrackingMode {
                 mapView.setUserTrackingMode(newView.userTrackingMode.actualValue, animated: animated)
             }

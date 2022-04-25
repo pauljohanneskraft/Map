@@ -20,8 +20,7 @@ public struct Map<AnnotationItems: RandomAccessCollection> where AnnotationItems
 
     let usesRegion: Bool
 
-    let showsUserLocation: Bool
-
+    let informationVisibility: MapInformationVisibility
     let usesUserTrackingMode: Bool
 
     @available(watchOS 6.1, *)
@@ -38,14 +37,14 @@ extension Map {
 
     public init(
         coordinateRegion: Binding<MKCoordinateRegion>,
-        showsUserLocation: Bool = false,
+        informationVisibility: MapInformationVisibility = .default,
         annotationItems: AnnotationItems,
         annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation
     ) {
         self.usesRegion = true
         self._coordinateRegion = coordinateRegion
         self._mapRect = .constant(.init())
-        self.showsUserLocation = showsUserLocation
+        self.informationVisibility = informationVisibility
         self.usesUserTrackingMode = false
         self._userTrackingMode = .constant(.none)
         self.annotationItems = annotationItems
@@ -54,14 +53,14 @@ extension Map {
 
     public init(
         mapRect: Binding<MKMapRect>,
-        showsUserLocation: Bool = false,
+        informationVisibility: MapInformationVisibility = .default,
         annotationItems: AnnotationItems,
         annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation
     ) {
         self.usesRegion = false
         self._coordinateRegion = .constant(.init())
         self._mapRect = mapRect
-        self.showsUserLocation = showsUserLocation
+        self.informationVisibility = informationVisibility
         self.usesUserTrackingMode = false
         self._userTrackingMode = .constant(.none)
         self.annotationItems = annotationItems
@@ -71,7 +70,7 @@ extension Map {
     @available(watchOS 6.1, *)
     public init(
         coordinateRegion: Binding<MKCoordinateRegion>,
-        showsUserLocation: Bool = false,
+        informationVisibility: MapInformationVisibility = .default,
         userTrackingMode: Binding<MapUserTrackingMode>?,
         annotationItems: AnnotationItems,
         annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation
@@ -79,7 +78,7 @@ extension Map {
         self.usesRegion = true
         self._coordinateRegion = coordinateRegion
         self._mapRect = .constant(.init())
-        self.showsUserLocation = showsUserLocation
+        self.informationVisibility = informationVisibility
         if let userTrackingMode = userTrackingMode {
             self.usesUserTrackingMode = true
             self._userTrackingMode = userTrackingMode
@@ -94,7 +93,7 @@ extension Map {
     @available(watchOS 6.1, *)
     public init(
         mapRect: Binding<MKMapRect>,
-        showsUserLocation: Bool = false,
+        informationVisibility: MapInformationVisibility = .default,
         userTrackingMode: Binding<MapUserTrackingMode>?,
         annotationItems: AnnotationItems,
         annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation
@@ -102,7 +101,7 @@ extension Map {
         self.usesRegion = false
         self._coordinateRegion = .constant(.init())
         self._mapRect = mapRect
-        self.showsUserLocation = showsUserLocation
+        self.informationVisibility = informationVisibility
         if let userTrackingMode = userTrackingMode {
             self.usesUserTrackingMode = true
             self._userTrackingMode = userTrackingMode
@@ -120,11 +119,11 @@ extension Map where AnnotationItems == EmptyCollection<IdentifiableObject<NSObje
 
     public init(
         coordinateRegion: Binding<MKCoordinateRegion>,
-        showsUserLocation: Bool = false
+        informationVisibility: MapInformationVisibility = .default
     ) {
         self.init(
             coordinateRegion: coordinateRegion,
-            showsUserLocation: showsUserLocation,
+            informationVisibility: informationVisibility,
             annotationItems: .init(),
             annotationContent: { _ -> MapAnnotation in fatalError() }
         )
@@ -132,11 +131,11 @@ extension Map where AnnotationItems == EmptyCollection<IdentifiableObject<NSObje
 
     public init(
         mapRect: Binding<MKMapRect>,
-        showsUserLocation: Bool = false
+        informationVisibility: MapInformationVisibility = .default
     ) {
         self.init(
             mapRect: mapRect,
-            showsUserLocation: showsUserLocation,
+            informationVisibility: informationVisibility,
             annotationItems: .init(),
             annotationContent: { _ -> MapAnnotation in fatalError() }
         )
@@ -145,12 +144,12 @@ extension Map where AnnotationItems == EmptyCollection<IdentifiableObject<NSObje
     @available(watchOS 6.1, *)
     public init(
         coordinateRegion: Binding<MKCoordinateRegion>,
-        showsUserLocation: Bool = false,
+        informationVisibility: MapInformationVisibility = .default,
         userTrackingMode: Binding<MapUserTrackingMode>?
     ) {
         self.init(
             coordinateRegion: coordinateRegion,
-            showsUserLocation: showsUserLocation,
+            informationVisibility: informationVisibility,
             userTrackingMode: userTrackingMode,
             annotationItems: .init(),
             annotationContent: { _ -> MapAnnotation in fatalError() }
@@ -160,12 +159,12 @@ extension Map where AnnotationItems == EmptyCollection<IdentifiableObject<NSObje
     @available(watchOS 6.1, *)
     public init(
         mapRect: Binding<MKMapRect>,
-        showsUserLocation: Bool = false,
+        informationVisibility: MapInformationVisibility = .default,
         userTrackingMode: Binding<MapUserTrackingMode>?
     ) {
         self.init(
             mapRect: mapRect,
-            showsUserLocation: showsUserLocation,
+            informationVisibility: informationVisibility,
             userTrackingMode: userTrackingMode,
             annotationItems: .init(),
             annotationContent: { _ -> MapAnnotation in fatalError() }
