@@ -1,6 +1,6 @@
 //
-//  File.swift
-//  
+//  MapUserTrackingMode.swift
+//  Map
 //
 //  Created by Paul Kraft on 25.04.22.
 //
