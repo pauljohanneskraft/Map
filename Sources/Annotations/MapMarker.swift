@@ -60,13 +60,13 @@ public struct MapMarker {
 @available(macOS 11, *)
 extension MapMarker: MapAnnotation {
 
-    public static func register(on mapView: MKMapView) {
+    public static func registerView(on mapView: MKMapView) {
         mapView.register(
             MKMarkerAnnotationView.self,
             forAnnotationViewWithReuseIdentifier: reuseIdentifier)
     }
 
-    public func dequeue(from mapView: MKMapView) -> MKAnnotationView? {
+    public func view(for mapView: MKMapView) -> MKAnnotationView? {
         let view = mapView.dequeueReusableAnnotationView(withIdentifier: Self.reuseIdentifier, for: annotation)
         view.annotation = annotation
         if let marker = view as? MKMarkerAnnotationView {

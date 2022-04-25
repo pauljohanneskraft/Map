@@ -23,7 +23,7 @@ public protocol MapAnnotation {
 
     // MARK: Static Functions
 
-    static func register(on mapView: MKMapView)
+    static func registerView(on mapView: MKMapView)
 
     // MARK: Properties
 
@@ -31,7 +31,7 @@ public protocol MapAnnotation {
 
     // MARK: Methods
 
-    func dequeue(from mapView: MKMapView) -> MKAnnotationView?
+    func view(for mapView: MKMapView) -> MKAnnotationView?
 
 }
 

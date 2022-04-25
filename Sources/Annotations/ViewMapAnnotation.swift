@@ -34,7 +34,7 @@ public struct ViewMapAnnotation<Content: View>: MapAnnotation {
 
     // MARK: Static Functions
 
-    public static func register(on mapView: MKMapView) {
+    public static func registerView(on mapView: MKMapView) {
         mapView.register(MKMapAnnotationView<Content>.self, forAnnotationViewWithReuseIdentifier: reuseIdentifier)
     }
 
@@ -65,7 +65,7 @@ public struct ViewMapAnnotation<Content: View>: MapAnnotation {
 
     // MARK: Methods
 
-    public func dequeue(from mapView: MKMapView) -> MKAnnotationView? {
+    public func view(for mapView: MKMapView) -> MKAnnotationView? {
         let view = mapView.dequeueReusableAnnotationView(
             withIdentifier: Self.reuseIdentifier,
             for: annotation

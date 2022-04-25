@@ -85,13 +85,13 @@ public struct MapPin {
 
 extension MapPin: MapAnnotation {
 
-    public static func register(on mapView: MKMapView) {
+    public static func registerView(on mapView: MKMapView) {
         mapView.register(
             MKPinAnnotationView.self,
             forAnnotationViewWithReuseIdentifier: reuseIdentifier)
     }
 
-    public func dequeue(from mapView: MKMapView) -> MKAnnotationView? {
+    public func view(for mapView: MKMapView) -> MKAnnotationView? {
         let view = mapView.dequeueReusableAnnotationView(withIdentifier: Self.reuseIdentifier, for: annotation)
         view.annotation = annotation
         if #available(iOS 14, macOS 11, tvOS 14, *), let tint = tint, let pin = view as? MKPinAnnotationView {

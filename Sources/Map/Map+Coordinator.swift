@@ -54,7 +54,7 @@ extension Map {
             let contentTypeKey = ObjectIdentifier(contentType)
             if !registeredAnnotationTypes.contains(contentTypeKey) {
                 registeredAnnotationTypes.insert(contentTypeKey)
-                contentType.register(on: mapView)
+                contentType.registerView(on: mapView)
             }
         }
 
@@ -230,7 +230,7 @@ extension Map {
                 assertionFailure("Somehow an unknown annotation appeared.")
                 return nil
             }
-            return content.dequeue(from: mapView)
+            return content.view(for: mapView)
         }
 
     }
