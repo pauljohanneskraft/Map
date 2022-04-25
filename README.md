@@ -38,8 +38,8 @@ struct MyMapView: View {
           coordinateRegion: $region,
           type: .satelliteFlyover,
           pointOfInterestFilter: .excludingAll,
+          informationVisibility: .default.union(.userLocation),
           interactionModes: [.pan, .rotate],
-          showsUserLocation: true,
           userTrackingMode: $userTrackingMode,
           annotationItems: locations,
           annotationContent: { location in
