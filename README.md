@@ -104,14 +104,16 @@ Moving an existing code base over to SwiftUI is hard, especially when you want t
 ```swift
 public protocol MapAnnotation {
 
-    static func register(on mapView: MKMapView)
+    static func registerView(on mapView: MKMapView)
     
     var annotation: MKAnnotation { get }
 
-    func dequeue(from mapView: MKMapView) -> MKAnnotationView?
+    func view(for mapView: MKMapView) -> MKAnnotationView?
     
 }
 ```
+
+In `registerView(on:)`, your custom annotation implementation can register a cell type for dequeuing using `MKMapView.register(_:forAnnotationViewWithReuseIdentifier:)`. To dequeue the registered cell, implement the `view(for:)` method, similar to `MKMapViewDelegate.mapView(_:viewFor:)`.
 
 Note: Please make sure not to create the value of the property `annotation` dynamically. You can either use an existing object or create the object in your type's initializer. Simply put: Do not make `annotation` a computed property!
 
@@ -128,6 +130,8 @@ public protocol MapOverlay {
     
 }
 ```
+
+In your implementation, the `renderer(for:)` method creates a renderer for the overlay, similar to `MKMapViewDelegate.mapView(_:rendererFor:)`.
 
 Note: Please make sure not to create the value of the property `overlay` dynamically. You can either use an existing object or create the object in your type's initializer. Simply put: Do not make `overlay` a computed property!
 
