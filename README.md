@@ -1,12 +1,12 @@
 # Map
 
-MapKit's SwiftUI implementation of `Map` (UIKit: MKMapView) is very limited. This library can be used as a drop-in solution (i.e. it features a very similar, but more powerful and customizable interface) to the existing `Map` and gives you so much more features and control:
+MapKit's SwiftUI implementation of [Map](https://developer.apple.com/documentation/mapkit/map) (UIKit: [MKMapView](https://developer.apple.com/documentation/mapkit/mkmapview)) is very limited. This library can be used as a drop-in solution (i.e. it features a very similar, but more powerful and customizable interface) to the existing [Map](https://developer.apple.com/documentation/mapkit/map) and gives you so much more features and control:
 
 ## Features
 
-- Create annotations from a list of `MKAnnotation`. You may have existing code that still has a few MKAnnotations lying around - now you can put them to good use without requiring to restructure your codebase unnecessarily. You can even use your existing `MKAnnotationView` implementations!
-- Overlay support: Add your own custom overlays - featuring a backwards-compatible `MKOverlay`/`MKOverlayRenderer` interface and a more modern solution using `Identifiable` items - similar to Apple's `annotationItems` API.
-- Change your map's type (`MKMapType`), user tracking mode (`MKUserTrackingMode`), interaction modes (including rotation) and point of interest filter (`MKPointOfInterestFilter`).
+- Create annotations from a list of [MKAnnotation](https://developer.apple.com/documentation/mapkit/mkannotation). You may have existing code that still has a few MKAnnotations lying around - now you can put them to good use without requiring to restructure your codebase unnecessarily. You can even use your existing [MKAnnotationView](https://developer.apple.com/documentation/mapkit/mkannotationview) implementations!
+- Overlay support: Add your own custom overlays - featuring a backwards-compatible [MKOverlay](https://developer.apple.com/documentation/mapkit/mkoverlay)/[MKOverlayRenderer](https://developer.apple.com/documentation/mapkit/mkoverlayrenderer) interface and a more modern solution using `Identifiable` items - similar to Apple's `annotationItems` API.
+- Change your map's type ([MKMapType](https://developer.apple.com/documentation/mapkit/mkmaptype)), user tracking mode ([MKUserTrackingMode](https://developer.apple.com/documentation/mapkit/mkusertrackingmode)), interaction modes (including rotation) and point of interest filter ([MKPointOfInterestFilter](https://developer.apple.com/documentation/mapkit/mkpointofinterestfilter)).
 
 ## Supported Platforms
 
@@ -19,7 +19,7 @@ Keep in mind that not all features are equally available on all platforms (based
 
 ## Usage on iOS, macOS and tvOS
 
-Very similar to MapKit's SwiftUI wrapper, you simply create a `Map` view inside the body of your view. You can define a region or mapRect, the map type (MKMapType), a pointOfInterestFilter (MKPointOfInterestFilter), interactions Modes (with values: .none, .pan, .zoon, .rotate and .all - which can be combined as you wish) and showsUserLocation.
+Very similar to MapKit's SwiftUI wrapper, you simply create a `Map` view inside the body of your view. You can define a region or mapRect, the map type ([MKMapType](https://developer.apple.com/documentation/mapkit/mkmaptype)), a pointOfInterestFilter ([MKPointOfInterestFilter](https://developer.apple.com/documentation/mapkit/mkpointofinterestfilter)), interactions Modes (with values: .none, .pan, .zoon, .rotate and .all - which can be combined as you wish) and showsUserLocation.
 
 ```swift
 import Map
@@ -99,7 +99,7 @@ Map(
 
 ### Annotations: The old-fashioned approach
 
-Moving an existing code base over to SwiftUI is hard, especially when you want to keep methods, types and properties that you have previously built. This library, therefore, allows the use of `MKAnnotation` instead of being forced to the new `Identifiable` style. In the additional closure, you can use one of the options mentioned in the modern-approach. Alternatively, we also have an option to use your own `MKAnnotationView` implementations. Simply create a struct conforming to the following protocol and you are good to go.
+Moving an existing code base over to SwiftUI is hard, especially when you want to keep methods, types and properties that you have previously built. This library, therefore, allows the use of [MKAnnotation](https://developer.apple.com/documentation/mapkit/mkannotation) instead of being forced to the new `Identifiable` style. In the additional closure, you can use one of the options mentioned in the modern-approach. Alternatively, we also have an option to use your own [MKAnnotationView](https://developer.apple.com/documentation/mapkit/mkannotationview) implementations. Simply create a struct conforming to the following protocol and you are good to go.
 
 ```swift
 public protocol MapAnnotation {
@@ -113,7 +113,7 @@ public protocol MapAnnotation {
 }
 ```
 
-In `registerView(on:)`, your custom annotation implementation can register a cell type for dequeuing using `MKMapView.register(_:forAnnotationViewWithReuseIdentifier:)`. To dequeue the registered cell, implement the `view(for:)` method, similar to `MKMapViewDelegate.mapView(_:viewFor:)`.
+In `registerView(on:)`, your custom annotation implementation can register a cell type for dequeuing using [`MKMapView.register(_:forAnnotationViewWithReuseIdentifier:)`](https://developer.apple.com/documentation/mapkit/mkmapview/2887124-register). To dequeue the registered cell, implement the `view(for:)` method, similar to [`MKMapViewDelegate.mapView(_:viewFor:)`](https://developer.apple.com/documentation/mapkit/mkmapviewdelegate/1452045-mapview).
 
 Note: Please make sure not to create the value of the property `annotation` dynamically. You can either use an existing object or create the object in your type's initializer. Simply put: Do not make `annotation` a computed property!
 
@@ -131,13 +131,13 @@ public protocol MapOverlay {
 }
 ```
 
-In your implementation, the `renderer(for:)` method creates a renderer for the overlay, similar to `MKMapViewDelegate.mapView(_:rendererFor:)`.
+In your implementation, the `renderer(for:)` method creates a renderer for the overlay, similar to [`MKMapViewDelegate.mapView(_:rendererFor:)`](https://developer.apple.com/documentation/mapkit/mkmapviewdelegate/1452203-mapview).
 
 Note: Please make sure not to create the value of the property `overlay` dynamically. You can either use an existing object or create the object in your type's initializer. Simply put: Do not make `overlay` a computed property!
 
 ### Overlays: The old-fashioned approach
 
-Especially when working with `MKDirections` or when more customization to the `MKOverlayRenderer` is necessary, you can also provide an array of `MKOverlay` objects and use your own `MKOverlayRenderer`.
+Especially when working with [MKDirections](https://developer.apple.com/documentation/mapkit/mkdirections) or when more customization to the [MKOverlayRenderer](https://developer.apple.com/documentation/mapkit/mkoverlayrenderer) is necessary, you can also provide an array of [MKOverlay](https://developer.apple.com/documentation/mapkit/mkoverlay) objects and use your own [MKOverlayRenderer](https://developer.apple.com/documentation/mapkit/mkoverlayrenderer).
 
 For this, we provide `RendererMapOverlay`:
 
