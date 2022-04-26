@@ -191,8 +191,15 @@ extension Map {
                 let newRegion = mapView.regionThatFits(newView.coordinateRegion)
                 mapView.setRegion(newRegion, animated: animated)
             } else {
+                let visibleMapRect = mapView.visibleMapRect
                 let newRect = mapView.mapRectThatFits(newView.mapRect)
-                mapView.setVisibleMapRect(newRect, animated: animated)
+                if visibleMapRect.origin.x != newRect.origin.x
+                    || visibleMapRect.origin.y != newRect.origin.y
+                    || visibleMapRect.height != newRect.height
+                    || visibleMapRect.width != newRect.width {
+                    mapView.setVisibleMapRect(newRect, animated: animated)
+                }
+
             }
         }
 
@@ -216,12 +223,6 @@ extension Map {
         public func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
             view?.coordinateRegion = mapView.region
             view?.mapRect = mapView.visibleMapRect
-            if let view = view, !view.usesRegion {
-                regionIsChanging = true
-                DispatchQueue.main.async { [weak self] in
-                    self?.regionIsChanging = false
-                }
-            }
         }
 
         @available(macOS 11, *)
