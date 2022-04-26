@@ -192,12 +192,13 @@ extension Map {
                 mapView.setRegion(newRegion, animated: animated)
             } else {
                 let visibleMapRect = mapView.visibleMapRect
-                let newRect = mapView.mapRectThatFits(newView.mapRect)
+                let newRect = newView.mapRect
                 if visibleMapRect.origin.x != newRect.origin.x
                     || visibleMapRect.origin.y != newRect.origin.y
                     || visibleMapRect.height != newRect.height
                     || visibleMapRect.width != newRect.width {
-                    mapView.setVisibleMapRect(newRect, animated: animated)
+                    let newRectThatFits = mapView.mapRectThatFits(newRect)
+                    mapView.setVisibleMapRect(newRectThatFits, animated: animated)
                 }
 
             }
