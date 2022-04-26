@@ -7,6 +7,11 @@ MapKit's SwiftUI implementation of [Map](https://developer.apple.com/documentati
 - Create annotations from a list of [MKAnnotation](https://developer.apple.com/documentation/mapkit/mkannotation). You may have existing code that still has a few MKAnnotations lying around - now you can put them to good use without requiring to restructure your codebase unnecessarily. You can even use your existing [MKAnnotationView](https://developer.apple.com/documentation/mapkit/mkannotationview) implementations!
 - Overlay support: Add your own custom overlays - featuring a backwards-compatible [MKOverlay](https://developer.apple.com/documentation/mapkit/mkoverlay)/[MKOverlayRenderer](https://developer.apple.com/documentation/mapkit/mkoverlayrenderer) interface and a more modern solution using `Identifiable` items - similar to Apple's `annotationItems` API.
 - Change your map's type ([MKMapType](https://developer.apple.com/documentation/mapkit/mkmaptype)), user tracking mode ([MKUserTrackingMode](https://developer.apple.com/documentation/mapkit/mkusertrackingmode)), interaction modes (including rotation) and point of interest filter ([MKPointOfInterestFilter](https://developer.apple.com/documentation/mapkit/mkpointofinterestfilter)).
+- Wrappers for custom map controls:
+  - `MapCompass` for [MKCompassButton](https://developer.apple.com/documentation/mapkit/mkcompass)
+  - `MapPitchControl` for [MKPitchControl](https://developer.apple.com/documentation/mapkit/mkpitchcontrol)
+  - `MapScale` for [MKScaleView](https://developer.apple.com/documentation/mapkit/mkscaleview)
+  - `MapZoomControl` for [MKZoomControl](https://developer.apple.com/documentation/mapkit/mkzoomcontrol)
 
 ## Supported Platforms
 
@@ -160,6 +165,30 @@ Map(
 )
 ```
 
+### Custom Map Controls
+
+For the use of `MapCompass`, `MapPitchControl`, `MapScale` and `MapZoomControl` you will need to associate both the `Map` and the control with some form of a shared key. This key needs to conform to the `Hashable` protocol. For each key, there must only be one `Map` (or `MKMapView` respectively) in the view hierarchy at once.
+
+Example: We want to display a scale overlay at the topLeading edge of a `Map`. To accomplish this, let's take a look at the following code snippet.
+
+```swift
+struct MyMapKey: Hashable {}
+
+struct MyMapView: View {
+
+    @Binding var region: MKCoordinateRegion
+    
+    var body: some View {
+        Map(coordinateRegion: $region)
+            .mapKey(MyMapKey())
+            .overlay(alignment: .topLeading) {
+                MapScale(key: MyMapKey(), alignment: .leading, visibility: .visible)
+                    .padding(8)
+            }
+    }
+}
+```
+
 ## Usage on watchOS
 
 Since MapKit is very limited on watchOS, there is a separate (also similary limited) wrapper in this library. If you are only targeting watchOS, it might not make sense to use this library as the underlying feature set is already very limited (e.g. no overlay support, only a few kinds of possible annotations, etc).
@@ -169,7 +198,7 @@ We do include a drop-in interface though for projects that target multiple platf
 ```swift
 Map(
     coordinateRegion: $region,
-    showsUserLocation: true,
+    informationVisibility: [.userHeading, .userLocation],
     userTrackingMode: $userTrackingMode,
     annotationItems: annotationItems,
     annotationContent: { item in
