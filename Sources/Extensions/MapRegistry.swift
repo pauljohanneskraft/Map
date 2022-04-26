@@ -13,7 +13,7 @@ import SwiftUI
 extension View {
 
     public func mapKey<Key: Hashable>(_ key: Key) -> some View {
-        environment(\.mapKey, .init(key))
+        environment(\.mapKey, key)
     }
 
 }
