@@ -216,6 +216,12 @@ extension Map {
         public func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
             view?.coordinateRegion = mapView.region
             view?.mapRect = mapView.visibleMapRect
+            if let view = view, !view.usesRegion {
+                regionIsChanging = true
+                DispatchQueue.main.async {
+                    regionIsChanging = false
+                }
+            }
         }
 
         @available(macOS 11, *)
