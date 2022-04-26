@@ -4,10 +4,27 @@ MapKit's SwiftUI implementation of [Map](https://developer.apple.com/documentati
 
 ## Features
 
-- Create annotations from a list of [MKAnnotation](https://developer.apple.com/documentation/mapkit/mkannotation). You may have existing code that still has a few MKAnnotations lying around - now you can put them to good use without requiring to restructure your codebase unnecessarily. You can even use your existing [MKAnnotationView](https://developer.apple.com/documentation/mapkit/mkannotationview) implementations!
-- Overlay support: Add your own custom overlays - featuring a backwards-compatible [MKOverlay](https://developer.apple.com/documentation/mapkit/mkoverlay)/[MKOverlayRenderer](https://developer.apple.com/documentation/mapkit/mkoverlayrenderer) interface and a more modern solution using `Identifiable` items - similar to Apple's `annotationItems` API.
-- Change your map's type ([MKMapType](https://developer.apple.com/documentation/mapkit/mkmaptype)), user tracking mode ([MKUserTrackingMode](https://developer.apple.com/documentation/mapkit/mkusertrackingmode)), interaction modes (including rotation) and point of interest filter ([MKPointOfInterestFilter](https://developer.apple.com/documentation/mapkit/mkpointofinterestfilter)).
-- Wrappers for custom map controls:
+- Annotations
+  - Create annotations from annotationItems as in the default MapKit SwiftUI implementation.
+  - Create annotations from a list of [MKAnnotation](https://developer.apple.com/documentation/mapkit/mkannotation) objects - you can even use your existing [MKAnnotationView](https://developer.apple.com/documentation/mapkit/mkannotationview) implementations!
+- Overlays
+  - Option 1: Use a SwiftUI-style API based on `Identifiable` with overlay items and a closure to create overlays from these items
+  - Option 2: Use existing [MKOverlay](https://developer.apple.com/documentation/mapkit/mkoverlay) / [MKOverlayRenderer](https://developer.apple.com/documentation/mapkit/mkoverlayrenderer) objects
+- Appearance / Behavior Customization
+  - Map type ([MKMapType](https://developer.apple.com/documentation/mapkit/mkmaptype))
+  - User tracking mode ([MKUserTrackingMode](https://developer.apple.com/documentation/mapkit/mkusertrackingmode))
+  - Interaction modes (rotation, pitch, zoom and pan)
+  - Point of interest filter ([MKPointOfInterestFilter](https://developer.apple.com/documentation/mapkit/mkpointofinterestfilter)).
+- Adapt visibility of:
+  - Buildings
+  - Compass
+  - Pitch control
+  - Scale
+  - Traffic
+  - User heading
+  - User location
+  - Zoom controls
+- Custom controls
   - `MapCompass` for [MKCompassButton](https://developer.apple.com/documentation/mapkit/mkcompass)
   - `MapPitchControl` for [MKPitchControl](https://developer.apple.com/documentation/mapkit/mkpitchcontrol)
   - `MapScale` for [MKScaleView](https://developer.apple.com/documentation/mapkit/mkscaleview)
@@ -24,7 +41,7 @@ Keep in mind that not all features are equally available on all platforms (based
 
 ## Usage on iOS, macOS and tvOS
 
-Very similar to MapKit's SwiftUI wrapper, you simply create a `Map` view inside the body of your view. You can define a region or mapRect, the map type ([MKMapType](https://developer.apple.com/documentation/mapkit/mkmaptype)), a pointOfInterestFilter ([MKPointOfInterestFilter](https://developer.apple.com/documentation/mapkit/mkpointofinterestfilter)), interactions Modes (with values: .none, .pan, .zoon, .rotate and .all - which can be combined as you wish) and showsUserLocation.
+Very similar to MapKit's SwiftUI wrapper, you simply create a `Map` view inside the body of your view. You can define a region or mapRect, the map type ([MKMapType](https://developer.apple.com/documentation/mapkit/mkmaptype)), a pointOfInterestFilter ([MKPointOfInterestFilter](https://developer.apple.com/documentation/mapkit/mkpointofinterestfilter)), interactions Modes (with values: .none, .pitch, .pan, .zoon, .rotate and .all - which can be combined as you wish) and showsUserLocation.
 
 ```swift
 import Map
@@ -32,7 +49,7 @@ import SwiftUI
 
 struct MyMapView: View {
 
-    let locations: [Location]
+    let locations: [MyLocation]
     let directions: MKDirections.Response
     
     @State private var region = MKCoordinateRegion()
