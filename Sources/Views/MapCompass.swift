@@ -84,7 +84,9 @@ extension MapCompass: NSViewRepresentable {
     }
 
     public func updateNSView(_ compassButton: MKCompassButton, context: Context) {
-        compassButton.mapView = MapRegistry[key]
+        if let mapView = MapRegistry[key], mapView != compassButton.mapView {
+            compassButton.mapView = mapView
+        }
         context.coordinator.update(compassButton, with: self, context: context)
     }
 

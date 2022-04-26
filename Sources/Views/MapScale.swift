@@ -69,7 +69,9 @@ extension MapScale: UIViewRepresentable {
     }
 
     public func updateUIView(_ scaleView: MKScaleView, context: Context) {
-        scaleView.mapView = MapRegistry[key]
+        if let mapView = MapRegistry[key], mapView != scaleView.mapView {
+            scaleView.mapView = mapView
+        }
         context.coordinator.update(scaleView, with: self, context: context)
     }
 

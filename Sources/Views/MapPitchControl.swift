@@ -35,7 +35,9 @@ extension MapPitchControl: NSViewRepresentable {
     }
 
     public func updateNSView(_ pitchControl: MKPitchControl, context: Context) {
-        pitchControl.mapView = MapRegistry[key]
+        if let mapView = MapRegistry[key], mapView != pitchControl.mapView {
+            pitchControl.mapView = mapView
+        }
     }
 
 }

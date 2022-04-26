@@ -37,7 +37,9 @@ extension MapZoomControl: NSViewRepresentable {
     }
 
     public func updateNSView(_ zoomControl: MKZoomControl, context: Context) {
-        zoomControl.mapView = MapRegistry[key]
+        if let mapView = MapRegistry[key], mapView != zoomControl.mapView {
+            zoomControl.mapView = mapView
+        }
     }
 
 }
