@@ -66,7 +66,9 @@ extension MapCompass: UIViewRepresentable {
     }
 
     public func updateUIView(_ compassButton: MKCompassButton, context: Context) {
-        compassButton.mapView = MapRegistry[key]
+        if let mapView = MapRegistry[key], mapView != compassButton.mapView {
+            compassButton.mapView = mapView
+        }
         context.coordinator.update(compassButton, with: self, context: context)
     }
 
