@@ -200,7 +200,8 @@ struct MyMapView: View {
             .mapKey(MyMapKey())
             .overlay(alignment: .topLeading) {
                 MapScale(key: MyMapKey(), alignment: .leading, visibility: .visible)
-                    .padding(8)
+                    .fixedSize()
+                    .padding(12)
             }
     }
 }
