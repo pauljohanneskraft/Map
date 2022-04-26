@@ -2,20 +2,20 @@
 
 MapKit's SwiftUI implementation of [Map](https://developer.apple.com/documentation/mapkit/map) (UIKit: [MKMapView](https://developer.apple.com/documentation/mapkit/mkmapview)) is very limited. This library can be used as a drop-in solution (i.e. it features a very similar, but more powerful and customizable interface) to the existing [Map](https://developer.apple.com/documentation/mapkit/map) and gives you so much more features and control:
 
-## Features
+## 🚀 Features
 
-- Annotations
+📍 Annotations
   - Create annotations from annotationItems as in the default MapKit SwiftUI implementation.
   - Create annotations from a list of [MKAnnotation](https://developer.apple.com/documentation/mapkit/mkannotation) objects - you can even use your existing [MKAnnotationView](https://developer.apple.com/documentation/mapkit/mkannotationview) implementations!
-- Overlays
+🖼 Overlays
   - Option 1: Use a SwiftUI-style API based on `Identifiable` with overlay items and a closure to create overlays from these items
   - Option 2: Use existing [MKOverlay](https://developer.apple.com/documentation/mapkit/mkoverlay) / [MKOverlayRenderer](https://developer.apple.com/documentation/mapkit/mkoverlayrenderer) objects
-- Appearance / Behavior Customization
+🛠 Appearance / Behavior Customization
   - Map type ([MKMapType](https://developer.apple.com/documentation/mapkit/mkmaptype))
   - User tracking mode ([MKUserTrackingMode](https://developer.apple.com/documentation/mapkit/mkusertrackingmode))
   - Interaction modes (rotation, pitch, zoom and pan)
   - Point of interest filter ([MKPointOfInterestFilter](https://developer.apple.com/documentation/mapkit/mkpointofinterestfilter)).
-- Adapt visibility of:
+👀 Adapt visibility of:
   - Buildings
   - Compass
   - Pitch control
@@ -24,13 +24,13 @@ MapKit's SwiftUI implementation of [Map](https://developer.apple.com/documentati
   - User heading
   - User location
   - Zoom controls
-- Custom controls
+🪄 Custom controls
   - `MapCompass` for [MKCompassButton](https://developer.apple.com/documentation/mapkit/mkcompass)
   - `MapPitchControl` for [MKPitchControl](https://developer.apple.com/documentation/mapkit/mkpitchcontrol)
   - `MapScale` for [MKScaleView](https://developer.apple.com/documentation/mapkit/mkscaleview)
   - `MapZoomControl` for [MKZoomControl](https://developer.apple.com/documentation/mapkit/mkzoomcontrol)
 
-## Supported Platforms
+## 💻 Supported Platforms
 
 - iOS 13+
 - macOS 10.15+
@@ -39,7 +39,7 @@ MapKit's SwiftUI implementation of [Map](https://developer.apple.com/documentati
 
 Keep in mind that not all features are equally available on all platforms (based on what MapKit provides) and therefore might not be available here either. However, if you can use them using UIKit, there is a very high change that it is available here as well - if not: Let me/us know by creating an issue!
 
-## Usage on iOS, macOS and tvOS
+## 🧑🏽‍💻 Usage on iOS, macOS and tvOS
 
 Very similar to MapKit's SwiftUI wrapper, you simply create a `Map` view inside the body of your view. You can define a region or mapRect, the map type ([MKMapType](https://developer.apple.com/documentation/mapkit/mkmaptype)), a pointOfInterestFilter ([MKPointOfInterestFilter](https://developer.apple.com/documentation/mapkit/mkpointofinterestfilter)), interactions Modes (with values: .none, .pitch, .pan, .zoon, .rotate and .all - which can be combined as you wish) and showsUserLocation.
 
@@ -95,7 +95,7 @@ struct MyMapView: View {
 }
 ```
 
-### Annotations: The modern approach
+### 📍 Annotations: The modern approach
 
 You can use a collection of items conforming to `Identifiable` and a closure that maps an item to its visual representation (available types: `MapPin`, `MapMarker` and `ViewMapAnnotation` for custom annotations from any SwiftUI `View`).
 
@@ -119,7 +119,7 @@ Map(
 )
 ```
 
-### Annotations: The old-fashioned approach
+### 📌 Annotations: The old-fashioned approach
 
 Moving an existing code base over to SwiftUI is hard, especially when you want to keep methods, types and properties that you have previously built. This library, therefore, allows the use of [MKAnnotation](https://developer.apple.com/documentation/mapkit/mkannotation) instead of being forced to the new `Identifiable` style. In the additional closure, you can use one of the options mentioned in the modern-approach. Alternatively, we also have an option to use your own [MKAnnotationView](https://developer.apple.com/documentation/mapkit/mkannotationview) implementations. Simply create a struct conforming to the following protocol and you are good to go.
 
@@ -139,7 +139,7 @@ In `registerView(on:)`, your custom annotation implementation can register a cel
 
 Note: Please make sure not to create the value of the property `annotation` dynamically. You can either use an existing object or create the object in your type's initializer. Simply put: Do not make `annotation` a computed property!
 
-### Overlays: The modern approach
+### 🌃 Overlays: The modern approach
 
 Similarly to how annotations are handled, you can also use a collection of `Identifiable` and a closure mapping it to specific overlay types. These overlay types currently contain `MapCircle`, `MapMultiPolygon`, `MapMultiPolyline`, `MapPolygon` and `MapPolyline` and this list can easily be extended by creating a type conforming to the following protocol:
 
@@ -157,7 +157,7 @@ In your implementation, the `renderer(for:)` method creates a renderer for the o
 
 Note: Please make sure not to create the value of the property `overlay` dynamically. You can either use an existing object or create the object in your type's initializer. Simply put: Do not make `overlay` a computed property!
 
-### Overlays: The old-fashioned approach
+### 🖼 Overlays: The old-fashioned approach
 
 Especially when working with [MKDirections](https://developer.apple.com/documentation/mapkit/mkdirections) or when more customization to the [MKOverlayRenderer](https://developer.apple.com/documentation/mapkit/mkoverlayrenderer) is necessary, you can also provide an array of [MKOverlay](https://developer.apple.com/documentation/mapkit/mkoverlay) objects and use your own [MKOverlayRenderer](https://developer.apple.com/documentation/mapkit/mkoverlayrenderer).
 
@@ -182,7 +182,7 @@ Map(
 )
 ```
 
-### Custom Map Controls
+### 🪄 Custom Map Controls
 
 For the use of `MapCompass`, `MapPitchControl`, `MapScale` and `MapZoomControl` you will need to associate both the `Map` and the control with some form of a shared key. This key needs to conform to the `Hashable` protocol. For each key, there must only be one `Map` (or `MKMapView` respectively) in the view hierarchy at once.
 
@@ -207,7 +207,7 @@ struct MyMapView: View {
 }
 ```
 
-## Usage on watchOS
+## ⌚️ Usage on watchOS
 
 Since MapKit is very limited on watchOS, there is a separate (also similary limited) wrapper in this library. If you are only targeting watchOS, it might not make sense to use this library as the underlying feature set is already very limited (e.g. no overlay support, only a few kinds of possible annotations, etc).
 
@@ -229,10 +229,10 @@ Map(
 )
 ```
 
-## Author
+## ✍️ Author
 
 Paul Kraft
 
-## License
+## 📄 License
 
 Map is available under the MIT license. See the LICENSE file for more info.
