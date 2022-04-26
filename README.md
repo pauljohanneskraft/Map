@@ -6,11 +6,11 @@ MapKit's SwiftUI implementation of [Map](https://developer.apple.com/documentati
 
 📍 Annotations
 - Create annotations from annotationItems as in the default MapKit SwiftUI implementation.
-- Create annotations from a list of [MKAnnotation](https://developer.apple.com/documentation/mapkit/mkannotation) objects - you can even use your existing [MKAnnotationView](https://developer.apple.com/documentation/mapkit/mkannotationview) implementations!
+- Or: Create annotations from a list of [MKAnnotation](https://developer.apple.com/documentation/mapkit/mkannotation) objects - you can even use your existing [MKAnnotationView](https://developer.apple.com/documentation/mapkit/mkannotationview) implementations!
 
 🖼 Overlays
-- Option 1: Use a SwiftUI-style API based on `Identifiable` with overlay items and a closure to create overlays from these items
-- Option 2: Use existing [MKOverlay](https://developer.apple.com/documentation/mapkit/mkoverlay) / [MKOverlayRenderer](https://developer.apple.com/documentation/mapkit/mkoverlayrenderer) objects
+- Use a SwiftUI-style API based on `Identifiable` with overlay items and a closure to create overlays from these items
+- Or: Use existing [MKOverlay](https://developer.apple.com/documentation/mapkit/mkoverlay) / [MKOverlayRenderer](https://developer.apple.com/documentation/mapkit/mkoverlayrenderer) objects
 
 🛠 Appearance / Behavior Customization
 - Map type ([MKMapType](https://developer.apple.com/documentation/mapkit/mkmaptype))
