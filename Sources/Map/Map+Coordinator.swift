@@ -33,6 +33,10 @@ extension Map {
 
         override init() {}
 
+        deinit {
+            MapRegistry.clean()
+        }
+
         // MARK: Methods
 
         func update(_ mapView: MKMapView, from newView: Map, context: Context) {
@@ -45,6 +49,10 @@ extension Map {
             updateRegion(on: mapView, from: view, to: newView, animated: animation != nil)
             updateType(on: mapView, from: view, to: newView)
             updateUserTracking(on: mapView, from: view, to: newView)
+
+            if let key = context.environment.mapKey {
+                MapRegistry[key] = mapView
+            }
         }
 
         // MARK: Helpers
