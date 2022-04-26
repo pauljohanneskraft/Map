@@ -218,8 +218,8 @@ extension Map {
             view?.mapRect = mapView.visibleMapRect
             if let view = view, !view.usesRegion {
                 regionIsChanging = true
-                DispatchQueue.main.async {
-                    regionIsChanging = false
+                DispatchQueue.main.async { [weak self] in
+                    self?.regionIsChanging = false
                 }
             }
         }
