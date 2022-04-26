@@ -10,7 +10,7 @@
 import SwiftUI
 import MapKit
 
-public struct MapScale<Key: MapKey> {
+public struct MapScale {
 
     // MARK: Nested Types
 
@@ -38,12 +38,14 @@ public struct MapScale<Key: MapKey> {
 
     // MARK: Stored Properties
 
+    private let key: AnyHashable
     private let alignment: MKScaleView.Alignment
     private let visibility: MKFeatureVisibility
 
     // MARK: Initialization
 
-    public init(key: Key.Type, alignment: MKScaleView.Alignment, visibility: MKFeatureVisibility) {
+    public init<Key: Hashable>(key: Key, alignment: MKScaleView.Alignment, visibility: MKFeatureVisibility) {
+        self.key = key
         self.alignment = alignment
         self.visibility = visibility
     }
@@ -61,13 +63,13 @@ public struct MapScale<Key: MapKey> {
 extension MapScale: UIViewRepresentable {
 
     public func makeUIView(context: Context) -> MKScaleView {
-        let view = MKScaleView(mapView: MapRegistry[Key.self])
+        let view = MKScaleView(mapView: MapRegistry[key])
         updateUIView(view, context: context)
         return view
     }
 
     public func updateUIView(_ scaleView: MKScaleView, context: Context) {
-        scaleView.mapView = MapRegistry[Key.self]
+        scaleView.mapView = MapRegistry[key]
         context.coordinator.update(scaleView, with: self, context: context)
     }
 

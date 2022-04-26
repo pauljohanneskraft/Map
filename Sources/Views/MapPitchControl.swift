@@ -11,11 +11,17 @@ import SwiftUI
 import MapKit
 
 @available(macOS 11, *)
-public struct MapPitchControl<Key: MapKey> {
+public struct MapPitchControl {
+
+    // MARK: Stored Properties
+
+    private let key: AnyHashable
 
     // MARK: Initialization
 
-    public init(key: Key.Type) {}
+    public init<Key: Hashable>(key: Key) {
+        self.key = key
+    }
 
 }
 
@@ -23,13 +29,13 @@ public struct MapPitchControl<Key: MapKey> {
 extension MapPitchControl: NSViewRepresentable {
 
     public func makeNSView(context: Context) -> MKPitchControl {
-        let view = MKPitchControl(mapView: MapRegistry[Key.self])
+        let view = MKPitchControl(mapView: MapRegistry[key])
         updateNSView(view, context: context)
         return view
     }
 
     public func updateNSView(_ pitchControl: MKPitchControl, context: Context) {
-        pitchControl.mapView = MapRegistry[Key.self]
+        pitchControl.mapView = MapRegistry[key]
     }
 
 }

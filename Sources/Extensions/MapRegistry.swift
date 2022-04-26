@@ -10,23 +10,21 @@
 import MapKit
 import SwiftUI
 
-public protocol MapKey {}
-
 extension View {
 
-    public func mapKey(_ key: MapKey.Type) -> some View {
-        environment(\.mapKey, key)
+    public func mapKey<Key: Hashable>(_ key: Key) -> some View {
+        environment(\.mapKey, .init(key))
     }
 
 }
 
 private struct MapEnvironmentKey: EnvironmentKey {
-    static var defaultValue: MapKey.Type? { nil }
+    static var defaultValue: AnyHashable? { nil }
 }
 
 extension EnvironmentValues {
 
-    var mapKey: MapKey.Type? {
+    var mapKey: AnyHashable? {
         get { self[MapEnvironmentKey.self] }
         set { self[MapEnvironmentKey.self] = newValue }
     }
@@ -35,7 +33,7 @@ extension EnvironmentValues {
 
 enum MapRegistry {
 
-    private static var content = [ObjectIdentifier: Value]()
+    private static var content = [AnyHashable: Value]()
 
     private struct Value {
         weak var object: MKMapView?
@@ -47,9 +45,9 @@ enum MapRegistry {
         }
     }
 
-    static subscript(_ mapKey: MapKey.Type) -> MKMapView? {
-        get { content[ObjectIdentifier(mapKey)]?.object }
-        set { content[ObjectIdentifier(mapKey)] = newValue.map { Value(object: $0) } }
+    static subscript(_ key: AnyHashable) -> MKMapView? {
+        get { content[key]?.object }
+        set { content[key] = newValue.map { Value(object: $0) } }
     }
 
 }

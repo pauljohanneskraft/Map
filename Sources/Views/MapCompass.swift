@@ -12,7 +12,7 @@ import SwiftUI
 import MapKit
 
 @available(macOS 11, *)
-public struct MapCompass<Key: MapKey> {
+public struct MapCompass {
 
     // MARK: Nested Types
 
@@ -36,11 +36,13 @@ public struct MapCompass<Key: MapKey> {
 
     // MARK: Stored Properties
 
+    private let key: AnyHashable
     private let visibility: MKFeatureVisibility
 
     // MARK: Initialization
 
-    public init(key: Key.Type, visibility: MKFeatureVisibility) {
+    public init<Key: Hashable>(key: Key, visibility: MKFeatureVisibility) {
+        self.key = key
         self.visibility = visibility
     }
 
@@ -58,13 +60,13 @@ public struct MapCompass<Key: MapKey> {
 extension MapCompass: UIViewRepresentable {
 
     public func makeUIView(context: Context) -> MKCompassButton {
-        let view = MKCompassButton(mapView: MapRegistry[Key.self])
+        let view = MKCompassButton(mapView: MapRegistry[key])
         updateUIView(view, context: context)
         return view
     }
 
     public func updateUIView(_ compassButton: MKCompassButton, context: Context) {
-        compassButton.mapView = MapRegistry[Key.self]
+        compassButton.mapView = MapRegistry[key]
         context.coordinator.update(compassButton, with: self, context: context)
     }
 
@@ -76,13 +78,13 @@ extension MapCompass: UIViewRepresentable {
 extension MapCompass: NSViewRepresentable {
 
     public func makeNSView(context: Context) -> MKCompassButton {
-        let view = MKCompassButton(mapView: MapRegistry[Key.self])
+        let view = MKCompassButton(mapView: MapRegistry[key])
         updateNSView(view, context: context)
         return view
     }
 
     public func updateNSView(_ compassButton: MKCompassButton, context: Context) {
-        compassButton.mapView = MapRegistry[Key.self]
+        compassButton.mapView = MapRegistry[key]
         context.coordinator.update(compassButton, with: self, context: context)
     }
 

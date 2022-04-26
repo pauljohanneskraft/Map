@@ -11,11 +11,17 @@ import SwiftUI
 import MapKit
 
 @available(macOS 11, *)
-public struct MapZoomControl<Key: MapKey> {
+public struct MapZoomControl {
+
+    // MARK: Stored Properties
+
+    private let key: AnyHashable
 
     // MARK: Initialization
 
-    public init(key: Key.Type) {}
+    public init<Key: Hashable>(key: Key) {
+        self.key = key
+    }
 
 }
 
@@ -25,13 +31,13 @@ public struct MapZoomControl<Key: MapKey> {
 extension MapZoomControl: NSViewRepresentable {
 
     public func makeNSView(context: Context) -> MKZoomControl {
-        let view = MKZoomControl(mapView: MapRegistry[Key.self])
+        let view = MKZoomControl(mapView: MapRegistry[key])
         updateNSView(view, context: context)
         return view
     }
 
     public func updateNSView(_ zoomControl: MKZoomControl, context: Context) {
-        zoomControl.mapView = MapRegistry[Key.self]
+        zoomControl.mapView = MapRegistry[key]
     }
 
 }
