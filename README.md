@@ -234,7 +234,7 @@ Map(
 )
 ```
 
-## Installation
+## 🔩 Installation
 
 Map is currently only available via Swift Package Manager. See [this tutorial by Apple](https://developer.apple.com/documentation/swift_packages/adding_package_dependencies_to_your_app) on how to add a package dependency to your Xcode project.
 
