@@ -4,21 +4,21 @@ MapKit's SwiftUI implementation of [Map](https://developer.apple.com/documentati
 
 ## 🚀 Features
 
-📍 Annotations
+### 📍 Annotations
 - Create annotations from annotationItems as in the default MapKit SwiftUI implementation.
 - Or: Create annotations from a list of [MKAnnotation](https://developer.apple.com/documentation/mapkit/mkannotation) objects - you can even use your existing [MKAnnotationView](https://developer.apple.com/documentation/mapkit/mkannotationview) implementations!
 
-🖼 Overlays
+### 🖼 Overlays
 - Use a SwiftUI-style API based on `Identifiable` with overlay items and a closure to create overlays from these items
 - Or: Use existing [MKOverlay](https://developer.apple.com/documentation/mapkit/mkoverlay) / [MKOverlayRenderer](https://developer.apple.com/documentation/mapkit/mkoverlayrenderer) objects
 
-🛠 Appearance / Behavior Customization
+### 🛠 Appearance / Behavior Customization
 - Map type ([MKMapType](https://developer.apple.com/documentation/mapkit/mkmaptype))
 - User tracking mode ([MKUserTrackingMode](https://developer.apple.com/documentation/mapkit/mkusertrackingmode))
 - Interaction modes (rotation, pitch, zoom and pan)
 - Point of interest filter ([MKPointOfInterestFilter](https://developer.apple.com/documentation/mapkit/mkpointofinterestfilter)).
 
-👀 Adapt visibility of:
+### 👀 Adapt visibility of:
 - Buildings
 - Compass
 - Pitch control
@@ -28,7 +28,7 @@ MapKit's SwiftUI implementation of [Map](https://developer.apple.com/documentati
 - User location
 - Zoom controls
 
-🪄 Custom controls
+### 🪄 Custom controls
 - `MapCompass` for [MKCompassButton](https://developer.apple.com/documentation/mapkit/mkcompass)
 - `MapPitchControl` for [MKPitchControl](https://developer.apple.com/documentation/mapkit/mkpitchcontrol)
 - `MapScale` for [MKScaleView](https://developer.apple.com/documentation/mapkit/mkscaleview)
@@ -36,10 +36,11 @@ MapKit's SwiftUI implementation of [Map](https://developer.apple.com/documentati
 
 ## 💻 Supported Platforms
 
-- iOS 13+
-- macOS 10.15+
-- tvOS 13+
-- watchOS 6+
+| 📱 | iOS 13+ |
+| :-: | :-: |
+| 🖥 | **macOS 10.15+** | 
+| 📺 | **tvOS 13+** |
+| ⌚️ | **watchOS 6+** |
 
 Keep in mind that not all features are equally available on all platforms (based on what MapKit provides) and therefore might not be available here either. However, if you can use them using UIKit, there is a very high change that it is available here as well - if not: Let me/us know by creating an issue!
 
