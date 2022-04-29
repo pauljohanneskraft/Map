@@ -194,7 +194,6 @@ For the use of `MapCompass`, `MapPitchControl`, `MapScale` and `MapZoomControl` 
 Example: We want to display a scale overlay at the topLeading edge of a `Map`. To accomplish this, let's take a look at the following code snippet.
 
 ```swift
-struct MyMapKey: Hashable {}
 
 struct MyMapView: View {
 
@@ -202,9 +201,9 @@ struct MyMapView: View {
     
     var body: some View {
         Map(coordinateRegion: $region)
-            .mapKey(MyMapKey())
+            .mapKey(1)
             .overlay(alignment: .topLeading) {
-                MapScale(key: MyMapKey(), alignment: .leading, visibility: .visible)
+                MapScale(key: 1, alignment: .leading, visibility: .visible)
                     .fixedSize()
                     .padding(12)
             }
