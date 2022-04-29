@@ -226,7 +226,7 @@ Map(
     annotationContent: { item in
         if <first condition> {
             ImageAnnotation(coordinate: item.coordinate, image: UIImage(...), centerOffset: CGPoint(x: 0, y: -2) 
-        } else if <second condition> {
+        } else {
             MapPin(coordinate: item.coordinate, color: .red) // color can only be red, green or purple
         }
     }
