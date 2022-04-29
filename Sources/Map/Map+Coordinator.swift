@@ -28,6 +28,7 @@ extension Map {
 
         private var registeredAnnotationTypes = Set<ObjectIdentifier>()
         private var regionIsChanging = false
+        private var isUpdating = false
 
         // MARK: Initialization
 
@@ -40,7 +41,11 @@ extension Map {
         // MARK: Methods
 
         func update(_ mapView: MKMapView, from newView: Map, context: Context) {
-            defer { view = newView }
+            defer {
+                view = newView
+                isUpdating = false
+            }
+            isUpdating = true
             let animation = context.transaction.animation
             updateAnnotations(on: mapView, from: view, to: newView)
             updateInteractionModes(on: mapView, from: view, to: newView)
@@ -228,10 +233,12 @@ extension Map {
         // MARK: MKMapViewDelegate
 
         public func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
-            DispatchQueue.main.async { [weak self] in
-                self?.view?.coordinateRegion = mapView.region
-                self?.view?.mapRect = mapView.visibleMapRect
+            guard !isUpdating else {
+                return
             }
+
+            view?.coordinateRegion = mapView.region
+            view?.mapRect = mapView.visibleMapRect
         }
 
         @available(macOS 11, *)
