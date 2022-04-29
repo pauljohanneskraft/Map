@@ -94,16 +94,20 @@ public struct DynamicRendererMapOverlay: MapOverlay {
 
         self.overlay = Overlay(coordinate: coordinate, boundingMapRect: boundingMapRect)
         self.level = level
-        self.displayRequestPublisher = publisher.eraseToAnyPublisher()
+        self.updatePublisher = updates.eraseToAnyPublisher()
         self.canDraw = canDraw
         self.draw = draw
     }
 
 
     public func renderer(for mapView: MKMapView) -> MKOverlayRenderer {
-        DynamicMapRenderer(
+        guard let overlay = overlay as? Overlay else {
+            assertionFailure("DynamicRendererMapOverlay does not support custom MKOverlay classes.")
+            return MKOverlayRenderer(overlay: overlay)
+        }
+        return DynamicMapRenderer(
             overlay: overlay,
-            displayRequestPublisher: displayRequestPublisher,
+            updatePublisher: updatePublisher,
             canDraw: canDraw,
             draw: draw
         )
@@ -155,7 +159,7 @@ private class DynamicMapRenderer: MKOverlayRenderer {
             typedOverlay?.coordinate = coordinate
         }
         
-        if let boundingMapRect = update.boundingMapRect {
+        if let boundingMapRect = update.boundingMapRect {
             typedOverlay?.boundingMapRect = boundingMapRect
         }
         
