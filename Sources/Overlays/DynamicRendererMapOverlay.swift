@@ -13,6 +13,28 @@ import MapKit
 public struct DynamicRendererMapOverlay: MapOverlay {
 
     // MARK: Nested Types
+    
+    public struct Update {
+        
+        // MARK: Stored Properties
+        
+        let coordinate: CLLocationCoordinate2D?
+        let boundingMapRect: MKMapRect?
+        let displayRequest: DisplayRequest?
+        
+        // MARK: Initialization
+        
+        public init(
+            coordinate: CLLocationCoordinate2D? = nil, 
+            boundingMapRect: MKMapRect? = nil,
+            displayRequest: DisplayRequest? = nil
+        ) {
+            self.coordinate = coordinate
+            self.boundingMapRect = boundingMapRect
+            self.displayRequest = displayRequest
+        }
+        
+    }
 
     public struct DisplayRequest {
 
@@ -34,26 +56,43 @@ public struct DynamicRendererMapOverlay: MapOverlay {
         }
 
     }
+    
+    class Overlay: NSObject, MKOverlay {
+        
+        // MARK: Stored Properties
+        
+        @objc dynamic var coordinate: CLLocationCoordinate2D
+        @objc dynamic var boundingMapRect: MKMapRect
+        
+        // MARK: Initialization
+        
+        init(coordinate: CLLocationCoordinate2D, boundingMapRect: MKMapRect) {
+            self.coordinate = coordinate
+            self.boundingMapRect = boundingMapRect
+        }
+        
+    }
 
     // MARK: Stored Properties
 
     public let overlay: MKOverlay
     public let level: MKOverlayLevel?
-    private let displayRequestPublisher: AnyPublisher<DisplayRequest, Never>
+    private let updatePublisher: AnyPublisher<Update, Never>
     private let canDraw: ((MKMapRect, MKZoomScale) -> Bool)?
     private let draw: (MKMapRect, MKZoomScale, CGContext) -> Void
 
     // MARK: Initialization
 
     public init<P: Publisher>(
-        overlay: MKOverlay,
+        coordinate: CLLocationCoordinate2D,
+        boundingMapRect: MKMapRect,
         level: MKOverlayLevel? = nil,
-        publisher: P,
+        updates: P,
         canDraw: ((MKMapRect, MKZoomScale) -> Bool)? = nil,
         draw: @escaping (MKMapRect, MKZoomScale, CGContext) -> Void
-    ) where P.Output == DisplayRequest, P.Failure == Never {
+    ) where P.Output == Update, P.Failure == Never {
 
-        self.overlay = overlay
+        self.overlay = Overlay(coordinate: coordinate, boundingMapRect: boundingMapRect)
         self.level = level
         self.displayRequestPublisher = publisher.eraseToAnyPublisher()
         self.canDraw = canDraw
@@ -76,14 +115,14 @@ private class DynamicMapRenderer: MKOverlayRenderer {
 
     // MARK: Stored Properties
 
-    let _canDraw: ((MKMapRect, MKZoomScale) -> Bool)?
-    let _draw: (MKMapRect, MKZoomScale, CGContext) -> Void
-    var cancellables = Set<AnyCancellable>()
+    private let _canDraw: ((MKMapRect, MKZoomScale) -> Bool)?
+    private let _draw: (MKMapRect, MKZoomScale, CGContext) -> Void
+    private var cancellables = Set<AnyCancellable>()
 
     // MARK: Initialization
 
-    init(overlay: MKOverlay,
-         displayRequestPublisher: AnyPublisher<DynamicRendererMapOverlay.DisplayRequest, Never>,
+    init(overlay: DynamicRendererMapOverlay.Overlay,
+         updatePublisher: AnyPublisher<DynamicRendererMapOverlay.Update, Never>,
          canDraw: ((MKMapRect, MKZoomScale) -> Bool)?,
          draw: @escaping (MKMapRect, MKZoomScale, CGContext) -> Void) {
 
@@ -91,19 +130,9 @@ private class DynamicMapRenderer: MKOverlayRenderer {
         self._draw = draw
         super.init(overlay: overlay)
 
-        displayRequestPublisher
+        updatePublisher
             .receive(on: DispatchQueue.main)
-            .sink { [unowned self] request in
-                guard let mapRect = request.mapRect else {
-                    self.setNeedsDisplay()
-                    return
-                }
-                guard let zoomScale = request.zoomScale else {
-                    self.setNeedsDisplay(mapRect)
-                    return
-                }
-                self.setNeedsDisplay(mapRect, zoomScale: zoomScale)
-            }
+            .sink { [unowned self] in self.handle($0) }
             .store(in: &cancellables)
     }
 
@@ -115,6 +144,32 @@ private class DynamicMapRenderer: MKOverlayRenderer {
 
     override func draw(_ mapRect: MKMapRect, zoomScale: MKZoomScale, in context: CGContext) {
         _draw(mapRect, zoomScale, context)
+    }
+    
+    // MARK: Helpers
+    
+    private func handle(_ update: DynamicRendererMapOverlay.Update) {
+        let typedOverlay = overlay as? DynamicRendererMapOverlay.Overlay
+        
+        if let coordinate = update.coordinate {
+            typedOverlay?.coordinate = coordinate
+        }
+        
+        if let boundingMapRect = update.boundingMapRect {
+            typedOverlay?.boundingMapRect = boundingMapRect
+        }
+        
+        if let request = update.displayRequest {
+            guard let mapRect = request.mapRect else {
+                setNeedsDisplay()
+                return
+            }
+            guard let zoomScale = request.zoomScale else {
+                setNeedsDisplay(mapRect)
+                return
+            }
+            setNeedsDisplay(mapRect, zoomScale: zoomScale)
+        }
     }
 
 }
