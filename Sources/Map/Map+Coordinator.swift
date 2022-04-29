@@ -28,7 +28,6 @@ extension Map {
 
         private var registeredAnnotationTypes = Set<ObjectIdentifier>()
         private var regionIsChanging = false
-        private var isUpdating = false
 
         // MARK: Initialization
 
@@ -189,28 +188,21 @@ extension Map {
             }
 
             if newView.usesRegion {
-                let currentRegion = mapView.region
                 let newRegion = newView.coordinateRegion
-                if newRegion.center.latitude != currentRegion.center.latitude
-                    || newRegion.center.longitude != currentRegion.center.longitude
-                    || newRegion.span.latitudeDelta != currentRegion.span.latitudeDelta
-                    || newRegion.span.longitudeDelta != currentRegion.span.longitudeDelta {
-                    DispatchQueue.main.async {
-                        mapView.setRegion(newRegion, animated: animated)
-                    }
+                guard !mapView.region.equals(to: newRegion) else {
+                    return
+                }
+                DispatchQueue.main.async {
+                    mapView.setRegion(newRegion, animated: animated)
                 }
             } else {
-                let visibleMapRect = mapView.visibleMapRect
                 let newRect = newView.mapRect
-                if visibleMapRect.origin.x != newRect.origin.x
-                    || visibleMapRect.origin.y != newRect.origin.y
-                    || visibleMapRect.height != newRect.height
-                    || visibleMapRect.width != newRect.width {
-                    DispatchQueue.main.async {
-                        mapView.setVisibleMapRect(newRect, animated: animated)
-                    }
+                guard !mapView.visibleMapRect.equals(to: newRect) else {
+                    return
                 }
-
+                DispatchQueue.main.async {
+                    mapView.setVisibleMapRect(newRect, animated: animated)
+                }
             }
         }
 
