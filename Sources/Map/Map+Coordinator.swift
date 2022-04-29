@@ -41,11 +41,7 @@ extension Map {
         // MARK: Methods
 
         func update(_ mapView: MKMapView, from newView: Map, context: Context) {
-            defer {
-                view = newView
-                isUpdating = false
-            }
-            isUpdating = true
+            defer { view = newView }
             let animation = context.transaction.animation
             updateAnnotations(on: mapView, from: view, to: newView)
             updateInteractionModes(on: mapView, from: view, to: newView)
@@ -188,7 +184,7 @@ extension Map {
         }
 
         private func updateRegion(on mapView: MKMapView, from previousView: Map?, to newView: Map, animated: Bool) {
-            guard !regionIsChanging && !mapView.needsLayout && !mapView.needsDisplay else {
+            guard !regionIsChanging else {
                 return
             }
 
@@ -199,7 +195,9 @@ extension Map {
                     || newRegion.center.longitude != currentRegion.center.longitude
                     || newRegion.span.latitudeDelta != currentRegion.span.latitudeDelta
                     || newRegion.span.longitudeDelta != currentRegion.span.longitudeDelta {
-                    mapView.setRegion(newRegion, animated: animated)
+                    DispatchQueue.main.async {
+                        mapView.setRegion(newRegion, animated: animated)
+                    }
                 }
             } else {
                 let visibleMapRect = mapView.visibleMapRect
@@ -208,7 +206,9 @@ extension Map {
                     || visibleMapRect.origin.y != newRect.origin.y
                     || visibleMapRect.height != newRect.height
                     || visibleMapRect.width != newRect.width {
-                    mapView.setVisibleMapRect(newRect, animated: animated)
+                    DispatchQueue.main.async {
+                        mapView.setVisibleMapRect(newRect, animated: animated)
+                    }
                 }
 
             }
@@ -232,8 +232,6 @@ extension Map {
         // MARK: MKMapViewDelegate
 
         public func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
-            guard !isUpdating else { return }
-
             view?.coordinateRegion = mapView.region
             view?.mapRect = mapView.visibleMapRect
         }
