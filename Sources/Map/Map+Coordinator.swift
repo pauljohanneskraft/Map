@@ -188,7 +188,7 @@ extension Map {
         }
 
         private func updateRegion(on mapView: MKMapView, from previousView: Map?, to newView: Map, animated: Bool) {
-            guard !regionIsChanging && !mapView.needsLayout else {
+            guard !regionIsChanging && !mapView.needsLayout && !mapView.needsDisplay else {
                 return
             }
 
