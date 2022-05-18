@@ -48,19 +48,21 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
     }
 
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        let result = controller?.view.point(inside: point, with: event) ?? super.point(inside: point, with: event)
-        print(#function, point, bounds, frame, controller?.view.frame, controller?.view.bounds, result)
-        return result
+        calculateIntrinsicContentFrame().contains(point)
     }
 
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        controller?.view.frame = calculateIntrinsicContentFrame()
         guard let view = controller?.view.hitTest(point, with: event) ?? super.hitTest(point, with: event) else {
-            print(#function, point, bounds, frame, controller?.view.frame, controller?.view.bounds, "nil")
             return nil
         }
-        print(#function, point, bounds, view)
         superview?.bringSubviewToFront(self)
         return view
+    }
+
+    private func calculateIntrinsicContentFrame() -> CGRect {
+        let size = controller?.view.intrinsicContentSize ?? .zero
+        return CGRect(origin: .init(x: -size.width / 2, y: -size.height / 2), size: size)
     }
 
 }
