@@ -75,12 +75,11 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
     #if canImport(UIKit)
 
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        frame = intrinsicContentFrame
-        return controller?.view.point(inside: point, with: event) ?? super.point(inside: point, with: event)
+        intrinsicContentFrame.contains(point)
     }
 
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        frame = intrinsicContentFrame
+        controller?.view.frame = intrinsicContentFrame
         guard let view = controller?.view.hitTest(point, with: event) ?? super.hitTest(point, with: event) else {
             return nil
         }
@@ -91,8 +90,7 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
     #elseif canImport(AppKit)
 
     override func isMousePoint(_ point: NSPoint, in rect: NSRect) -> Bool {
-        controller?.view.frame = intrinsicContentFrame
-        return controller?.view.isMousePoint(point, in: rect) ?? super.isMousePoint(point, in: rect)
+        intrinsicContentFrame.contains(point)
     }
 
     override func hitTest(_ point: NSPoint) -> NSView? {
