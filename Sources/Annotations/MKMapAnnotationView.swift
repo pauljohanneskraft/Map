@@ -69,12 +69,6 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
         controller = nil
     }
 
-    override func layout() {
-        bounds = intrinsicContentFrame
-
-        super.layout()
-    }
-
     #if canImport(UIKit)
 
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
