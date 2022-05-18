@@ -61,7 +61,10 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        controller?.view.frame = calculateIntrinsicContentFrame()
+        let size = intrinsicContentSize
+        let intrinsicFrame = CGRect(origin: .init(x: -size.width / 2, y: -size.height / 2), size: size)
+        frame = intrinsicFrame
+        controller?.view.frame = intrinsicFrame
     }
 
     /*
@@ -78,12 +81,14 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
         superview?.bringSubviewToFront(self)
         return view
     }
+
+     private func calculateIntrinsicContentFrame() -> CGRect? {
+     let size = controller?.view.intrinsicContentSize ?? .zero
+     return CGRect(origin: .init(x: -size.width / 2, y: -size.height / 2), size: size)
+     }
      */
 
-    private func calculateIntrinsicContentFrame() -> CGRect {
-        let size = controller?.view.intrinsicContentSize ?? .zero
-        return CGRect(origin: .init(x: -size.width / 2, y: -size.height / 2), size: size)
-    }
+
 
 }
 
