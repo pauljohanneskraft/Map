@@ -20,17 +20,29 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
 
     override var intrinsicContentSize: CGSize {
         controller?.view.intrinsicContentSize
-            ?? .init(width: UIView.noIntrinsicMetric, height: UIView.noIntrinsicMetric)
+            ?? .init(width: NativeView.noIntrinsicMetric, height: NativeView.noIntrinsicMetric)
+    }
+
+    private var intrinsicContentFrame: CGRect {
+        let size = intrinsicContentSize
+        return CGRect(origin: .init(x: -size.width / 2, y: -size.height / 2), size: size)
     }
 
     // MARK: Methods
 
     func setup(for mapAnnotation: ViewMapAnnotation<Content>) {
         annotation = mapAnnotation.annotation
+
+        #if canImport(UIKit)
         backgroundColor = .clear
+        #endif
 
         let controller = NativeHostingController(rootView: mapAnnotation.content)
+
+        #if canImport(UIKit)
         controller.view.backgroundColor = .clear
+        #endif
+
         controller.view.translatesAutoresizingMaskIntoConstraints = false
         addSubview(controller.view)
         NSLayoutConstraint.activate([
@@ -40,7 +52,9 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
             controller.view.heightAnchor.constraint(equalTo: heightAnchor),
         ])
 
+        #if canImport(UIKit)
         self.isUserInteractionEnabled = true
+        #endif
         self.controller = controller
         self.invalidateIntrinsicContentSize()
     }
@@ -58,23 +72,15 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
         controller = nil
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    #if canImport(UIKit)
 
-        let size = intrinsicContentSize
-        let intrinsicFrame = CGRect(origin: .init(x: -size.width / 2, y: -size.height / 2), size: size)
-        frame = intrinsicFrame
-        controller?.view.frame = intrinsicFrame
-    }
-
-    /*
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        controller?.view.frame = calculateIntrinsicContentFrame()
-        calculateIntrinsicContentFrame().contains(point)
+        controller?.view.frame = intrinsicContentFrame
+        return controller?.view.point(inside: point, with: event) ?? super.point(inside: point, with: event)
     }
 
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        controller?.view.frame = calculateIntrinsicContentFrame()
+        controller?.view.frame = intrinsicContentFrame
         guard let view = controller?.view.hitTest(point, with: event) ?? super.hitTest(point, with: event) else {
             return nil
         }
@@ -82,13 +88,22 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
         return view
     }
 
-     private func calculateIntrinsicContentFrame() -> CGRect? {
-     let size = controller?.view.intrinsicContentSize ?? .zero
-     return CGRect(origin: .init(x: -size.width / 2, y: -size.height / 2), size: size)
-     }
-     */
+    #elseif canImport(AppKit)
 
+    override func isMousePoint(_ point: NSPoint, in rect: NSRect) -> Bool {
+        controller?.view.frame = intrinsicContentFrame
+        return controller?.view.isMousePoint(point, in: rect) ?? super.isMousePoint(point, in: rect)
+    }
 
+    override func hitTest(_ point: NSPoint) -> NSView? {
+        controller?.view.frame = intrinsicContentFrame
+        guard let view = controller?.view.hitTest(point) ?? super.hitTest(point) else {
+            return nil
+        }
+        return view
+    }
+
+    #endif
 
 }
 
