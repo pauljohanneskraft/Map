@@ -16,12 +16,21 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
 
     private var controller: NativeHostingController<Content>?
 
+    // MARK: Computed Properties
+
+    override var intrinsicContentSize: CGSize {
+        controller?.view.intrinsicContentSize
+            ?? .init(width: UIView.noIntrinsicMetric, height: UIView.noIntrinsicMetric)
+    }
+
     // MARK: Methods
 
     func setup(for mapAnnotation: ViewMapAnnotation<Content>) {
         annotation = mapAnnotation.annotation
+        backgroundColor = .clear
 
         let controller = NativeHostingController(rootView: mapAnnotation.content)
+        controller.view.backgroundColor = .clear
         controller.view.translatesAutoresizingMaskIntoConstraints = false
         addSubview(controller.view)
         NSLayoutConstraint.activate([
@@ -30,8 +39,10 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
             controller.view.widthAnchor.constraint(equalTo: widthAnchor),
             controller.view.heightAnchor.constraint(equalTo: heightAnchor),
         ])
+
         self.isUserInteractionEnabled = true
         self.controller = controller
+        self.invalidateIntrinsicContentSize()
     }
 
     // MARK: Overrides
@@ -47,13 +58,13 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
         controller = nil
     }
 
+    /*
     override func layoutSubviews() {
         super.layoutSubviews()
 
         controller?.view.frame = calculateIntrinsicContentFrame()
     }
 
-    /*
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         controller?.view.frame = calculateIntrinsicContentFrame()
         calculateIntrinsicContentFrame().contains(point)
