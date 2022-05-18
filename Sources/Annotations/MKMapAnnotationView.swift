@@ -58,13 +58,13 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
         controller = nil
     }
 
-    /*
     override func layoutSubviews() {
         super.layoutSubviews()
 
         controller?.view.frame = calculateIntrinsicContentFrame()
     }
 
+    /*
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         controller?.view.frame = calculateIntrinsicContentFrame()
         calculateIntrinsicContentFrame().contains(point)
