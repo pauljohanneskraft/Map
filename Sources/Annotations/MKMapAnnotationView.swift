@@ -46,6 +46,18 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
         controller = nil
     }
 
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        controller?.view.point(inside: point, with: event) ?? false
+    }
+
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        guard let hitView = super.hitTest(point, with: event) else {
+            return nil
+        }
+        superview?.bringSubviewToFront(self)
+        return hitView
+    }
+
 }
 
 #endif
