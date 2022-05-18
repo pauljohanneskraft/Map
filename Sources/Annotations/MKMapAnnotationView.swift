@@ -52,9 +52,6 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
             controller.view.heightAnchor.constraint(equalTo: heightAnchor),
         ])
 
-        #if canImport(UIKit)
-        self.isUserInteractionEnabled = true
-        #endif
         self.controller = controller
         self.invalidateIntrinsicContentSize()
     }
@@ -88,10 +85,6 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
     }
 
     #elseif canImport(AppKit)
-
-    override func isMousePoint(_ point: NSPoint, in rect: NSRect) -> Bool {
-        intrinsicContentFrame.contains(point)
-    }
 
     override func hitTest(_ point: NSPoint) -> NSView? {
         controller?.view.frame = intrinsicContentFrame
