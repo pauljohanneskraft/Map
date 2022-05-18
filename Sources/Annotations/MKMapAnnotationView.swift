@@ -68,12 +68,8 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
     }
 
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        controller?.view.frame = intrinsicContentFrame
-        guard let view = controller?.view.hitTest(point, with: event) ?? super.hitTest(point, with: event) else {
-            return nil
-        }
-        superview?.bringSubviewToFront(self)
-        return view
+        // controller?.view.frame = intrinsicContentFrame
+        return controller?.view.hitTest(point, with: event) ?? super.hitTest(point, with: event)
     }
 
     #elseif canImport(AppKit)
