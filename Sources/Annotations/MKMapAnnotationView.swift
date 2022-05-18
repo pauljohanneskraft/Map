@@ -43,15 +43,7 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
         controller.view.backgroundColor = .clear
         #endif
 
-        controller.view.translatesAutoresizingMaskIntoConstraints = false
         addSubview(controller.view)
-        NSLayoutConstraint.activate([
-            controller.view.centerXAnchor.constraint(equalTo: centerXAnchor),
-            controller.view.centerYAnchor.constraint(equalTo: centerYAnchor),
-            controller.view.widthAnchor.constraint(equalTo: widthAnchor),
-            controller.view.heightAnchor.constraint(equalTo: heightAnchor),
-        ])
-
         self.controller = controller
         self.invalidateIntrinsicContentSize()
     }
