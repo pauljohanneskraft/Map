@@ -66,7 +66,7 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         let rect = intrinsicContentFrame
         let result = rect.contains(point)
-        print(#function, rect, point, result)
+        print(#function, rect, point, result, event)
         return result
     }
 
@@ -75,7 +75,7 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
         controller?.view.frame = rect
         let result = controller?.view.hitTest(point, with: event) // ?? super.hitTest(point, with: event)
         let alternativeResult = result ?? super.hitTest(point, with: event)
-        print(result, controller, controller?.view.frame, result, alternativeResult)
+        print(result, controller, controller?.view.frame, result, alternativeResult, event)
         return alternativeResult
     }
 
