@@ -29,6 +29,7 @@ public struct Map<AnnotationItems: RandomAccessCollection> where AnnotationItems
     let annotationItems: AnnotationItems
     let annotationContent: (AnnotationItems.Element) -> MapAnnotation
 
+    let onOverlayTapped: ((OverlayItems.Element) -> Void)? = nil
 }
 
 // MARK: - Initialization
@@ -39,7 +40,8 @@ extension Map {
         coordinateRegion: Binding<MKCoordinateRegion>,
         informationVisibility: MapInformationVisibility = .default,
         annotationItems: AnnotationItems,
-        annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation
+        annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation,
+        onOverlayTapped: ((OverlayItems.Element) -> Void)? = nil
     ) {
         self.usesRegion = true
         self._coordinateRegion = coordinateRegion
@@ -49,13 +51,15 @@ extension Map {
         self._userTrackingMode = .constant(.none)
         self.annotationItems = annotationItems
         self.annotationContent = annotationContent
+        self.onOverlayTapped = onOverlayTapped
     }
 
     public init(
         mapRect: Binding<MKMapRect>,
         informationVisibility: MapInformationVisibility = .default,
         annotationItems: AnnotationItems,
-        annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation
+        annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation,
+        onOverlayTapped: ((OverlayItems.Element) -> Void)? = nil
     ) {
         self.usesRegion = false
         self._coordinateRegion = .constant(.init())
@@ -65,6 +69,7 @@ extension Map {
         self._userTrackingMode = .constant(.none)
         self.annotationItems = annotationItems
         self.annotationContent = annotationContent
+        self.onOverlayTapped = onOverlayTapped
     }
 
     @available(watchOS 6.1, *)
@@ -73,7 +78,8 @@ extension Map {
         informationVisibility: MapInformationVisibility = .default,
         userTrackingMode: Binding<MapUserTrackingMode>?,
         annotationItems: AnnotationItems,
-        annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation
+        annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation,
+        onOverlayTapped: ((OverlayItems.Element) -> Void)? = nil
     ) {
         self.usesRegion = true
         self._coordinateRegion = coordinateRegion
@@ -88,6 +94,7 @@ extension Map {
         }
         self.annotationItems = annotationItems
         self.annotationContent = annotationContent
+        self.onOverlayTapped = onOverlayTapped
     }
 
     @available(watchOS 6.1, *)
@@ -96,7 +103,8 @@ extension Map {
         informationVisibility: MapInformationVisibility = .default,
         userTrackingMode: Binding<MapUserTrackingMode>?,
         annotationItems: AnnotationItems,
-        annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation
+        annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation,
+        onOverlayTapped: ((OverlayItems.Element) -> Void)? = nil
     ) {
         self.usesRegion = false
         self._coordinateRegion = .constant(.init())
@@ -111,6 +119,7 @@ extension Map {
         }
         self.annotationItems = annotationItems
         self.annotationContent = annotationContent
+        self.onOverlayTapped = onOverlayTapped
     }
 
 }

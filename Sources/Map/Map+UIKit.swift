@@ -17,13 +17,19 @@ extension Map: UIViewRepresentable {
         let mapView = MKMapView()
         mapView.delegate = context.coordinator
         updateUIView(mapView, context: context)
+
+        let gesture = UITapGestureRecognizer(
+            target: context.coordinator,
+            action: #selector(Coordinator.tapped)
+        )
+        mapView.addGestureRecognizer(gesture)
+
         return mapView
     }
 
     public func updateUIView(_ mapView: MKMapView, context: Context) {
         context.coordinator.update(mapView, from: self, context: context)
     }
-
 }
 
 #endif

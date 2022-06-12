@@ -273,6 +273,12 @@ extension Map {
             return content.view(for: mapView)
         }
 
+        @objc func tapped(gesture: UITapGestureRecognizer) {
+            guard let mapView = gesture.view as? MKMapView else { return }
+            let point = gesture.location(in: mapView)
+
+            view?.processTapEvent(for: mapView, of: overlayContentByID, on: point)
+        }
     }
 
     // MARK: Methods
@@ -280,7 +286,6 @@ extension Map {
     public func makeCoordinator() -> Coordinator {
         Coordinator()
     }
-
 }
 
 #endif
