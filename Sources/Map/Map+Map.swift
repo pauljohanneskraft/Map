@@ -23,30 +23,21 @@ extension Map {
         let tappedItems = mapView.overlays.filter {
             overlay in
 
-            // FIXME: predefine renderer
-            let renderer: MKOverlayPathRenderer
-            if overlay is MKCircle {
-                renderer = MKCircleRenderer(circle: overlay as! MKCircle)
-            } else if overlay is MKPolyline {
-                renderer = MKPolylineRenderer(polyline: overlay as! MKPolyline)
-            } else if overlay is MKPolygon {
-                renderer = MKPolygonRenderer(polygon: overlay as! MKPolygon)
-            } else {
-                fatalError("unsupported type")
-            }
+            guard let renderer: MKOverlayPathRenderer = mapView.renderer(for: overlay) as? MKOverlayPathRenderer else { return false }
             let currentMapPoint: MKMapPoint = MKMapPoint(locationCoordinate)
             let viewPoint: CGPoint = renderer.point(for: currentMapPoint)
 
             var targetPath = renderer.path
-            if overlay is MKPolyline {
+            if overlay is MKPolyline || overlay is MKMultiPolyline {
                 targetPath = targetPath?.copy(
-                    strokingWithWidth: 5.0,
-                    lineCap: .round,
-                    lineJoin: .round,
+                    strokingWithWidth: 5.0,    // FIXME: 本来は、polylineのstrokeWidthに応じた値にすべき
+                    lineCap: .square,
+                    lineJoin: .bevel,
                     miterLimit: .greatestFiniteMagnitude
                 )
             }
-            return targetPath != nil && targetPath!.contains(viewPoint)
+            guard let targetPath = targetPath else { return false }
+            return targetPath.contains(viewPoint)
         }
 
         if let tappedItem = tappedItems.first {
