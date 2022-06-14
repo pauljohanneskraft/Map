@@ -268,7 +268,6 @@ extension Map {
 
         public func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
             guard let content = annotationContentByObject[ObjectIdentifier(annotation)] else {
-                print("Unknown annotation appeared: \(annotation).")
                 return nil
             }
             return content.view(for: mapView)
