@@ -43,6 +43,7 @@ extension Map {
             defer { view = newView }
             let animation = context.transaction.animation
             updateAnnotations(on: mapView, from: view, to: newView)
+            updateInformationVisibility(on: mapView, from: view, to: newView)
             updateInteractionModes(on: mapView, from: view, to: newView)
             updateOverlays(on: mapView, from: view, to: newView)
             updatePointOfInterestFilter(on: mapView, from: view, to: newView)
