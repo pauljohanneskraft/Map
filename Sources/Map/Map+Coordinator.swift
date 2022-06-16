@@ -225,8 +225,10 @@ extension Map {
         // MARK: MKMapViewDelegate
 
         public func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
-            view?.coordinateRegion = mapView.region
-            view?.mapRect = mapView.visibleMapRect
+            Task { @MainActor [weak self] in
+                self?.view?.coordinateRegion = mapView.region
+                self?.view?.mapRect = mapView.visibleMapRect
+            }
         }
 
         @available(macOS 11, *)
