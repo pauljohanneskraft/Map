@@ -28,9 +28,9 @@ extension Map {
             let viewPoint: CGPoint = renderer.point(for: currentMapPoint)
 
             var targetPath = renderer.path
-            if overlay is MKPolyline || overlay is MKMultiPolyline {
+            if renderer is MKPolylineRenderer || renderer is MKMultiPolygonRenderer {
                 targetPath = targetPath?.copy(
-                    strokingWithWidth: 5.0,    // FIXME: 本来は、polylineのstrokeWidthに応じた値にすべき
+                    strokingWithWidth: renderer.lineWidth,
                     lineCap: .square,
                     lineJoin: .bevel,
                     miterLimit: .greatestFiniteMagnitude
