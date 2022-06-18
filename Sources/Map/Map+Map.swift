@@ -31,12 +31,12 @@ extension Map {
             let viewPoint: CGPoint = renderer.point(for: currentMapPoint)
             var targetPath = renderer.path
 
-            if renderer is MKPolylineRenderer || renderer is MKMultiPolygonRenderer {
+            if renderer is MKPolylineRenderer || renderer is MKMultiPolylineRenderer {
                 targetPath = targetPath?.copy(
                     strokingWithWidth: renderer.lineWidth * scale * UIScreen.main.scale,
-                    lineCap: .square,
-                    lineJoin: .bevel,
-                    miterLimit: .greatestFiniteMagnitude
+                    lineCap: renderer.lineCap,
+                    lineJoin: renderer.lineJoin,
+                    miterLimit: renderer.miterLimit
                 )
             }
             guard let targetPath = targetPath else { return false }
