@@ -26,11 +26,14 @@ extension Map {
             guard let renderer: MKOverlayPathRenderer = mapView.renderer(for: overlay) as? MKOverlayPathRenderer else { return false }
             let currentMapPoint: MKMapPoint = MKMapPoint(locationCoordinate)
             let viewPoint: CGPoint = renderer.point(for: currentMapPoint)
-
             var targetPath = renderer.path
+
+            let zoomLevel = log2(360.0 * ((Double(mapView.frame.size.width) / 256.0) / mapView.region.span.longitudeDelta)) + 1.0
+            let scale = pow(2, 20 - zoomLevel)
+
             if renderer is MKPolylineRenderer || renderer is MKMultiPolygonRenderer {
                 targetPath = targetPath?.copy(
-                    strokingWithWidth: renderer.lineWidth,
+                    strokingWithWidth: renderer.lineWidth * scale * UIScreen.main.scale,
                     lineCap: .square,
                     lineJoin: .bevel,
                     miterLimit: .greatestFiniteMagnitude
