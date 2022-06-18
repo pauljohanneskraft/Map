@@ -43,7 +43,7 @@ extension Map {
             return targetPath.contains(viewPoint)
         }
 
-        if let tappedItem = tappedItems.first {
+        if let tappedItem = tappedItems.last {
             if let id = overlayContentByID.first(where: { $0.value.overlay.hash == tappedItem.hash })?.key {
                 if let item = self.overlayItems.first(where: { $0.id == id }) {
                     onOverlayTapped?(item)
