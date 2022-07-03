@@ -28,12 +28,8 @@ extension EnvironmentValues {
 
 extension View {
 
-    public func mapBoundary(region: MKCoordinateRegion?) -> some View {
-        environment(\.mapBoundary, region.flatMap { .init(coordinateRegion: $0) })
-    }
-
-    public func mapBoundary(mapRect: MKMapRect?) -> some View {
-        environment(\.mapBoundary, mapRect.flatMap { .init(mapRect: $0) })
+    public func mapBoundary(_ boundary: MKMapView.CameraBoundary?) -> some View {
+        environment(\.mapBoundary, boundary)
     }
 
 }
