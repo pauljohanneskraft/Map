@@ -10,7 +10,7 @@
 import SwiftUI
 import MapKit
 
-private struct MapZoomRangeKey: EnvironmentKey {
+private enum MapZoomRangeKey: EnvironmentKey {
 
     static var defaultValue: MKMapView.CameraZoomRange? { nil }
 

@@ -11,9 +11,9 @@ import Foundation
 import MapKit
 import SwiftUI
 
-private struct MapBoundaryKey: EnvironmentKey {
+private enum MapBoundaryKey: EnvironmentKey {
 
-    static var defaultValue: MKMapView.CameraBoundary?
+    static var defaultValue: MKMapView.CameraBoundary? { nil }
 
 }
 
