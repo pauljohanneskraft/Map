@@ -26,6 +26,9 @@ extension Map {
         private var overlayContentByObject = [ObjectIdentifier: MapOverlay]()
         private var overlayContentByID = [OverlayItems.Element.ID: MapOverlay]()
 
+        private var previousBoundary: MKMapView.CameraBoundary?
+        private var previousZoomRange: MKMapView.CameraZoomRange?
+
         private var registeredAnnotationTypes = Set<ObjectIdentifier>()
         private var regionIsChanging = false
 
@@ -43,6 +46,7 @@ extension Map {
             defer { view = newView }
             let animation = context.transaction.animation
             updateAnnotations(on: mapView, from: view, to: newView)
+            updateCamera(on: mapView, context: context, animated: animation != nil)
             updateInformationVisibility(on: mapView, from: view, to: newView)
             updateInteractionModes(on: mapView, from: view, to: newView)
             updateOverlays(on: mapView, from: view, to: newView)
@@ -101,6 +105,20 @@ extension Map {
                     annotationContentByObject.removeValue(forKey: ObjectIdentifier(content.annotation))
                     annotationContentByID.removeValue(forKey: item.id)
                 }
+            }
+        }
+
+        private func updateCamera(on mapView: MKMapView, context: Context, animated: Bool) {
+            let newBoundary = context.environment.mapBoundary
+            if previousBoundary != newBoundary && mapView.cameraBoundary != newBoundary {
+                mapView.setCameraBoundary(newBoundary, animated: animated)
+                previousBoundary = newBoundary
+            }
+
+            let newZoomRange = context.environment.mapZoomRange
+            if previousZoomRange != newZoomRange && mapView.cameraZoomRange != newZoomRange {
+                mapView.setCameraZoomRange(newZoomRange, animated: animated)
+                previousZoomRange = newZoomRange
             }
         }
 
@@ -190,7 +208,8 @@ extension Map {
 
             if newView.usesRegion {
                 let newRegion = newView.coordinateRegion
-                guard !mapView.region.equals(to: newRegion) else {
+                guard !(previousView?.coordinateRegion.equals(to: newRegion) ?? false)
+                        && !mapView.region.equals(to: newRegion) else {
                     return
                 }
                 DispatchQueue.main.async {
@@ -198,7 +217,8 @@ extension Map {
                 }
             } else {
                 let newRect = newView.mapRect
-                guard !mapView.visibleMapRect.equals(to: newRect) else {
+                guard !(previousView?.mapRect.equals(to: newRect) ?? false)
+                        && !mapView.visibleMapRect.equals(to: newRect) else {
                     return
                 }
                 DispatchQueue.main.async {

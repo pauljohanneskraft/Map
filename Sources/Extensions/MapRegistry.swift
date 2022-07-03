@@ -18,8 +18,10 @@ extension View {
 
 }
 
-private struct MapEnvironmentKey: EnvironmentKey {
+private enum MapEnvironmentKey: EnvironmentKey {
+
     static var defaultValue: AnyHashable? { nil }
+
 }
 
 extension EnvironmentValues {
