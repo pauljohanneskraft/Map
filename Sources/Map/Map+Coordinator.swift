@@ -235,7 +235,7 @@ extension Map {
 
         private func updateUserTracking(on mapView: MKMapView, from previousView: Map?, to newView: Map) {
             if #available(macOS 11, *) {
-                let newTrackingMode = newView.userTrackingMode.actualValue
+                let newTrackingMode = newView.userTrackingMode
                 if newView.usesUserTrackingMode, mapView.userTrackingMode != newTrackingMode {
                     mapView.userTrackingMode = newTrackingMode
                 }

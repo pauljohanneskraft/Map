@@ -29,7 +29,7 @@ public struct Map<AnnotationItems: RandomAccessCollection, OverlayItems: RandomA
     let usesUserTrackingMode: Bool
 
     @available(macOS 11, *)
-    @Binding var userTrackingMode: MapUserTrackingMode
+    @Binding var userTrackingMode: MKUserTrackingMode
 
     let annotationItems: AnnotationItems
     let annotationContent: (AnnotationItems.Element) -> MapAnnotation
@@ -105,7 +105,7 @@ extension Map {
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
         showsUserLocation: Bool = false,
-        userTrackingMode: Binding<MapUserTrackingMode>?,
+        userTrackingMode: Binding<MKUserTrackingMode>?,
         annotationItems: AnnotationItems,
         @MapAnnotationBuilder annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation,
         overlayItems: OverlayItems,
@@ -138,7 +138,7 @@ extension Map {
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
-        userTrackingMode: Binding<MapUserTrackingMode>?,
+        userTrackingMode: Binding<MKUserTrackingMode>?,
         annotationItems: AnnotationItems,
         @MapAnnotationBuilder annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation,
         overlayItems: OverlayItems,
@@ -176,7 +176,7 @@ extension Map {
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
-        userTrackingMode: Binding<MapUserTrackingMode>? = nil,
+        userTrackingMode: Binding<MKUserTrackingMode>? = nil,
         annotationItems: AnnotationItems,
         @MapAnnotationBuilder annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation,
         overlayItems: OverlayItems,
@@ -208,7 +208,7 @@ extension Map {
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
-        userTrackingMode: Binding<MapUserTrackingMode>? = nil,
+        userTrackingMode: Binding<MKUserTrackingMode>? = nil,
         annotationItems: AnnotationItems,
         @MapAnnotationBuilder annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation,
         overlayItems: OverlayItems,
@@ -309,7 +309,7 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>] {
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
-        userTrackingMode: Binding<MapUserTrackingMode>?,
+        userTrackingMode: Binding<MKUserTrackingMode>?,
         annotations: [MKAnnotation] = [],
         @MapAnnotationBuilder annotationContent: @escaping (MKAnnotation) -> MapAnnotation = { annotation in
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
@@ -339,7 +339,7 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>] {
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
-        userTrackingMode: Binding<MapUserTrackingMode>?,
+        userTrackingMode: Binding<MKUserTrackingMode>?,
         annotations: [MKAnnotation] = [],
         @MapAnnotationBuilder annotationContent: @escaping (MKAnnotation) -> MapAnnotation = { annotation in
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
@@ -374,7 +374,7 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>] {
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
-        userTrackingMode: Binding<MapUserTrackingMode>? = nil,
+        userTrackingMode: Binding<MKUserTrackingMode>? = nil,
         annotations: [MKAnnotation] = [],
         @MapAnnotationBuilder annotationContent: @escaping (MKAnnotation) -> MapAnnotation = { annotation in
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
@@ -403,7 +403,7 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>] {
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
-        userTrackingMode: Binding<MapUserTrackingMode>? = nil,
+        userTrackingMode: Binding<MKUserTrackingMode>? = nil,
         annotations: [MKAnnotation] = [],
         @MapAnnotationBuilder annotationContent: @escaping (MKAnnotation) -> MapAnnotation = { annotation in
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
@@ -506,7 +506,7 @@ extension Map where OverlayItems == [IdentifiableObject<MKOverlay>] {
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
-        userTrackingMode: Binding<MapUserTrackingMode>?,
+        userTrackingMode: Binding<MKUserTrackingMode>?,
         annotationItems: AnnotationItems,
         @MapAnnotationBuilder annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation,
         overlays: [MKOverlay] = [],
@@ -538,7 +538,7 @@ extension Map where OverlayItems == [IdentifiableObject<MKOverlay>] {
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
-        userTrackingMode: Binding<MapUserTrackingMode>?,
+        userTrackingMode: Binding<MKUserTrackingMode>?,
         annotationItems: AnnotationItems,
         @MapAnnotationBuilder annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation,
         overlays: [MKOverlay] = [],
@@ -575,7 +575,7 @@ extension Map where OverlayItems == [IdentifiableObject<MKOverlay>] {
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
-        userTrackingMode: Binding<MapUserTrackingMode>? = nil,
+        userTrackingMode: Binding<MKUserTrackingMode>? = nil,
         annotationItems: AnnotationItems,
         @MapAnnotationBuilder annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation,
         overlays: [MKOverlay] = [],
@@ -606,7 +606,7 @@ extension Map where OverlayItems == [IdentifiableObject<MKOverlay>] {
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
-        userTrackingMode: Binding<MapUserTrackingMode>? = nil,
+        userTrackingMode: Binding<MKUserTrackingMode>? = nil,
         annotationItems: AnnotationItems,
         @MapAnnotationBuilder annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation,
         overlays: [MKOverlay] = [],
@@ -715,7 +715,7 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>], Overl
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
-        userTrackingMode: Binding<MapUserTrackingMode>?,
+        userTrackingMode: Binding<MKUserTrackingMode>?,
         annotations: [MKAnnotation] = [],
         @MapAnnotationBuilder annotationContent: @escaping (MKAnnotation) -> MapAnnotation = { annotation in
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
@@ -750,7 +750,7 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>], Overl
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
-        userTrackingMode: Binding<MapUserTrackingMode>?,
+        userTrackingMode: Binding<MKUserTrackingMode>?,
         annotations: [MKAnnotation] = [],
         @MapAnnotationBuilder annotationContent: @escaping (MKAnnotation) -> MapAnnotation = { annotation in
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
@@ -792,7 +792,7 @@ extension Map
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
-        userTrackingMode: Binding<MapUserTrackingMode>? = nil,
+        userTrackingMode: Binding<MKUserTrackingMode>? = nil,
         annotations: [MKAnnotation] = [],
         @MapAnnotationBuilder annotationContent: @escaping (MKAnnotation) -> MapAnnotation = { annotation in
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
@@ -826,7 +826,7 @@ extension Map
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
-        userTrackingMode: Binding<MapUserTrackingMode>? = nil,
+        userTrackingMode: Binding<MKUserTrackingMode>? = nil,
         annotations: [MKAnnotation] = [],
         @MapAnnotationBuilder annotationContent: @escaping (MKAnnotation) -> MapAnnotation = { annotation in
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
