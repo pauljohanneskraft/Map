@@ -24,7 +24,7 @@ public struct Map<AnnotationItems: RandomAccessCollection> where AnnotationItems
     let usesUserTrackingMode: Bool
 
     @available(watchOS 6.1, *)
-    @Binding var userTrackingMode: MapUserTrackingMode
+    @Binding var userTrackingMode: WKInterfaceMap.UserTrackingMode
 
     let annotationItems: AnnotationItems
     let annotationContent: (AnnotationItems.Element) -> MapAnnotation
@@ -71,7 +71,7 @@ extension Map {
     public init(
         coordinateRegion: Binding<MKCoordinateRegion>,
         informationVisibility: MapInformationVisibility = .default,
-        userTrackingMode: Binding<MapUserTrackingMode>?,
+        userTrackingMode: Binding<WKInterfaceMap.UserTrackingMode>?,
         annotationItems: AnnotationItems,
         annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation
     ) {
@@ -94,7 +94,7 @@ extension Map {
     public init(
         mapRect: Binding<MKMapRect>,
         informationVisibility: MapInformationVisibility = .default,
-        userTrackingMode: Binding<MapUserTrackingMode>?,
+        userTrackingMode: Binding<WKInterfaceMap.UserTrackingMode>?,
         annotationItems: AnnotationItems,
         annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation
     ) {
@@ -145,7 +145,7 @@ extension Map where AnnotationItems == EmptyCollection<IdentifiableObject<NSObje
     public init(
         coordinateRegion: Binding<MKCoordinateRegion>,
         informationVisibility: MapInformationVisibility = .default,
-        userTrackingMode: Binding<MapUserTrackingMode>?
+        userTrackingMode: Binding<WKInterfaceMap.UserTrackingMode>?
     ) {
         self.init(
             coordinateRegion: coordinateRegion,
@@ -160,7 +160,7 @@ extension Map where AnnotationItems == EmptyCollection<IdentifiableObject<NSObje
     public init(
         mapRect: Binding<MKMapRect>,
         informationVisibility: MapInformationVisibility = .default,
-        userTrackingMode: Binding<MapUserTrackingMode>?
+        userTrackingMode: Binding<WKInterfaceMap.UserTrackingMode>?
     ) {
         self.init(
             mapRect: mapRect,

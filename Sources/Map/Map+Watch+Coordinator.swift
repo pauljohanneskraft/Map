@@ -89,7 +89,7 @@ extension Map: WKInterfaceObjectRepresentable {
                 mapView.setShowsUserLocation(newView.informationVisibility.contains(.userLocation))
             }
             if newView.usesUserTrackingMode, previousView?.userTrackingMode != newView.userTrackingMode {
-                mapView.setUserTrackingMode(newView.userTrackingMode.actualValue, animated: animated)
+                mapView.setUserTrackingMode(newView.userTrackingMode, animated: animated)
             }
         }
 
