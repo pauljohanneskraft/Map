@@ -22,14 +22,8 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
         annotation = mapAnnotation.annotation
 
         let controller = NativeHostingController(rootView: mapAnnotation.content)
-        controller.view.translatesAutoresizingMaskIntoConstraints = false
         addSubview(controller.view)
-        NSLayoutConstraint.activate([
-            controller.view.centerXAnchor.constraint(equalTo: centerXAnchor),
-            controller.view.centerYAnchor.constraint(equalTo: centerYAnchor),
-            controller.view.widthAnchor.constraint(equalTo: widthAnchor),
-            controller.view.heightAnchor.constraint(equalTo: heightAnchor),
-        ])
+        bounds.size = controller.preferredContentSize
         self.controller = controller
     }
 
