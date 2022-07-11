@@ -248,6 +248,7 @@ extension Map {
             DispatchQueue.main.async { [weak self] in
                 self?.view?.coordinateRegion = mapView.region
                 self?.view?.mapRect = mapView.visibleMapRect
+                self?.view?.camera?.wrappedValue = mapView.camera
             }
         }
 

@@ -17,6 +17,7 @@ public struct Map<AnnotationItems: RandomAccessCollection, OverlayItems: RandomA
 
     @Binding var coordinateRegion: MKCoordinateRegion
     @Binding var mapRect: MKMapRect
+    var camera: Binding<MKMapCamera>?
 
     let usesRegion: Bool
 
@@ -36,7 +37,12 @@ public struct Map<AnnotationItems: RandomAccessCollection, OverlayItems: RandomA
 
     let overlayItems: OverlayItems
     let overlayContent: (OverlayItems.Element) -> MapOverlay
-
+    
+    public func camera(_ binding: Binding<MKMapCamera>) -> Self {
+        var map = self
+        map.camera = binding
+        return map
+    }
 }
 
 // MARK: - Initialization
