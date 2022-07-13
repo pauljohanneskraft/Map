@@ -146,9 +146,15 @@ extension Map {
                     }
                     annotationContentByID[item.id] = content
                     annotationContentByObject[objectKey] = content
+                    
                     registerAnnotationViewIfNeeded(on: mapView, for: content)
               
                     mapView.addAnnotation(content.annotation)
+                    
+                    if let annotationView = content.view(for: mapView) {
+                        viewByObject[objectKey] = annotationView
+                        view?.modifiedAnnotationHandler?(item, annotationView)
+                    }
                     
                 case let .remove(_, item, _):
                     guard let content = annotationContentByID[item.id] else {
@@ -159,6 +165,7 @@ extension Map {
                     mapView.removeAnnotation(content.annotation)
                     
                     annotationContentByObject.removeValue(forKey: ObjectIdentifier(content.annotation))
+                    viewByObject.removeValue(forKey: ObjectIdentifier(content.annotation))
                     annotationContentByID.removeValue(forKey: item.id)
                 }
             }
@@ -349,11 +356,8 @@ extension Map {
             guard let content = annotationContentByObject[ObjectIdentifier(annotation)] else {
                 return nil
             }
-            let view = content.view(for: mapView)
-            viewByObject[ObjectIdentifier(annotation)] = view
-            return view
+            return viewByObject[ObjectIdentifier(annotation)] 
         }
-
     }
 
     // MARK: Methods

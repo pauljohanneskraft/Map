@@ -14,24 +14,14 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
 
     // MARK: Stored Properties
 
-    private var controller: NativeHostingController<AnyView>?
+    private var controller: NativeHostingController<Content>?
 
     // MARK: Methods
 
     func setup(for mapAnnotation: ViewMapAnnotation<Content>) {
         annotation = mapAnnotation.annotation
 
-        let controller = NativeHostingController(rootView: AnyView(mapAnnotation.content))
-        addSubview(controller.view)
-        bounds.size = controller.preferredContentSize
-        self.controller = controller
-    }
-  
-    func setup(for mapAnnotation: MovableViewMapAnnotation<Content>) {
-        print("setup movable")
-        annotation = mapAnnotation.annotation
-        let view = AnyView(mapAnnotation.content.rotationEffect(Angle(degrees: mapAnnotation.annotation.heading)))
-        let controller = NativeHostingController(rootView: view)
+        let controller = NativeHostingController(rootView: mapAnnotation.content)
         addSubview(controller.view)
         bounds.size = controller.preferredContentSize
         self.controller = controller
