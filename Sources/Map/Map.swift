@@ -38,7 +38,7 @@ where AnnotationItems.Element: Identifiable, OverlayItems.Element: Identifiable,
     let overlayItems: OverlayItems
     let overlayContent: (OverlayItems.Element) -> MapOverlay
     
-    var modifiedAnnotationHandler: ((AnnotationItems.Element, MKAnnotationView) -> Void)?
+    var modifiedAnnotationHandler: ((AnnotationItems.Element, MKPointAnnotation, MKAnnotationView) -> Void)?
     
     public func camera(_ binding: Binding<MKMapCamera>) -> Self {
         var map = self
@@ -46,7 +46,7 @@ where AnnotationItems.Element: Identifiable, OverlayItems.Element: Identifiable,
         return map
     }
     
-    public func modifiedAnnotations(handler: @escaping (AnnotationItems.Element, MKAnnotationView) -> Void) -> Self {
+    public func modifiedAnnotations(handler: @escaping (AnnotationItems.Element, MKPointAnnotation, MKAnnotationView) -> Void) -> Self {
         var map = self
         map.modifiedAnnotationHandler = handler
         return map

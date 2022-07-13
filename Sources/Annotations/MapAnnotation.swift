@@ -21,10 +21,8 @@ public protocol MapAnnotation {
 
 
 public class PointAnnotation: MKPointAnnotation {
-  public var heading: Double
   
-  public init(coordinate: CLLocationCoordinate2D, heading: Double = 0, title: String? = nil, subtitle: String? = nil) {
-    self.heading = heading
+  public init(coordinate: CLLocationCoordinate2D, title: String? = nil, subtitle: String? = nil) {
     super.init()
     self.coordinate = coordinate
     self.title = title

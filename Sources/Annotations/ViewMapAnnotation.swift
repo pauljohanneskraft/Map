@@ -34,12 +34,11 @@ public struct ViewMapAnnotation<Content: View>: MapAnnotation {
     ///   - content: Title of the annotation
     public init(
         coordinate: CLLocationCoordinate2D,
-        heading: Double = 0,
         title: String? = nil,
         subtitle: String? = nil,
         @ViewBuilder content: () -> Content
     ) {
-        self.annotation = PointAnnotation(coordinate: coordinate, heading: heading, title: title, subtitle: subtitle)
+        self.annotation = PointAnnotation(coordinate: coordinate, title: title, subtitle: subtitle)
         self.content = content()
     }
 

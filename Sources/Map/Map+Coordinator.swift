@@ -119,16 +119,14 @@ extension Map {
             }
             
             for modification in modificationsSet {
-                guard let content = annotationContentByID[modification.id] else {
+                guard
+                    let content = annotationContentByID[modification.id],
+                    let annotationView = viewByObject[ObjectIdentifier(content.annotation)]
+                else {
                     fatalError()
                 }
                 
-                if let annotationView = viewByObject[ObjectIdentifier(content.annotation)] {
-                    view?.modifiedAnnotationHandler?(modification, annotationView)
-                } else if let annotationView = content.view(for: mapView) {
-                    viewByObject[ObjectIdentifier(content.annotation)] = annotationView
-                    view?.modifiedAnnotationHandler?(modification, annotationView)
-                }
+                view?.modifiedAnnotationHandler?(modification, content.annotation, annotationView)
             }
         
             for change in changesWithoutModifications {
@@ -153,7 +151,7 @@ extension Map {
                     
                     if let annotationView = content.view(for: mapView) {
                         viewByObject[objectKey] = annotationView
-                        view?.modifiedAnnotationHandler?(item, annotationView)
+                        view?.modifiedAnnotationHandler?(item, content.annotation, annotationView)
                     }
                     
                 case let .remove(_, item, _):
