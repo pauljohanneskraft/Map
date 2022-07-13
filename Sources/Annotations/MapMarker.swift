@@ -13,22 +13,6 @@ import SwiftUI
 @available(macOS 11, *)
 public struct MapMarker {
 
-    // MARK: Nested Types
-
-//    private class Annotation: NSObject, MKAnnotation {
-//
-//        // MARK: Stored Properties
-//
-//        let coordinate: CLLocationCoordinate2D
-//
-//        // MARK: Initialization
-//
-//        init(_ coordinate: CLLocationCoordinate2D) {
-//            self.coordinate = coordinate
-//        }
-//
-//    }
-
     // MARK: Stored Properties
 
     private let coordinate: CLLocationCoordinate2D

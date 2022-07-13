@@ -35,7 +35,7 @@ extension Map {
 
         // MARK: Initialization
 
-        override public init() {}
+        override init() {}
 
         deinit {
             MapRegistry.clean()
@@ -79,7 +79,6 @@ extension Map {
             } else {
                 changes = newView.annotationItems.difference(from: []) { $0 == $1 }
             }
-            print("changes:", changes)
             
             var changeSet = Set<AnnotationItems.Element.ID>()
             var modificationsSet = [AnnotationItems.Element]()
@@ -351,9 +350,6 @@ extension Map {
         }
 
         public func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-            guard let content = annotationContentByObject[ObjectIdentifier(annotation)] else {
-                return nil
-            }
             return viewByObject[ObjectIdentifier(annotation)] 
         }
     }
