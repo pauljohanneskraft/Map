@@ -19,6 +19,19 @@ public protocol MapAnnotation {
 
 #else
 
+
+public class PointAnnotation: MKPointAnnotation {
+  public var heading: Double
+  
+  public init(coordinate: CLLocationCoordinate2D, heading: Double = 0, title: String? = nil, subtitle: String? = nil) {
+    self.heading = heading
+    super.init()
+    self.coordinate = coordinate
+    self.title = title
+    self.subtitle = subtitle
+  }
+}
+
 public protocol MapAnnotation {
 
     // MARK: Static Functions
@@ -27,7 +40,7 @@ public protocol MapAnnotation {
 
     // MARK: Properties
 
-    var annotation: MKAnnotation { get }
+    var annotation: PointAnnotation { get }
 
     // MARK: Methods
 

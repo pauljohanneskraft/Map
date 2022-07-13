@@ -7,7 +7,11 @@
 
 import Foundation
 
-public struct IdentifiableObject<Object: AnyObject>: Identifiable {
+public struct IdentifiableObject<Object: AnyObject>: Identifiable, Equatable {
+    public static func == (lhs: IdentifiableObject<Object>, rhs: IdentifiableObject<Object>) -> Bool {
+        lhs.id == rhs.id
+    }
+    
 
     let object: Object
 

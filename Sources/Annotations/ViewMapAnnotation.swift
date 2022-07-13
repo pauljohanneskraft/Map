@@ -14,23 +14,23 @@ public struct ViewMapAnnotation<Content: View>: MapAnnotation {
 
     // MARK: Nested Types
 
-    private class Annotation: NSObject, MKAnnotation {
-
-        // MARK: Stored Properties
-
-        let coordinate: CLLocationCoordinate2D
-        let title: String?
-        let subtitle: String?
-
-        // MARK: Initialization
-
-        init(coordinate: CLLocationCoordinate2D, title: String?, subtitle: String?) {
-            self.coordinate = coordinate
-            self.title = title
-            self.subtitle = subtitle
-        }
-
-    }
+//    private class Annotation: NSObject, MKAnnotation {
+//
+//        // MARK: Stored Properties
+//
+//        let coordinate: CLLocationCoordinate2D
+//        let title: String?
+//        let subtitle: String?
+//
+//        // MARK: Initialization
+//
+//        init(coordinate: CLLocationCoordinate2D, title: String?, subtitle: String?) {
+//            self.coordinate = coordinate
+//            self.title = title
+//            self.subtitle = subtitle
+//        }
+//
+//    }
 
     // MARK: Static Functions
 
@@ -40,7 +40,7 @@ public struct ViewMapAnnotation<Content: View>: MapAnnotation {
 
     // MARK: Stored Properties
 
-    public let annotation: MKAnnotation
+    public let annotation: PointAnnotation
     let content: Content
 
     // MARK: Initialization
@@ -51,12 +51,12 @@ public struct ViewMapAnnotation<Content: View>: MapAnnotation {
         subtitle: String? = nil,
         @ViewBuilder content: () -> Content
     ) {
-        self.annotation = Annotation(coordinate: coordinate, title: title, subtitle: subtitle)
+        self.annotation = PointAnnotation(coordinate: coordinate, heading: 0, title: title, subtitle: subtitle)
         self.content = content()
     }
 
     public init(
-        annotation: MKAnnotation,
+        annotation: PointAnnotation,
         @ViewBuilder content: () -> Content
     ) {
         self.annotation = annotation
@@ -70,7 +70,6 @@ public struct ViewMapAnnotation<Content: View>: MapAnnotation {
             withIdentifier: Self.reuseIdentifier,
             for: annotation
         ) as? MKMapAnnotationView<Content>
-
         view?.setup(for: self)
         return view
     }
