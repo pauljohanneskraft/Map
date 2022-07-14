@@ -80,44 +80,26 @@ extension Map {
                 changes = newView.annotationItems.difference(from: []) { $0 == $1 }
             }
             
-            var changeSet = Set<AnnotationItems.Element.ID>()
-            var modificationsSet = [AnnotationItems.Element]()
-            
-            var changesWithoutModifications = changes.map { $0 }
-            for change in changes {
+            let changeElement = { (change: CollectionDifference<AnnotationItems.Element>.Change) -> AnnotationItems.Element in
                 switch change {
-                case let .insert(_, item, _):
-                    if changeSet.contains(item.id) {
-                        modificationsSet.append(item)
-                        changesWithoutModifications = changesWithoutModifications.filter { element in
-                            switch element {
-                            case let .remove(_, newItem, _):
-                                return item.id != newItem.id
-                            case let .insert(_, newItem, _):
-                                return item.id != newItem.id
-                            }
-                        }
-                    } else {
-                        changeSet.insert(item.id)
-                    }
-                case let .remove(_, item, _):
-                    if changeSet.contains(item.id) {
-                        modificationsSet.append(item)
-                        changesWithoutModifications = changesWithoutModifications.filter { element in
-                            switch element {
-                            case let .remove(_, newItem, _):
-                                return item.id != newItem.id
-                            case let .insert(_, newItem, _):
-                                return item.id != newItem.id
-                            }
-                        }
-                    } else {
-                        changeSet.insert(item.id)
-                    }
+                case let .insert(_, element, _):
+                    return element
+                case let .remove(_, element, _):
+                    return element
                 }
             }
             
-            for modification in modificationsSet {
+            let changeId = { change in
+                return changeElement(change).id
+            }
+            
+            let insertionSet = Set(changes.insertions.map(changeId))
+            let removalsSet = Set(changes.removals.map(changeId))
+            let modificationsSet = insertionSet.intersection(removalsSet)
+            // we're only looking at insertions to avoid duplications
+            let modificationsList = changes.insertions.lazy.filter { modificationsSet.contains(changeId($0)) }.map(changeElement)
+            
+            for modification in modificationsList {
                 guard
                     let content = annotationContentByID[modification.id],
                     let annotationView = viewByObject[ObjectIdentifier(content.annotation)]
@@ -128,6 +110,7 @@ extension Map {
                 view?.modifiedAnnotationHandler?(modification, content.annotation, annotationView)
             }
         
+            let changesWithoutModifications = changes.filter { !modificationsSet.contains(changeId($0)) }
             for change in changesWithoutModifications {
                 switch change {
                 case let .insert(_, item, _):
@@ -143,11 +126,8 @@ extension Map {
                     }
                     annotationContentByID[item.id] = content
                     annotationContentByObject[objectKey] = content
-                    
                     registerAnnotationViewIfNeeded(on: mapView, for: content)
-              
                     mapView.addAnnotation(content.annotation)
-                    
                     if let annotationView = content.view(for: mapView) {
                         viewByObject[objectKey] = annotationView
                         view?.modifiedAnnotationHandler?(item, content.annotation, annotationView)
@@ -158,9 +138,7 @@ extension Map {
                         assertionFailure("Missing annotation content for item \(item) encountered.")
                         continue
                     }
-                    
                     mapView.removeAnnotation(content.annotation)
-                    
                     annotationContentByObject.removeValue(forKey: ObjectIdentifier(content.annotation))
                     viewByObject.removeValue(forKey: ObjectIdentifier(content.annotation))
                     annotationContentByID.removeValue(forKey: item.id)
