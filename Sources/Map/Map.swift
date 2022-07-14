@@ -11,7 +11,7 @@ import MapKit
 import SwiftUI
 
 public struct Map<AnnotationItems: RandomAccessCollection, OverlayItems: RandomAccessCollection>
-where AnnotationItems.Element: Identifiable, OverlayItems.Element: Identifiable, AnnotationItems.Element: Equatable {
+    where AnnotationItems.Element: Identifiable, OverlayItems.Element: Identifiable, AnnotationItems.Element: Equatable {
 
     // MARK: Stored Properties
 
@@ -40,12 +40,6 @@ where AnnotationItems.Element: Identifiable, OverlayItems.Element: Identifiable,
     
     var modifiedAnnotationHandler: ((AnnotationItems.Element, MKPointAnnotation, MKAnnotationView) -> Void)?
     
-    public func camera(_ binding: Binding<MKMapCamera>) -> Self {
-        var map = self
-        map.camera = binding
-        return map
-    }
-    
     public func modifiedAnnotations(handler: @escaping (AnnotationItems.Element, MKPointAnnotation, MKAnnotationView) -> Void) -> Self {
         var map = self
         map.modifiedAnnotationHandler = handler
@@ -61,6 +55,7 @@ extension Map {
 
     public init(
         coordinateRegion: Binding<MKCoordinateRegion>,
+        camera: Binding<MKMapCamera>? = nil,
         type mapType: MKMapType = .standard,
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
@@ -73,6 +68,7 @@ extension Map {
         self.usesRegion = true
         self._coordinateRegion = coordinateRegion
         self._mapRect = .constant(.init())
+        self._camera = camera
         self.mapType = mapType
         self.pointOfInterestFilter = pointOfInterestFilter
         self.informationVisibility = informationVisibility
@@ -87,6 +83,7 @@ extension Map {
 
     public init(
         mapRect: Binding<MKMapRect>,
+        camera: Binding<MKMapCamera>? = nil,
         type mapType: MKMapType = .standard,
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
@@ -99,6 +96,7 @@ extension Map {
         self.usesRegion = false
         self._coordinateRegion = .constant(.init())
         self._mapRect = mapRect
+        self._camera = camera
         self.mapType = mapType
         self.pointOfInterestFilter = pointOfInterestFilter
         self.informationVisibility = informationVisibility
@@ -114,6 +112,7 @@ extension Map {
     @available(macOS 11, *)
     public init(
         coordinateRegion: Binding<MKCoordinateRegion>,
+        camera: Binding<MKMapCamera>? = nil,
         type mapType: MKMapType = .standard,
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
@@ -128,6 +127,7 @@ extension Map {
         self.usesRegion = true
         self._coordinateRegion = coordinateRegion
         self._mapRect = .constant(.init())
+        self._camera = camera
         self.mapType = mapType
         self.pointOfInterestFilter = pointOfInterestFilter
         self.informationVisibility = informationVisibility
@@ -148,6 +148,7 @@ extension Map {
     @available(macOS 11, *)
     public init(
         mapRect: Binding<MKMapRect>,
+        camera: Binding<MKMapCamera>? = nil,
         type mapType: MKMapType = .standard,
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
@@ -161,6 +162,7 @@ extension Map {
         self.usesRegion = false
         self._coordinateRegion = .constant(.init())
         self._mapRect = mapRect
+        self._camera = camera
         self.mapType = mapType
         self.pointOfInterestFilter = pointOfInterestFilter
         self.informationVisibility = informationVisibility
@@ -186,6 +188,7 @@ extension Map {
 
     public init(
         coordinateRegion: Binding<MKCoordinateRegion>,
+        camera: Binding<MKMapCamera>? = nil,
         type mapType: MKMapType = .standard,
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
@@ -199,6 +202,7 @@ extension Map {
         self.usesRegion = true
         self._coordinateRegion = coordinateRegion
         self._mapRect = .constant(.init())
+        self.camera = camera
         self.mapType = mapType
         self.pointOfInterestFilter = pointOfInterestFilter
         self.informationVisibility = informationVisibility
@@ -218,6 +222,7 @@ extension Map {
 
     public init(
         mapRect: Binding<MKMapRect>,
+        camera: Binding<MKMapCamera>? = nil,
         type mapType: MKMapType = .standard,
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
@@ -231,6 +236,7 @@ extension Map {
         self.usesRegion = false
         self._coordinateRegion = .constant(.init())
         self._mapRect = mapRect
+        self.camera = camera
         self.mapType = mapType
         self.pointOfInterestFilter = pointOfInterestFilter
         self.informationVisibility = informationVisibility
@@ -263,6 +269,7 @@ extension Map where AnnotationItems == [IdentifiableObject<PointAnnotation>] {
 
     public init(
         coordinateRegion: Binding<MKCoordinateRegion>,
+        camera: Binding<MKMapCamera>? = nil,
         type mapType: MKMapType = .standard,
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
@@ -277,6 +284,7 @@ extension Map where AnnotationItems == [IdentifiableObject<PointAnnotation>] {
     ) {
         self.init(
             coordinateRegion: coordinateRegion,
+            camera: camera,
             type: mapType,
             pointOfInterestFilter: pointOfInterestFilter,
             informationVisibility: informationVisibility,
@@ -290,6 +298,7 @@ extension Map where AnnotationItems == [IdentifiableObject<PointAnnotation>] {
 
     public init(
         mapRect: Binding<MKMapRect>,
+        camera: Binding<MKMapCamera>? = nil,
         type mapType: MKMapType = .standard,
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
@@ -304,6 +313,7 @@ extension Map where AnnotationItems == [IdentifiableObject<PointAnnotation>] {
     ) {
         self.init(
             mapRect: mapRect,
+            camera: camera,
             type: mapType,
             pointOfInterestFilter: pointOfInterestFilter,
             informationVisibility: informationVisibility,
@@ -319,6 +329,7 @@ extension Map where AnnotationItems == [IdentifiableObject<PointAnnotation>] {
     @available(macOS 11, *)
     public init(
         coordinateRegion: Binding<MKCoordinateRegion>,
+        camera: Binding<MKMapCamera>? = nil,
         type mapType: MKMapType = .standard,
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
@@ -334,6 +345,7 @@ extension Map where AnnotationItems == [IdentifiableObject<PointAnnotation>] {
     ) {
         self.init(
             coordinateRegion: coordinateRegion,
+            camera: camera,
             type: mapType,
             pointOfInterestFilter: pointOfInterestFilter,
             informationVisibility: informationVisibility,
@@ -349,6 +361,7 @@ extension Map where AnnotationItems == [IdentifiableObject<PointAnnotation>] {
     @available(macOS 11, *)
     public init(
         mapRect: Binding<MKMapRect>,
+        camera: Binding<MKMapCamera>? = nil,
         type mapType: MKMapType = .standard,
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
@@ -364,6 +377,7 @@ extension Map where AnnotationItems == [IdentifiableObject<PointAnnotation>] {
     ) {
         self.init(
             mapRect: mapRect,
+            camera: camera,
             type: mapType,
             pointOfInterestFilter: pointOfInterestFilter,
             informationVisibility: informationVisibility,
@@ -384,6 +398,7 @@ extension Map where AnnotationItems == [IdentifiableObject<PointAnnotation>] {
 
     public init(
         coordinateRegion: Binding<MKCoordinateRegion>,
+        camera: Binding<MKMapCamera>? = nil,
         type mapType: MKMapType = .standard,
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
@@ -399,6 +414,7 @@ extension Map where AnnotationItems == [IdentifiableObject<PointAnnotation>] {
     ) {
         self.init(
             coordinateRegion: coordinateRegion,
+            camera: camera,
             type: mapType,
             pointOfInterestFilter: pointOfInterestFilter,
             informationVisibility: informationVisibility,
@@ -413,6 +429,7 @@ extension Map where AnnotationItems == [IdentifiableObject<PointAnnotation>] {
 
     public init(
         mapRect: Binding<MKMapRect>,
+        camera: Binding<MKMapCamera>? = nil,
         type mapType: MKMapType = .standard,
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
@@ -428,6 +445,7 @@ extension Map where AnnotationItems == [IdentifiableObject<PointAnnotation>] {
     ) {
         self.init(
             mapRect: mapRect,
+            camera: camera,
             type: mapType,
             pointOfInterestFilter: pointOfInterestFilter,
             informationVisibility: informationVisibility,
@@ -457,6 +475,7 @@ extension Map where OverlayItems == [IdentifiableObject<MKOverlay>] {
 
     public init(
         coordinateRegion: Binding<MKCoordinateRegion>,
+        camera: Binding<MKMapCamera>? = nil,
         type mapType: MKMapType = .standard,
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
@@ -473,6 +492,7 @@ extension Map where OverlayItems == [IdentifiableObject<MKOverlay>] {
     ) {
         self.init(
             coordinateRegion: coordinateRegion,
+            camera: camera,
             type: mapType,
             pointOfInterestFilter: pointOfInterestFilter,
             informationVisibility: informationVisibility,
@@ -486,6 +506,7 @@ extension Map where OverlayItems == [IdentifiableObject<MKOverlay>] {
 
     public init(
         mapRect: Binding<MKMapRect>,
+        camera: Binding<MKMapCamera>? = nil,
         type mapType: MKMapType = .standard,
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
@@ -502,6 +523,7 @@ extension Map where OverlayItems == [IdentifiableObject<MKOverlay>] {
     ) {
         self.init(
             mapRect: mapRect,
+            camera: camera,
             type: mapType,
             pointOfInterestFilter: pointOfInterestFilter,
             informationVisibility: informationVisibility,
@@ -516,6 +538,7 @@ extension Map where OverlayItems == [IdentifiableObject<MKOverlay>] {
     @available(macOS 11, *)
     public init(
         coordinateRegion: Binding<MKCoordinateRegion>,
+        camera: Binding<MKMapCamera>? = nil,
         type mapType: MKMapType = .standard,
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
@@ -533,6 +556,7 @@ extension Map where OverlayItems == [IdentifiableObject<MKOverlay>] {
     ) {
         self.init(
             coordinateRegion: coordinateRegion,
+            camera: camera,
             type: mapType,
             pointOfInterestFilter: pointOfInterestFilter,
             informationVisibility: informationVisibility,
@@ -548,6 +572,7 @@ extension Map where OverlayItems == [IdentifiableObject<MKOverlay>] {
     @available(macOS 11, *)
     public init(
         mapRect: Binding<MKMapRect>,
+        camera: Binding<MKMapCamera>? = nil,
         type mapType: MKMapType = .standard,
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
@@ -565,6 +590,7 @@ extension Map where OverlayItems == [IdentifiableObject<MKOverlay>] {
     ) {
         self.init(
             mapRect: mapRect,
+            camera: camera,
             type: mapType,
             pointOfInterestFilter: pointOfInterestFilter,
             informationVisibility: informationVisibility,
@@ -585,6 +611,7 @@ extension Map where OverlayItems == [IdentifiableObject<MKOverlay>] {
 
     public init(
         coordinateRegion: Binding<MKCoordinateRegion>,
+        camera: Binding<MKMapCamera>? = nil,
         type mapType: MKMapType = .standard,
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
@@ -602,6 +629,7 @@ extension Map where OverlayItems == [IdentifiableObject<MKOverlay>] {
     ) {
         self.init(
             coordinateRegion: coordinateRegion,
+            camera: camera,
             type: mapType,
             pointOfInterestFilter: pointOfInterestFilter,
             informationVisibility: informationVisibility,
@@ -616,6 +644,7 @@ extension Map where OverlayItems == [IdentifiableObject<MKOverlay>] {
 
     public init(
         mapRect: Binding<MKMapRect>,
+        camera: Binding<MKMapCamera>? = nil,
         type mapType: MKMapType = .standard,
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
@@ -633,6 +662,7 @@ extension Map where OverlayItems == [IdentifiableObject<MKOverlay>] {
     ) {
         self.init(
             mapRect: mapRect,
+            camera: camera,
             type: mapType,
             pointOfInterestFilter: pointOfInterestFilter,
             informationVisibility: informationVisibility,
@@ -660,6 +690,7 @@ extension Map where AnnotationItems == [IdentifiableObject<PointAnnotation>], Ov
 
     public init(
         coordinateRegion: Binding<MKCoordinateRegion>,
+        camera: Binding<MKMapCamera>? = nil,
         type mapType: MKMapType = .standard,
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
@@ -679,6 +710,7 @@ extension Map where AnnotationItems == [IdentifiableObject<PointAnnotation>], Ov
     ) {
         self.init(
             coordinateRegion: coordinateRegion,
+            camera: camera,
             type: mapType,
             pointOfInterestFilter: pointOfInterestFilter,
             informationVisibility: informationVisibility,
@@ -692,6 +724,7 @@ extension Map where AnnotationItems == [IdentifiableObject<PointAnnotation>], Ov
 
     public init(
         mapRect: Binding<MKMapRect>,
+        camera: Binding<MKMapCamera>? = nil,
         type mapType: MKMapType = .standard,
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
@@ -711,6 +744,7 @@ extension Map where AnnotationItems == [IdentifiableObject<PointAnnotation>], Ov
     ) {
         self.init(
             mapRect: mapRect,
+            camera: camera,
             type: mapType,
             pointOfInterestFilter: pointOfInterestFilter,
             informationVisibility: informationVisibility,
@@ -725,6 +759,7 @@ extension Map where AnnotationItems == [IdentifiableObject<PointAnnotation>], Ov
     @available(macOS 11, *)
     public init(
         coordinateRegion: Binding<MKCoordinateRegion>,
+        camera: Binding<MKMapCamera>? = nil,
         type mapType: MKMapType = .standard,
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
@@ -745,6 +780,7 @@ extension Map where AnnotationItems == [IdentifiableObject<PointAnnotation>], Ov
     ) {
         self.init(
             coordinateRegion: coordinateRegion,
+            camera: camera,
             type: mapType,
             pointOfInterestFilter: pointOfInterestFilter,
             informationVisibility: informationVisibility,
@@ -760,6 +796,7 @@ extension Map where AnnotationItems == [IdentifiableObject<PointAnnotation>], Ov
     @available(macOS 11, *)
     public init(
         mapRect: Binding<MKMapRect>,
+        camera: Binding<MKMapCamera>? = nil,
         type mapType: MKMapType = .standard,
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
@@ -780,6 +817,7 @@ extension Map where AnnotationItems == [IdentifiableObject<PointAnnotation>], Ov
     ) {
         self.init(
             mapRect: mapRect,
+            camera: camera,
             type: mapType,
             pointOfInterestFilter: pointOfInterestFilter,
             informationVisibility: informationVisibility,
@@ -802,6 +840,7 @@ extension Map
 
     public init(
         coordinateRegion: Binding<MKCoordinateRegion>,
+        camera: Binding<MKMapCamera>? = nil,
         type mapType: MKMapType = .standard,
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
@@ -822,6 +861,7 @@ extension Map
     ) {
         self.init(
             coordinateRegion: coordinateRegion,
+            camera: camera,
             type: mapType,
             pointOfInterestFilter: pointOfInterestFilter,
             informationVisibility: informationVisibility,
@@ -836,6 +876,7 @@ extension Map
 
     public init(
         mapRect: Binding<MKMapRect>,
+        camera: Binding<MKMapCamera>? = nil,
         type mapType: MKMapType = .standard,
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
@@ -856,6 +897,7 @@ extension Map
     ) {
         self.init(
             mapRect: mapRect,
+            camera: camera,
             type: mapType,
             pointOfInterestFilter: pointOfInterestFilter,
             informationVisibility: informationVisibility,
