@@ -20,15 +20,15 @@ public protocol MapAnnotation {
 #else
 
 
-public class PointAnnotation: MKPointAnnotation {
-  
-  public init(coordinate: CLLocationCoordinate2D, title: String? = nil, subtitle: String? = nil) {
-    super.init()
-    self.coordinate = coordinate
-    self.title = title
-    self.subtitle = subtitle
-  }
-}
+//public class PointAnnotation: MKPointAnnotation {
+//
+//  public init(coordinate: CLLocationCoordinate2D, title: String? = nil, subtitle: String? = nil) {
+//    super.init()
+//    self.coordinate = coordinate
+//    self.title = title
+//    self.subtitle = subtitle
+//  }
+//}
 
 public protocol MapAnnotation {
 
@@ -38,7 +38,7 @@ public protocol MapAnnotation {
 
     // MARK: Properties
 
-    var annotation: PointAnnotation { get }
+    var annotation: MKAnnotation { get }
 
     // MARK: Methods
 

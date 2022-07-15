@@ -11,6 +11,17 @@ import MapKit
 import SwiftUI
 
 public struct ViewMapAnnotation<Content: View>: MapAnnotation {
+  
+    // MARK: Nested Types
+    private class Annotation: MKPointAnnotation {
+        // MARK: Initialization
+        init(coordinate: CLLocationCoordinate2D, title: String?, subtitle: String?) {
+            super.init()
+            self.coordinate = coordinate
+            self.title = title
+            self.subtitle = subtitle
+        }
+    }
 
     // MARK: Static Functions
 
@@ -20,7 +31,7 @@ public struct ViewMapAnnotation<Content: View>: MapAnnotation {
 
     // MARK: Stored Properties
 
-    public let annotation: PointAnnotation
+    public let annotation: MKAnnotation
     let content: Content
 
     // MARK: Initialization
@@ -38,12 +49,12 @@ public struct ViewMapAnnotation<Content: View>: MapAnnotation {
         subtitle: String? = nil,
         @ViewBuilder content: () -> Content
     ) {
-        self.annotation = PointAnnotation(coordinate: coordinate, title: title, subtitle: subtitle)
+        self.annotation = Annotation(coordinate: coordinate, title: title, subtitle: subtitle)
         self.content = content()
     }
 
     public init(
-        annotation: PointAnnotation,
+        annotation: MKAnnotation,
         @ViewBuilder content: () -> Content
     ) {
         self.annotation = annotation

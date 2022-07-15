@@ -103,9 +103,10 @@ extension Map {
             for modification in modificationsList {
                 if
                     let content = annotationContentByID[modification.id],
-                    let annotationView = viewByObject[ObjectIdentifier(content.annotation)]
+                    let annotationView = viewByObject[ObjectIdentifier(content.annotation)],
+                    let annotation = content.annotation as? MKPointAnnotation
                 {
-                    view?.modifiedAnnotationHandler?(modification, content.annotation, annotationView)
+                    view?.modifiedAnnotationHandler?(modification, annotation, annotationView)
                 }
             }
         
@@ -334,10 +335,11 @@ extension Map {
             
             guard
                 let annotationView = annotationView,
-                let element = elementByObject[ObjectIdentifier(annotation)]
+                let element = elementByObject[ObjectIdentifier(annotation)],
+                let annotation = content.annotation as? MKPointAnnotation
             else { return annotationView }
             
-            view?.modifiedAnnotationHandler?(element, content.annotation, annotationView)
+            view?.modifiedAnnotationHandler?(element, annotation, annotationView)
             return annotationView
         }
     }
