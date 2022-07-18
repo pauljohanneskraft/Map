@@ -19,17 +19,6 @@ public protocol MapAnnotation {
 
 #else
 
-
-//public class PointAnnotation: MKPointAnnotation {
-//
-//  public init(coordinate: CLLocationCoordinate2D, title: String? = nil, subtitle: String? = nil) {
-//    super.init()
-//    self.coordinate = coordinate
-//    self.title = title
-//    self.subtitle = subtitle
-//  }
-//}
-
 public protocol MapAnnotation {
 
     // MARK: Static Functions
@@ -46,12 +35,11 @@ public protocol MapAnnotation {
 
 }
 
-extension MapAnnotation {
+public extension MapAnnotation {
 
     static var reuseIdentifier: String {
         "__MAP__" + String(describing: self) + "__MAP__"
     }
-
 }
 
 #endif
