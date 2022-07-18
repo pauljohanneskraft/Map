@@ -28,7 +28,16 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
     }
 
     // MARK: Overrides
-
+  
+    #if os(macOS)
+    override func layout() {
+        super.layout()
+        
+        if let controller = controller {
+            bounds.size = controller.preferredContentSize
+        }
+    }
+    #elseif os(iOS)
     override func layoutSubviews() {
         super.layoutSubviews()
 
@@ -36,6 +45,7 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
             bounds.size = controller.preferredContentSize
         }
     }
+    #endif
 
     override func prepareForReuse() {
         super.prepareForReuse()

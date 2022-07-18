@@ -68,7 +68,7 @@ extension Map {
         self.usesRegion = true
         self._coordinateRegion = coordinateRegion
         self._mapRect = .constant(.init())
-        self._camera = camera
+        self.camera = camera
         self.mapType = mapType
         self.pointOfInterestFilter = pointOfInterestFilter
         self.informationVisibility = informationVisibility
@@ -96,7 +96,7 @@ extension Map {
         self.usesRegion = false
         self._coordinateRegion = .constant(.init())
         self._mapRect = mapRect
-        self._camera = camera
+        self.camera = camera
         self.mapType = mapType
         self.pointOfInterestFilter = pointOfInterestFilter
         self.informationVisibility = informationVisibility
@@ -127,7 +127,7 @@ extension Map {
         self.usesRegion = true
         self._coordinateRegion = coordinateRegion
         self._mapRect = .constant(.init())
-        self._camera = camera
+        self.camera = camera
         self.mapType = mapType
         self.pointOfInterestFilter = pointOfInterestFilter
         self.informationVisibility = informationVisibility
@@ -162,7 +162,7 @@ extension Map {
         self.usesRegion = false
         self._coordinateRegion = .constant(.init())
         self._mapRect = mapRect
-        self._camera = camera
+        self.camera = camera
         self.mapType = mapType
         self.pointOfInterestFilter = pointOfInterestFilter
         self.informationVisibility = informationVisibility
@@ -265,7 +265,7 @@ extension Map {
 
 #if os(macOS)
 
-extension Map where AnnotationItems == [IdentifiableObject<PointAnnotation>] {
+extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>] {
 
     public init(
         coordinateRegion: Binding<MKCoordinateRegion>,
@@ -274,8 +274,8 @@ extension Map where AnnotationItems == [IdentifiableObject<PointAnnotation>] {
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
-        annotations: [PointAnnotation] = [],
-        @MapAnnotationBuilder annotationContent: @escaping (PointAnnotation) -> MapAnnotation = { annotation in
+        annotations: [MKAnnotation] = [],
+        @MapAnnotationBuilder annotationContent: @escaping (MKAnnotation) -> MapAnnotation = { annotation in
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
             return ViewMapAnnotation(annotation: annotation) {}
         },
@@ -303,8 +303,8 @@ extension Map where AnnotationItems == [IdentifiableObject<PointAnnotation>] {
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
-        annotations: [PointAnnotation] = [],
-        @MapAnnotationBuilder annotationContent: @escaping (PointAnnotation) -> MapAnnotation = { annotation in
+        annotations: [MKAnnotation] = [],
+        @MapAnnotationBuilder annotationContent: @escaping (MKAnnotation) -> MapAnnotation = { annotation in
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
             return ViewMapAnnotation(annotation: annotation) {}
         },
@@ -335,8 +335,8 @@ extension Map where AnnotationItems == [IdentifiableObject<PointAnnotation>] {
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
         userTrackingMode: Binding<MKUserTrackingMode>?,
-        annotations: [PointAnnotation] = [],
-        @MapAnnotationBuilder annotationContent: @escaping (PointAnnotation) -> MapAnnotation = { annotation in
+        annotations: [MKAnnotation] = [],
+        @MapAnnotationBuilder annotationContent: @escaping (MKAnnotation) -> MapAnnotation = { annotation in
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
             return ViewMapAnnotation(annotation: annotation) {}
         },
@@ -367,8 +367,8 @@ extension Map where AnnotationItems == [IdentifiableObject<PointAnnotation>] {
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
         userTrackingMode: Binding<MKUserTrackingMode>?,
-        annotations: [PointAnnotation] = [],
-        @MapAnnotationBuilder annotationContent: @escaping (PointAnnotation) -> MapAnnotation = { annotation in
+        annotations: [MKAnnotation] = [],
+        @MapAnnotationBuilder annotationContent: @escaping (MKAnnotation) -> MapAnnotation = { annotation in
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
             return ViewMapAnnotation(annotation: annotation) {}
         },
@@ -686,7 +686,7 @@ extension Map where OverlayItems == [IdentifiableObject<MKOverlay>] {
 
 #if os(macOS)
 
-extension Map where AnnotationItems == [IdentifiableObject<PointAnnotation>], OverlayItems == [IdentifiableObject<MKOverlay>] {
+extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>], OverlayItems == [IdentifiableObject<MKOverlay>] {
 
     public init(
         coordinateRegion: Binding<MKCoordinateRegion>,
@@ -695,8 +695,8 @@ extension Map where AnnotationItems == [IdentifiableObject<PointAnnotation>], Ov
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
-        annotations: [PointAnnotation] = [],
-        @MapAnnotationBuilder annotationContent: @escaping (PointAnnotation) -> MapAnnotation = { annotation in
+        annotations: [MKAnnotation] = [],
+        @MapAnnotationBuilder annotationContent: @escaping (MKAnnotation) -> MapAnnotation = { annotation in
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
             return ViewMapAnnotation(annotation: annotation) {}
         },
@@ -729,8 +729,8 @@ extension Map where AnnotationItems == [IdentifiableObject<PointAnnotation>], Ov
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
-        annotations: [PointAnnotation] = [],
-        @MapAnnotationBuilder annotationContent: @escaping (PointAnnotation) -> MapAnnotation = { annotation in
+        annotations: [MKAnnotation] = [],
+        @MapAnnotationBuilder annotationContent: @escaping (MKAnnotation) -> MapAnnotation = { annotation in
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
             return ViewMapAnnotation(annotation: annotation) {}
         },
@@ -765,8 +765,8 @@ extension Map where AnnotationItems == [IdentifiableObject<PointAnnotation>], Ov
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
         userTrackingMode: Binding<MKUserTrackingMode>?,
-        annotations: [PointAnnotation] = [],
-        @MapAnnotationBuilder annotationContent: @escaping (PointAnnotation) -> MapAnnotation = { annotation in
+        annotations: [MKAnnotation] = [],
+        @MapAnnotationBuilder annotationContent: @escaping (MKAnnotation) -> MapAnnotation = { annotation in
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
             return ViewMapAnnotation(annotation: annotation) {}
         },
@@ -802,8 +802,8 @@ extension Map where AnnotationItems == [IdentifiableObject<PointAnnotation>], Ov
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
         userTrackingMode: Binding<MKUserTrackingMode>?,
-        annotations: [PointAnnotation] = [],
-        @MapAnnotationBuilder annotationContent: @escaping (PointAnnotation) -> MapAnnotation = { annotation in
+        annotations: [MKAnnotation] = [],
+        @MapAnnotationBuilder annotationContent: @escaping (MKAnnotation) -> MapAnnotation = { annotation in
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
             return ViewMapAnnotation(annotation: annotation) {}
         },
