@@ -35,12 +35,11 @@ public protocol MapAnnotation {
 
 }
 
-extension MapAnnotation {
+public extension MapAnnotation {
 
     static var reuseIdentifier: String {
         "__MAP__" + String(describing: self) + "__MAP__"
     }
-
 }
 
 #endif

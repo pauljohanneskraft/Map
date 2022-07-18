@@ -13,7 +13,6 @@ import SwiftUI
 import WatchKit
 
 public struct MapPin {
-
     // MARK: Stored Properties
 
     private let coordinate: CLLocationCoordinate2D
@@ -41,23 +40,20 @@ extension MapPin: MapAnnotation {
 #else
 
 public struct MapPin {
-
+    
     // MARK: Nested Types
-
     private class Annotation: NSObject, MKAnnotation {
-
+        
         // MARK: Stored Properties
-
         let coordinate: CLLocationCoordinate2D
-
+        
         // MARK: Initialization
-
         init(_ coordinate: CLLocationCoordinate2D) {
             self.coordinate = coordinate
         }
-
+        
     }
-
+    
     // MARK: Stored Properties
 
     private let coordinate: CLLocationCoordinate2D

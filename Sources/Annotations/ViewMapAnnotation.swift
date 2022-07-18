@@ -11,26 +11,9 @@ import MapKit
 import SwiftUI
 
 public struct ViewMapAnnotation<Content: View>: MapAnnotation {
-
+  
     // MARK: Nested Types
-
-    private class Annotation: NSObject, MKAnnotation {
-
-        // MARK: Stored Properties
-
-        let coordinate: CLLocationCoordinate2D
-        let title: String?
-        let subtitle: String?
-
-        // MARK: Initialization
-
-        init(coordinate: CLLocationCoordinate2D, title: String?, subtitle: String?) {
-            self.coordinate = coordinate
-            self.title = title
-            self.subtitle = subtitle
-        }
-
-    }
+    private class Annotation: MKPointAnnotation { }
 
     // MARK: Static Functions
 
@@ -45,13 +28,20 @@ public struct ViewMapAnnotation<Content: View>: MapAnnotation {
 
     // MARK: Initialization
 
+    
+    /// Create an annotation from a custom SwiftUI view
+    /// - Parameters:
+    ///   - coordinate: Where on the map to put the annotation
+    ///   - heading: The direction the annotation should be oriented in degrees
+    ///   - subtitle: Subtitle of the annotation
+    ///   - content: Title of the annotation
     public init(
         coordinate: CLLocationCoordinate2D,
         title: String? = nil,
         subtitle: String? = nil,
         @ViewBuilder content: () -> Content
     ) {
-        self.annotation = Annotation(coordinate: coordinate, title: title, subtitle: subtitle)
+        self.annotation = Annotation(__coordinate: coordinate, title: title, subtitle: subtitle)
         self.content = content()
     }
 
@@ -70,7 +60,6 @@ public struct ViewMapAnnotation<Content: View>: MapAnnotation {
             withIdentifier: Self.reuseIdentifier,
             for: annotation
         ) as? MKMapAnnotationView<Content>
-
         view?.setup(for: self)
         return view
     }
