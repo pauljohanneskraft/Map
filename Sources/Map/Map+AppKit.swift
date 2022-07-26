@@ -17,6 +17,12 @@ extension Map: NSViewRepresentable {
         let mapView = MKMapView()
         mapView.delegate = context.coordinator
         updateNSView(mapView, context: context)
+
+        let gesture = NSClickGestureRecognizer(
+            target: context.coordinator,
+            action: #selector(Coordinator.tapped)
+        )
+        mapView.addGestureRecognizer(gesture)
         return mapView
     }
 

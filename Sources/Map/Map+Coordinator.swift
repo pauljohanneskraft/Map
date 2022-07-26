@@ -273,12 +273,21 @@ extension Map {
             return content.view(for: mapView)
         }
 
+        #if canImport(AppKit) && !canImport(UIKit)
+        @objc func tapped(gesture: NSClickGestureRecognizer) {
+            guard let mapView = gesture.view as? MKMapView else { return }
+            let point = gesture.location(in: mapView)
+
+            view?.processTapEvent(for: mapView, of: overlayContentByID, on: point)
+        }
+        #elseif canImport(UIKit)
         @objc func tapped(gesture: UITapGestureRecognizer) {
             guard let mapView = gesture.view as? MKMapView else { return }
             let point = gesture.location(in: mapView)
 
             view?.processTapEvent(for: mapView, of: overlayContentByID, on: point)
         }
+        #endif
     }
 
     // MARK: Methods

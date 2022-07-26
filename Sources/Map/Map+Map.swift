@@ -8,6 +8,8 @@
 import Foundation
 import MapKit
 
+#if !os(watchOS)
+
 extension Map {
 
     // MARK: Methods
@@ -23,6 +25,11 @@ extension Map {
         let zoomLevel = log2(360.0 * ((Double(mapView.frame.size.width) / 256.0) / mapView.region.span.longitudeDelta)) + 1.0
         let scale = pow(2, 20 - zoomLevel)
 
+        #if canImport(AppKit) && !canImport(UIKit)
+        let screenScale = NSScreen.main?.backingScaleFactor ?? 1
+        #elseif canImport(UIKit)
+        let screenScale = UIScreen.main.scale
+        #endif
         let tappedItems = mapView.overlays.filter {
             overlay in
 
@@ -33,7 +40,7 @@ extension Map {
 
             if renderer is MKPolylineRenderer || renderer is MKMultiPolylineRenderer {
                 targetPath = targetPath?.copy(
-                    strokingWithWidth: renderer.lineWidth * scale * UIScreen.main.scale,
+                    strokingWithWidth: renderer.lineWidth * scale * screenScale,
                     lineCap: renderer.lineCap,
                     lineJoin: renderer.lineJoin,
                     miterLimit: renderer.miterLimit
@@ -54,3 +61,5 @@ extension Map {
     }
 
 }
+
+#endif
