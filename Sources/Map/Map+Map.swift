@@ -1,8 +1,8 @@
 //
-//  File.swift
-//  
+//  Map+Map.swift
+//  Map
 //
-//  Created by Niccari on 12/06/2022.
+//  Created by Niccari on 12.06.22.
 //
 
 import Foundation
