@@ -32,6 +32,7 @@ public struct Map<AnnotationItems: RandomAccessCollection, OverlayItems: RandomA
     @Binding var userTrackingMode: MKUserTrackingMode
 
     let annotationItems: AnnotationItems
+    @Binding var selectedItem: AnnotationItems.Element.ID?
     let annotationContent: (AnnotationItems.Element) -> MapAnnotation
 
     let overlayItems: OverlayItems
@@ -178,6 +179,7 @@ extension Map {
         interactionModes: MapInteractionModes = .all,
         userTrackingMode: Binding<MKUserTrackingMode>? = nil,
         annotationItems: AnnotationItems,
+        selectedItem: Binding<AnnotationItems.Element.ID?> = .constant(.none),
         @MapAnnotationBuilder annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation,
         overlayItems: OverlayItems,
         @MapOverlayBuilder overlayContent: @escaping (OverlayItems.Element) -> MapOverlay
@@ -197,6 +199,7 @@ extension Map {
             self._userTrackingMode = .constant(.none)
         }
         self.annotationItems = annotationItems
+        self._selectedItem = selectedItem
         self.annotationContent = annotationContent
         self.overlayItems = overlayItems
         self.overlayContent = overlayContent
@@ -210,6 +213,7 @@ extension Map {
         interactionModes: MapInteractionModes = .all,
         userTrackingMode: Binding<MKUserTrackingMode>? = nil,
         annotationItems: AnnotationItems,
+        selectedItem: Binding<AnnotationItems.Element.ID?> = .constant(.none),
         @MapAnnotationBuilder annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation,
         overlayItems: OverlayItems,
         @MapOverlayBuilder overlayContent: @escaping (OverlayItems.Element) -> MapOverlay
@@ -232,6 +236,7 @@ extension Map {
         self.annotationContent = annotationContent
         self.overlayItems = overlayItems
         self.overlayContent = overlayContent
+        self._selectedItem = selectedItem
     }
 
 }
@@ -391,6 +396,7 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>] {
             interactionModes: interactionModes,
             userTrackingMode: userTrackingMode,
             annotationItems: annotations.map(IdentifiableObject.init),
+            selectedItem: .constant(.none),
             annotationContent: { annotationContent($0.object) },
             overlayItems: overlayItems,
             overlayContent: overlayContent
@@ -508,6 +514,7 @@ extension Map where OverlayItems == [IdentifiableObject<MKOverlay>] {
         interactionModes: MapInteractionModes = .all,
         userTrackingMode: Binding<MKUserTrackingMode>?,
         annotationItems: AnnotationItems,
+        selectedItem: Binding<AnnotationItems.Element.ID?>,
         @MapAnnotationBuilder annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation,
         overlays: [MKOverlay] = [],
         @MapOverlayBuilder overlayContent: @escaping (MKOverlay) -> MapOverlay = { overlay in
@@ -525,6 +532,7 @@ extension Map where OverlayItems == [IdentifiableObject<MKOverlay>] {
             interactionModes: interactionModes,
             userTrackingMode: userTrackingMode,
             annotationItems: annotationItems,
+            selectedItem: selectedItem,
             annotationContent: annotationContent,
             overlayItems: overlays.map(IdentifiableObject.init),
             overlayContent: { overlayContent($0.object) }
@@ -577,6 +585,7 @@ extension Map where OverlayItems == [IdentifiableObject<MKOverlay>] {
         interactionModes: MapInteractionModes = .all,
         userTrackingMode: Binding<MKUserTrackingMode>? = nil,
         annotationItems: AnnotationItems,
+        selectedItem: Binding<AnnotationItems.Element.ID?>,
         @MapAnnotationBuilder annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation,
         overlays: [MKOverlay] = [],
         @MapOverlayBuilder overlayContent: @escaping (MKOverlay) -> MapOverlay = { overlay in
@@ -594,6 +603,7 @@ extension Map where OverlayItems == [IdentifiableObject<MKOverlay>] {
             interactionModes: interactionModes,
             userTrackingMode: userTrackingMode,
             annotationItems: annotationItems,
+            selectedItem: selectedItem,
             annotationContent: annotationContent,
             overlayItems: overlays.map(IdentifiableObject.init),
             overlayContent: { overlayContent($0.object) }
@@ -814,6 +824,7 @@ extension Map
             interactionModes: interactionModes,
             userTrackingMode: userTrackingMode,
             annotationItems: annotations.map(IdentifiableObject.init),
+            selectedItem: .constant(.none),
             annotationContent: { annotationContent($0.object) },
             overlayItems: overlays.map(IdentifiableObject.init),
             overlayContent: { overlayContent($0.object) }

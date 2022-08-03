@@ -42,6 +42,7 @@ public struct ViewMapAnnotation<Content: View>: MapAnnotation {
 
     public let annotation: MKAnnotation
     let content: Content
+    let selectedContent: Content
 
     // MARK: Initialization
 
@@ -49,18 +50,22 @@ public struct ViewMapAnnotation<Content: View>: MapAnnotation {
         coordinate: CLLocationCoordinate2D,
         title: String? = nil,
         subtitle: String? = nil,
-        @ViewBuilder content: () -> Content
+        @ViewBuilder content: () -> Content,
+        @ViewBuilder selectedContent: () -> Content? = { nil }
     ) {
         self.annotation = Annotation(coordinate: coordinate, title: title, subtitle: subtitle)
         self.content = content()
+        self.selectedContent = selectedContent() ?? content()
     }
 
     public init(
         annotation: MKAnnotation,
-        @ViewBuilder content: () -> Content
+        @ViewBuilder content: () -> Content,
+        @ViewBuilder selectedContent: () -> Content? = { nil }
     ) {
         self.annotation = annotation
         self.content = content()
+        self.selectedContent = selectedContent() ?? content()
     }
 
     // MARK: Methods
