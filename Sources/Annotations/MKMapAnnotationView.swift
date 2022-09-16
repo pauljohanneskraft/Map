@@ -21,7 +21,7 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
     func setup(for mapAnnotation: ViewMapAnnotation<Content>) {
         annotation = mapAnnotation.annotation
 
-        let controller = NativeHostingController(rootView: mapAnnotation.content)
+        let controller = NativeHostingController(rootView: mapAnnotation.content, ignoreSafeArea: true)
         addSubview(controller.view)
         bounds.size = controller.preferredContentSize
         self.controller = controller
