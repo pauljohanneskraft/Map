@@ -245,6 +245,9 @@ extension Map {
         // MARK: MKMapViewDelegate
 
         public func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
+            view?.coordinateRegion = mapView.region
+            view?.mapRect = mapView.visibleMapRect
+            /*
             DispatchQueue.main.async { [weak self] in
                 guard let view = self?.view else {
                     return
@@ -259,6 +262,7 @@ extension Map {
                     }
                 }
             }
+             */
         }
 
         @available(macOS 11, *)
@@ -287,7 +291,9 @@ extension Map {
         }
 
         public func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-            regionIsChanging = false
+            DispatchQueue.main.async { [weak self] in
+                self?.regionIsChanging = false
+            }
         }
 
         public func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
