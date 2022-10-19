@@ -31,6 +31,7 @@ extension Map {
 
         private var registeredAnnotationTypes = Set<ObjectIdentifier>()
         private var regionIsChanging = false
+        private var isUpdatingVisibleRegion = false
 
         // MARK: Initialization
 
@@ -202,7 +203,7 @@ extension Map {
         }
 
         private func updateRegion(on mapView: MKMapView, from previousView: Map?, to newView: Map, animated: Bool) {
-            guard !regionIsChanging else {
+            guard !regionIsChanging && !isUpdatingVisibleRegion else {
                 return
             }
 
@@ -245,24 +246,9 @@ extension Map {
         // MARK: MKMapViewDelegate
 
         public func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
+            isUpdatingVisibleRegion = true
             view?.coordinateRegion = mapView.region
             view?.mapRect = mapView.visibleMapRect
-            /*
-            DispatchQueue.main.async { [weak self] in
-                guard let view = self?.view else {
-                    return
-                }
-                if view.usesRegion {
-                    if !view.coordinateRegion.equals(to: mapView.region) {
-                        view.coordinateRegion = mapView.region
-                    }
-                } else {
-                    if !view.mapRect.equals(to: mapView.visibleMapRect) {
-                        view.mapRect = mapView.visibleMapRect
-                    }
-                }
-            }
-             */
         }
 
         @available(macOS 11, *)
@@ -291,9 +277,8 @@ extension Map {
         }
 
         public func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-            DispatchQueue.main.async { [weak self] in
-                self?.regionIsChanging = false
-            }
+            regionIsChanging = false
+            isUpdatingVisibleRegion = false
         }
 
         public func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
