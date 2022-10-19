@@ -245,6 +245,9 @@ extension Map {
         // MARK: MKMapViewDelegate
 
         public func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
+            guard !regionIsChanging else {
+                return
+            }
             DispatchQueue.main.async { [weak self] in
                 self?.view?.coordinateRegion = mapView.region
                 self?.view?.mapRect = mapView.visibleMapRect
