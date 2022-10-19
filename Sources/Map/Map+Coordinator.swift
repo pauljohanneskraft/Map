@@ -213,7 +213,7 @@ extension Map {
                     return
                 }
                 DispatchQueue.main.async {
-                    print("setting region")
+                    print("setting region", newRegion)
                     mapView.setRegion(newRegion, animated: animated)
                 }
             } else {
@@ -223,7 +223,7 @@ extension Map {
                     return
                 }
                 DispatchQueue.main.async {
-                    print("setting mapRect")
+                    print("setting mapRect", newRect)
                     mapView.setVisibleMapRect(newRect, animated: animated)
                 }
             }
