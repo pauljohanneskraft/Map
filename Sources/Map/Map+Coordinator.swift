@@ -245,12 +245,19 @@ extension Map {
         // MARK: MKMapViewDelegate
 
         public func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
-            guard view != nil else {
-                return
-            }
             DispatchQueue.main.async { [weak self] in
-                self?.view?.coordinateRegion = mapView.region
-                self?.view?.mapRect = mapView.visibleMapRect
+                guard let view = self?.view else {
+                    return
+                }
+                if view.usesRegion {
+                    if !view.coordinateRegion.equals(to: mapView.region) {
+                        view.coordinateRegion = mapView.region
+                    }
+                } else {
+                    if !view.mapRect.equals(to: mapView.visibleMapRect) {
+                        view.mapRect = mapView.visibleMapRect
+                    }
+                }
             }
         }
 
