@@ -31,6 +31,7 @@ extension Map {
 
         private var registeredAnnotationTypes = Set<ObjectIdentifier>()
         private var regionIsChanging = false
+        private var isInitialRegionChange = true
 
         // MARK: Initialization
 
@@ -281,7 +282,11 @@ extension Map {
 
         public func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
             regionIsChanging = false
-            mapViewDidChangeVisibleRegion(mapView)
+            if isInitialRegionChange {
+                isInitialRegionChange = false
+            } else {
+                mapViewDidChangeVisibleRegion(mapView)
+            }
         }
 
         public func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
