@@ -92,7 +92,6 @@ extension Map: WKInterfaceObjectRepresentable {
                 mapView.setUserTrackingMode(newView.userTrackingMode, animated: animated)
             }
         }
-
     }
 
     // MARK: Methods

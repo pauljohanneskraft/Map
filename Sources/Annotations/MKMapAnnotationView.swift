@@ -15,19 +15,33 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
     // MARK: Stored Properties
 
     private var controller: NativeHostingController<Content>?
+    private var selectedContent: Content?
+    private var notSelectedContent: Content?
+    private var viewMapAnnotation: ViewMapAnnotation<Content>?
 
     // MARK: Methods
 
     func setup(for mapAnnotation: ViewMapAnnotation<Content>) {
         annotation = mapAnnotation.annotation
-
-        let controller = NativeHostingController(rootView: mapAnnotation.content)
+        self.viewMapAnnotation = mapAnnotation
+        updateContent(for: self.isSelected)
+    }
+    
+    private func updateContent(for selectedState: Bool) {
+        guard let contentView = selectedState ? viewMapAnnotation?.selectedContent : viewMapAnnotation?.content else {
+            return
+        }
+        controller?.view.removeFromSuperview()
+        let controller = NativeHostingController(rootView: contentView)
         addSubview(controller.view)
         bounds.size = controller.preferredContentSize
         self.controller = controller
     }
 
     // MARK: Overrides
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        updateContent(for: selected)
+    }
 
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -47,7 +61,6 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
         controller?.removeFromParent()
         controller = nil
     }
-
 }
 
 #endif
