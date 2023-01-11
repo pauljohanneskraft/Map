@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+#if !os(watchOS)
 extension UIHostingController {
     /// This convenience init uses dynamic subclassing to disable safe area behaviour for a UIHostingController
     /// This solves bugs with embedded SwiftUI views having redundant insets
@@ -47,3 +48,4 @@ extension UIHostingController {
         }
     }
 }
+#endif
