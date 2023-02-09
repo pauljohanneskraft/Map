@@ -135,9 +135,9 @@ extension Map {
             mapView.showsScale = newView.informationVisibility.contains(.scale)
             mapView.showsTraffic = newView.informationVisibility.contains(.traffic)
             mapView.showsUserLocation = newView.informationVisibility.contains(.userLocation)
-            #if !os(iOS) && !os(tvOS)
+            #if os(macOS) || targetEnvironment(macCatalyst)
             mapView.showsZoomControls = newView.informationVisibility.contains(.zoomControls)
-            if #available(macOS 11, *) {
+            if #available(macOS 11, macCatalyst 14, *) {
                 mapView.showsPitchControl = newView.informationVisibility.contains(.pitchControl)
             }
             #endif
