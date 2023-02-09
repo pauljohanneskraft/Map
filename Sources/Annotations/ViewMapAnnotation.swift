@@ -41,6 +41,7 @@ public struct ViewMapAnnotation<Content: View>: MapAnnotation {
     // MARK: Stored Properties
 
     public let annotation: MKAnnotation
+    let clusteringIdentifier: String?
     let content: Content
 
     // MARK: Initialization
@@ -49,17 +50,21 @@ public struct ViewMapAnnotation<Content: View>: MapAnnotation {
         coordinate: CLLocationCoordinate2D,
         title: String? = nil,
         subtitle: String? = nil,
+        clusteringIdentifier: String? = nil,
         @ViewBuilder content: () -> Content
     ) {
         self.annotation = Annotation(coordinate: coordinate, title: title, subtitle: subtitle)
+        self.clusteringIdentifier = clusteringIdentifier
         self.content = content()
     }
 
     public init(
         annotation: MKAnnotation,
+        clusteringIdentifier: String? = nil,
         @ViewBuilder content: () -> Content
     ) {
         self.annotation = annotation
+        self.clusteringIdentifier = clusteringIdentifier
         self.content = content()
     }
 
