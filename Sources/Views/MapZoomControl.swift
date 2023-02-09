@@ -5,12 +5,12 @@
 //  Created by Paul Kraft on 26.04.22.
 //
 
-#if os(macOS)
+#if os(macOS) || targetEnvironment(macCatalyst)
 
 import SwiftUI
 import MapKit
 
-@available(macOS 11, *)
+@available(macOS 11, macCatalyst 14, *)
 public struct MapZoomControl {
 
     // MARK: Stored Properties
@@ -25,7 +25,36 @@ public struct MapZoomControl {
 
 }
 
+#endif
+
 // MARK: - UIViewRepresentable
+
+#if targetEnvironment(macCatalyst)
+
+@available(macCatalyst 14, *)
+extension MapZoomControl: UIViewRepresentable {
+
+    public func makeUIView(context: Context) -> MKZoomControl {
+        let view = MKZoomControl(mapView: MapRegistry[key])
+        updateUIView(view, context: context)
+        return view
+    }
+
+    public func updateUIView(_ zoomControl: MKZoomControl, context: Context) {
+        if let mapView = MapRegistry[key], mapView != zoomControl.mapView {
+            zoomControl.mapView = mapView
+        }
+    }
+
+}
+
+
+#endif
+
+
+// MARK: - NSViewRepresentable
+
+#if os(macOS)
 
 @available(macOS 11, *)
 extension MapZoomControl: NSViewRepresentable {
