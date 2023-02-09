@@ -6,6 +6,7 @@
 //
 
 public typealias MapAnnotationBuilder = SingleValueBuilder<MapAnnotation>
+public typealias OptionalMapAnnotationBuilder = SingleValueBuilder<MapAnnotation?>
 
 #if !os(watchOS)
 public typealias MapOverlayBuilder = SingleValueBuilder<MapOverlay>

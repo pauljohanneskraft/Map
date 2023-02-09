@@ -10,7 +10,7 @@
 import SwiftUI
 import MapKit
 
-@available(macOS 11, *)
+@available(macCatalyst 14, macOS 11, *)
 public struct MapPitchControl {
 
     // MARK: Stored Properties

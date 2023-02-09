@@ -20,6 +20,7 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
 
     func setup(for mapAnnotation: ViewMapAnnotation<Content>) {
         annotation = mapAnnotation.annotation
+        clusteringIdentifier = mapAnnotation.clusteringIdentifier
 
         let controller = NativeHostingController(rootView: mapAnnotation.content)
         addSubview(controller.view)
@@ -29,6 +30,8 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
 
     // MARK: Overrides
 
+    #if canImport(UIKit)
+
     override func layoutSubviews() {
         super.layoutSubviews()
 
@@ -36,6 +39,8 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
             bounds.size = controller.preferredContentSize
         }
     }
+
+    #endif
 
     override func prepareForReuse() {
         super.prepareForReuse()

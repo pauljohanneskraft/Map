@@ -53,30 +53,52 @@ public struct MapInformationVisibility: OptionSet {
 
     public static let `default`: MapInformationVisibility = {
         #if os(watchOS)
-        return MapInformationVisibility(rawValue: 0)
+        return []
         #else
-        return MapInformationVisibility(arrayLiteral: .buildings)
+        return [.buildings]
         #endif
     }()
 
     public static let all: MapInformationVisibility = {
+        var value = MapInformationVisibility()
+
+        #if !os(watchOS)
+        value.insert(.buildings)
+        #endif
+
+        #if !os(tvOS) && !os(watchOS)
+        value.insert(.compass)
+        #endif
+
         #if os(macOS) || targetEnvironment(macCatalyst)
-        if #available(macOS 11, macCatalyst 14, *) {
-            return MapInformationVisibility(arrayLiteral: .buildings, .compass, .pitchControl, .scale, .traffic, .userLocation, .zoomControls)
-        } else {
-            return MapInformationVisibility(arrayLiteral: .buildings, .compass, .scale, .traffic, .userLocation, .zoomControls)
-        }
-        #elseif os(iOS)
-        return MapInformationVisibility(arrayLiteral: .buildings, .compass, .scale, .traffic, .userLocation)
-        #elseif os(tvOS)
-        return MapInformationVisibility(arrayLiteral: .buildings, .scale, .traffic, .userLocation)
-        #elseif os(watchOS)
-        if #available(watchOS 6.1, *) {
-            return MapInformationVisibility(arrayLiteral: .userHeading, .userLocation)
-        } else {
-            return MapInformationVisibility(rawValue: 0)
+        if #available(macCatalyst 14, macOS 11, *) {
+            value.insert(.pitchControl)
         }
         #endif
+
+        #if !os(watchOS)
+        value.insert(.scale)
+        value.insert(.traffic)
+        #endif
+
+        #if os(watchOS)
+        if #available(watchOS 6.1, *) {
+            value.insert(.userHeading)
+            value.insert(.userLocation)
+        }
+        #else
+        value.insert(.userLocation)
+        #endif
+
+        #if os(macOS) || targetEnvironment(macCatalyst)
+        value.insert(.zoomControls)
+        #elseif targetEnvironment(macCatalyst)
+        if #available(macCatalyst 14, *) {
+            value.insert(.zoomControls)
+        }
+        #endif
+
+        return value
     }()
 
     // MARK: Stored Properties

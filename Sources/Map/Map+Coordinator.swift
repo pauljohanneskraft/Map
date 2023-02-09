@@ -21,6 +21,7 @@ extension Map {
         private var view: Map?
 
         private var annotationContentByObject = [ObjectIdentifier: MapAnnotation]()
+        private var annotationItemByObject = [ObjectIdentifier: AnnotationItems.Element]()
         private var annotationContentByID = [AnnotationItems.Element.ID: MapAnnotation]()
 
         private var overlayContentByObject = [ObjectIdentifier: MapOverlay]()
@@ -94,6 +95,7 @@ extension Map {
                         continue
                     }
                     annotationContentByID[item.id] = content
+                    annotationItemByObject[objectKey] = item
                     annotationContentByObject[objectKey] = content
                     registerAnnotationViewIfNeeded(on: mapView, for: content)
                     mapView.addAnnotation(content.annotation)
@@ -103,7 +105,9 @@ extension Map {
                         continue
                     }
                     mapView.removeAnnotation(content.annotation)
-                    annotationContentByObject.removeValue(forKey: ObjectIdentifier(content.annotation))
+                    let objectKey = ObjectIdentifier(content.annotation)
+                    annotationItemByObject.removeValue(forKey: objectKey)
+                    annotationContentByObject.removeValue(forKey: objectKey)
                     annotationContentByID.removeValue(forKey: item.id)
                 }
             }
@@ -236,7 +240,7 @@ extension Map {
 
         private func updateUserTracking(on mapView: MKMapView, from previousView: Map?, to newView: Map) {
             if #available(macOS 11, *) {
-                let newTrackingMode = newView.userTrackingMode
+                let newTrackingMode = newView.userTrackingMode.actualValue
                 if newView.usesUserTrackingMode, mapView.userTrackingMode != newTrackingMode {
                     mapView.userTrackingMode = newTrackingMode
                 }
@@ -296,10 +300,24 @@ extension Map {
         }
 
         public func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+            if let clusterAnnotation = annotation as? MKClusterAnnotation {
+                let content = clusterAnnotation.memberAnnotations.compactMap { annotation -> AnnotationItems.Element? in
+                    guard let item = annotationItemByObject[ObjectIdentifier(annotation)] else {
+                        assertionFailure("Somehow a cluster contains an unknown annotation item.")
+                        return nil
+                    }
+                    return item
+                }
+                return view?.clusterAnnotation(content)?.view(for: mapView)
+            }
             guard let content = annotationContentByObject[ObjectIdentifier(annotation)] else {
                 return nil
             }
             return content.view(for: mapView)
+        }
+
+        public func mapView(_ mapView: MKMapView, clusterAnnotationForMemberAnnotations memberAnnotations: [MKAnnotation]) -> MKClusterAnnotation {
+            MKClusterAnnotation(memberAnnotations: memberAnnotations)
         }
 
     }
