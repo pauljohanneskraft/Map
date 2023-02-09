@@ -31,7 +31,7 @@ public struct Map<AnnotationItems: RandomAccessCollection, OverlayItems: RandomA
 
     let annotationItems: AnnotationItems
     let annotationContent: (AnnotationItems.Element) -> MapAnnotation
-    let clusterAnnotation: ([AnnotationItems.Element]) -> MapAnnotation?
+    let clusterAnnotation: (MKClusterAnnotation, [AnnotationItems.Element]) -> MapAnnotation?
 
     let overlayItems: OverlayItems
     let overlayContent: (OverlayItems.Element) -> MapOverlay
@@ -52,7 +52,7 @@ extension Map {
         interactionModes: MapInteractionModes = .all,
         annotationItems: AnnotationItems,
         @MapAnnotationBuilder annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation,
-        @OptionalMapAnnotationBuilder clusterAnnotation: @escaping ([AnnotationItems.Element]) -> MapAnnotation? = { _ in nil },
+        @OptionalMapAnnotationBuilder clusterAnnotation: @escaping (MKClusterAnnotation, [AnnotationItems.Element]) -> MapAnnotation? = { _ in nil },
         overlayItems: OverlayItems,
         @MapOverlayBuilder overlayContent: @escaping (OverlayItems.Element) -> MapOverlay
     ) {
@@ -80,7 +80,7 @@ extension Map {
         interactionModes: MapInteractionModes = .all,
         annotationItems: AnnotationItems,
         @MapAnnotationBuilder annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation,
-        @OptionalMapAnnotationBuilder clusterAnnotation: @escaping ([AnnotationItems.Element]) -> MapAnnotation? = { _ in nil },
+        @OptionalMapAnnotationBuilder clusterAnnotation: @escaping (MKClusterAnnotation, [AnnotationItems.Element]) -> MapAnnotation? = { _, _ in nil },
         overlayItems: OverlayItems,
         @MapOverlayBuilder overlayContent: @escaping (OverlayItems.Element) -> MapOverlay
     ) {
@@ -111,7 +111,7 @@ extension Map {
         userTrackingMode: Binding<UserTrackingMode>?,
         annotationItems: AnnotationItems,
         @MapAnnotationBuilder annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation,
-        @OptionalMapAnnotationBuilder clusterAnnotation: @escaping ([AnnotationItems.Element]) -> MapAnnotation? = { _ in nil },
+        @OptionalMapAnnotationBuilder clusterAnnotation: @escaping (MKClusterAnnotation, [AnnotationItems.Element]) -> MapAnnotation? = { _, _ in nil },
         overlayItems: OverlayItems,
         @MapOverlayBuilder overlayContent: @escaping (OverlayItems.Element) -> MapOverlay
     ) {
@@ -146,7 +146,7 @@ extension Map {
         userTrackingMode: Binding<UserTrackingMode>?,
         annotationItems: AnnotationItems,
         @MapAnnotationBuilder annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation,
-        @OptionalMapAnnotationBuilder clusterAnnotation: @escaping ([AnnotationItems.Element]) -> MapAnnotation? = { _ in nil },
+        @OptionalMapAnnotationBuilder clusterAnnotation: @escaping (MKClusterAnnotation, [AnnotationItems.Element]) -> MapAnnotation? = { _, _ in nil },
         overlayItems: OverlayItems,
         @MapOverlayBuilder overlayContent: @escaping (OverlayItems.Element) -> MapOverlay
     ) {
@@ -186,7 +186,7 @@ extension Map {
         userTrackingMode: Binding<UserTrackingMode>? = nil,
         annotationItems: AnnotationItems,
         @MapAnnotationBuilder annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation,
-        @OptionalMapAnnotationBuilder clusterAnnotation: @escaping ([AnnotationItems.Element]) -> MapAnnotation? = { _ in nil },
+        @OptionalMapAnnotationBuilder clusterAnnotation: @escaping (MKClusterAnnotation, [AnnotationItems.Element]) -> MapAnnotation? = { _, _ in nil },
         overlayItems: OverlayItems,
         @MapOverlayBuilder overlayContent: @escaping (OverlayItems.Element) -> MapOverlay
     ) {
@@ -220,7 +220,7 @@ extension Map {
         userTrackingMode: Binding<UserTrackingMode>? = nil,
         annotationItems: AnnotationItems,
         @MapAnnotationBuilder annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation,
-        @OptionalMapAnnotationBuilder clusterAnnotation: @escaping ([AnnotationItems.Element]) -> MapAnnotation? = { _ in nil },
+        @OptionalMapAnnotationBuilder clusterAnnotation: @escaping (MKClusterAnnotation, [AnnotationItems.Element]) -> MapAnnotation? = { _, _ in nil },
         overlayItems: OverlayItems,
         @MapOverlayBuilder overlayContent: @escaping (OverlayItems.Element) -> MapOverlay
     ) {
@@ -269,7 +269,7 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>] {
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
             return ViewMapAnnotation(annotation: annotation) {}
         },
-        @OptionalMapAnnotationBuilder clusterAnnotation: @escaping ([MKAnnotation]) -> MapAnnotation? = { _ in nil },
+        @OptionalMapAnnotationBuilder clusterAnnotation: @escaping (MKClusterAnnotation) -> MapAnnotation? = { _ in nil },
         overlayItems: OverlayItems,
         @MapOverlayBuilder overlayContent: @escaping (OverlayItems.Element) -> MapOverlay
     ) {
@@ -281,7 +281,8 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>] {
             interactionModes: interactionModes,
             annotationItems: annotations.map(IdentifiableObject.init),
             annotationContent: { annotationContent($0.object) },
-            clusterAnnotation: { clusterAnnotation($0.map(\.object)) },
+            clusterAnnotation: { annotation, _ in clusterAnnotation(annotation) },
+            clusterAnnotation: { annotation, _ in clusterAnnotation(annotation) },
             overlayItems: overlayItems,
             overlayContent: overlayContent
         )
@@ -298,7 +299,7 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>] {
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
             return ViewMapAnnotation(annotation: annotation) {}
         },
-        @OptionalMapAnnotationBuilder clusterAnnotation: @escaping ([MKAnnotation]) -> MapAnnotation? = { _ in nil },
+        @OptionalMapAnnotationBuilder clusterAnnotation: @escaping (MKClusterAnnotation) -> MapAnnotation? = { _ in nil },
         overlayItems: OverlayItems,
         @MapOverlayBuilder overlayContent: @escaping (OverlayItems.Element) -> MapOverlay
     ) {
@@ -310,7 +311,7 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>] {
             interactionModes: interactionModes,
             annotationItems: annotations.map(IdentifiableObject.init),
             annotationContent: { annotationContent($0.object) },
-            clusterAnnotation: { clusterAnnotation($0.map(\.object)) },
+            clusterAnnotation: { annotation, _ in clusterAnnotation(annotation) },
             overlayItems: overlayItems,
             overlayContent: overlayContent
         )
@@ -330,7 +331,7 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>] {
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
             return ViewMapAnnotation(annotation: annotation) {}
         },
-        @OptionalMapAnnotationBuilder clusterAnnotation: @escaping ([MKAnnotation]) -> MapAnnotation? = { _ in nil },
+        @OptionalMapAnnotationBuilder clusterAnnotation: @escaping (MKClusterAnnotation) -> MapAnnotation? = { _ in nil },
         overlayItems: OverlayItems,
         @MapOverlayBuilder overlayContent: @escaping (OverlayItems.Element) -> MapOverlay
     ) {
@@ -343,7 +344,7 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>] {
             userTrackingMode: userTrackingMode,
             annotationItems: annotations.map(IdentifiableObject.init),
             annotationContent: { annotationContent($0.object) },
-            clusterAnnotation: { clusterAnnotation($0.map(\.object)) },
+            clusterAnnotation: { annotation, _ in clusterAnnotation(annotation) },
             overlayItems: overlayItems,
             overlayContent: overlayContent
         )
@@ -362,7 +363,7 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>] {
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
             return ViewMapAnnotation(annotation: annotation) {}
         },
-        @OptionalMapAnnotationBuilder clusterAnnotation: @escaping ([MKAnnotation]) -> MapAnnotation? = { _ in nil },
+        @OptionalMapAnnotationBuilder clusterAnnotation: @escaping (MKClusterAnnotation) -> MapAnnotation? = { _ in nil },
         overlayItems: OverlayItems,
         @MapOverlayBuilder overlayContent: @escaping (OverlayItems.Element) -> MapOverlay
     ) {
@@ -375,7 +376,7 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>] {
             userTrackingMode: userTrackingMode,
             annotationItems: annotations.map(IdentifiableObject.init),
             annotationContent: { annotationContent($0.object) },
-            clusterAnnotation: { clusterAnnotation($0.map(\.object)) },
+            clusterAnnotation: { annotation, _ in clusterAnnotation(annotation) },
             overlayItems: overlayItems,
             overlayContent: overlayContent
         )
@@ -399,7 +400,7 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>] {
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
             return ViewMapAnnotation(annotation: annotation) {}
         },
-        @OptionalMapAnnotationBuilder clusterAnnotation: @escaping ([MKAnnotation]) -> MapAnnotation? = { _ in nil },
+        @OptionalMapAnnotationBuilder clusterAnnotation: @escaping (MKClusterAnnotation) -> MapAnnotation? = { _ in nil },
         overlayItems: OverlayItems,
         @MapOverlayBuilder overlayContent: @escaping (OverlayItems.Element) -> MapOverlay
     ) {
@@ -412,7 +413,7 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>] {
             userTrackingMode: userTrackingMode,
             annotationItems: annotations.map(IdentifiableObject.init),
             annotationContent: { annotationContent($0.object) },
-            clusterAnnotation: { clusterAnnotation($0.map(\.object)) },
+            clusterAnnotation: { annotation, _ in clusterAnnotation(annotation) },
             overlayItems: overlayItems,
             overlayContent: overlayContent
         )
@@ -430,7 +431,7 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>] {
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
             return ViewMapAnnotation(annotation: annotation) {}
         },
-        @OptionalMapAnnotationBuilder clusterAnnotation: @escaping ([MKAnnotation]) -> MapAnnotation? = { _ in nil },
+        @OptionalMapAnnotationBuilder clusterAnnotation: @escaping (MKClusterAnnotation) -> MapAnnotation? = { _ in nil },
         overlayItems: OverlayItems,
         @MapOverlayBuilder overlayContent: @escaping (OverlayItems.Element) -> MapOverlay
     ) {
@@ -443,7 +444,7 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>] {
             userTrackingMode: userTrackingMode,
             annotationItems: annotations.map(IdentifiableObject.init),
             annotationContent: { annotationContent($0.object) },
-            clusterAnnotation: { clusterAnnotation($0.map(\.object)) },
+            clusterAnnotation: { annotation, _ in clusterAnnotation(annotation) },
             overlayItems: overlayItems,
             overlayContent: overlayContent
         )
@@ -609,7 +610,7 @@ extension Map where OverlayItems == [IdentifiableObject<MKOverlay>] {
         userTrackingMode: Binding<UserTrackingMode>? = nil,
         annotationItems: AnnotationItems,
         @MapAnnotationBuilder annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation,
-        @OptionalMapAnnotationBuilder clusterAnnotation: @escaping ([AnnotationItems.Element]) -> MapAnnotation? = { _ in nil },
+        @OptionalMapAnnotationBuilder clusterAnnotation: @escaping (MKClusterAnnotation, [AnnotationItems.Element]) -> MapAnnotation? = { _, _ in nil },
         overlays: [MKOverlay] = [],
         @MapOverlayBuilder overlayContent: @escaping (MKOverlay) -> MapOverlay = { overlay in
             assertionFailure("Please provide an `overlayContent` closure for the values in `overlays`.")
@@ -642,7 +643,7 @@ extension Map where OverlayItems == [IdentifiableObject<MKOverlay>] {
         userTrackingMode: Binding<UserTrackingMode>? = nil,
         annotationItems: AnnotationItems,
         @MapAnnotationBuilder annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation,
-        @OptionalMapAnnotationBuilder clusterAnnotation: @escaping ([AnnotationItems.Element]) -> MapAnnotation? = { _ in nil },
+        @OptionalMapAnnotationBuilder clusterAnnotation: @escaping (MKClusterAnnotation, [AnnotationItems.Element]) -> MapAnnotation? = { _, _ in nil },
         overlays: [MKOverlay] = [],
         @MapOverlayBuilder overlayContent: @escaping (MKOverlay) -> MapOverlay = { overlay in
             assertionFailure("Please provide an `overlayContent` closure for the values in `overlays`.")
@@ -690,7 +691,7 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>], Overl
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
             return ViewMapAnnotation(annotation: annotation) {}
         },
-        @OptionalMapAnnotationBuilder clusterAnnotation: @escaping ([MKAnnotation]) -> MapAnnotation? = { _ in nil },
+        @OptionalMapAnnotationBuilder clusterAnnotation: @escaping (MKClusterAnnotation) -> MapAnnotation? = { _ in nil },
         overlays: [MKOverlay] = [],
         @MapOverlayBuilder overlayContent: @escaping (MKOverlay) -> MapOverlay = { overlay in
             assertionFailure("Please provide an `overlayContent` closure for the values in `overlays`.")
@@ -724,7 +725,7 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>], Overl
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
             return ViewMapAnnotation(annotation: annotation) {}
         },
-        @MapAnnotationBuilder clusterAnnotation: @escaping ([MKAnnotation]) -> MapAnnotation? = { _ in nil },
+        @MapAnnotationBuilder clusterAnnotation: @escaping (MKClusterAnnotation) -> MapAnnotation? = { _ in nil },
         overlays: [MKOverlay] = [],
         @MapOverlayBuilder overlayContent: @escaping (MKOverlay) -> MapOverlay = { overlay in
             assertionFailure("Please provide an `overlayContent` closure for the values in `overlays`.")
@@ -760,7 +761,7 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>], Overl
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
             return ViewMapAnnotation(annotation: annotation) {}
         },
-        @MapAnnotationBuilder clusterAnnotation: @escaping ([MKAnnotation]) -> MapAnnotation? = { _ in nil },
+        @MapAnnotationBuilder clusterAnnotation: @escaping (MKClusterAnnotation) -> MapAnnotation? = { _ in nil },
         overlays: [MKOverlay] = [],
         @MapOverlayBuilder overlayContent: @escaping (MKOverlay) -> MapOverlay = { overlay in
             assertionFailure("Please provide an `overlayContent` closure for the values in `overlays`.")
@@ -797,7 +798,7 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>], Overl
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
             return ViewMapAnnotation(annotation: annotation) {}
         },
-        @MapAnnotationBuilder clusterAnnotation: @escaping ([MKAnnotation]) -> MapAnnotation? = { _ in nil },
+        @MapAnnotationBuilder clusterAnnotation: @escaping (MKClusterAnnotation) -> MapAnnotation? = { _ in nil },
         overlays: [MKOverlay] = [],
         @MapOverlayBuilder overlayContent: @escaping (MKOverlay) -> MapOverlay = { overlay in
             assertionFailure("Please provide an `overlayContent` closure for the values in `overlays`.")
@@ -815,7 +816,7 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>], Overl
             userTrackingMode: userTrackingMode,
             annotationItems: annotations.map(IdentifiableObject.init),
             annotationContent: { annotationContent($0.object) },
-            clusterAnnotation: { clusterAnnotation($0.map(\.object)) },
+            clusterAnnotation: { annotation, _ in clusterAnnotation(annotation) },
             overlayItems: overlays.map(IdentifiableObject.init),
             overlayContent: { overlayContent($0.object) }
         )
@@ -841,7 +842,7 @@ extension Map
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
             return ViewMapAnnotation(annotation: annotation) {}
         },
-        @MapAnnotationBuilder clusterAnnotation: @escaping ([MKAnnotation]) -> MapAnnotation? = { _ in nil },
+        @MapAnnotationBuilder clusterAnnotation: @escaping (MKClusterAnnotation) -> MapAnnotation? = { _ in nil },
         overlays: [MKOverlay] = [],
         @MapOverlayBuilder overlayContent: @escaping (MKOverlay) -> MapOverlay = { overlay in
             assertionFailure("Please provide an `overlayContent` closure for the values in `overlays`.")
@@ -859,7 +860,7 @@ extension Map
             userTrackingMode: userTrackingMode,
             annotationItems: annotations.map(IdentifiableObject.init),
             annotationContent: { annotationContent($0.object) },
-            clusterAnnotation: { clusterAnnotation($0.map(\.object)) },
+            clusterAnnotation: { annotation, _ in clusterAnnotation(annotation) },
             overlayItems: overlays.map(IdentifiableObject.init),
             overlayContent: { overlayContent($0.object) }
         )
@@ -877,7 +878,7 @@ extension Map
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
             return ViewMapAnnotation(annotation: annotation) {}
         },
-        @MapAnnotationBuilder clusterAnnotation: @escaping ([MKAnnotation]) -> MapAnnotation? = { _ in nil },
+        @MapAnnotationBuilder clusterAnnotation: @escaping (MKClusterAnnotation) -> MapAnnotation? = { _ in nil },
         overlays: [MKOverlay] = [],
         @MapOverlayBuilder overlayContent: @escaping (MKOverlay) -> MapOverlay = { overlay in
             assertionFailure("Please provide an `overlayContent` closure for the values in `overlays`.")
@@ -895,7 +896,7 @@ extension Map
             userTrackingMode: userTrackingMode,
             annotationItems: annotations.map(IdentifiableObject.init),
             annotationContent: { annotationContent($0.object) },
-            clusterAnnotation: { clusterAnnotation($0.map(\.object)) },
+            clusterAnnotation: { annotation, _ in clusterAnnotation(annotation) },
             overlayItems: overlays.map(IdentifiableObject.init),
             overlayContent: { overlayContent($0.object) }
         )

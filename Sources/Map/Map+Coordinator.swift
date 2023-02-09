@@ -308,7 +308,9 @@ extension Map {
                     }
                     return item
                 }
-                return view?.clusterAnnotation(content)?.view(for: mapView)
+                return view?
+                    .clusterAnnotation(clusterAnnotation, content)?
+                    .view(for: mapView)
             }
             guard let content = annotationContentByObject[ObjectIdentifier(annotation)] else {
                 return nil
