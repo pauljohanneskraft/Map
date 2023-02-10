@@ -300,7 +300,9 @@ extension Map {
         }
 
         public func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-            if let clusterAnnotation = annotation as? MKClusterAnnotation {
+            if let content = annotationContentByObject[ObjectIdentifier(annotation)] {
+                return content.view(for: mapView)
+            } else if let clusterAnnotation = annotation as? MKClusterAnnotation {
                 let content = clusterAnnotation.memberAnnotations.compactMap { annotation -> AnnotationItems.Element? in
                     guard let item = annotationItemByObject[ObjectIdentifier(annotation)] else {
                         assertionFailure("Somehow a cluster contains an unknown annotation item.")
@@ -311,11 +313,9 @@ extension Map {
                 return view?
                     .clusterAnnotation(clusterAnnotation, content)?
                     .view(for: mapView)
-            }
-            guard let content = annotationContentByObject[ObjectIdentifier(annotation)] else {
+            } else {
                 return nil
             }
-            return content.view(for: mapView)
         }
 
         public func mapView(_ mapView: MKMapView, clusterAnnotationForMemberAnnotations memberAnnotations: [MKAnnotation]) -> MKClusterAnnotation {
