@@ -35,7 +35,7 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
         backgroundColor = .clear
         #endif
 
-        let controller = NativeHostingController(rootView: mapAnnotation.content)
+        let controller = NativeHostingController(rootView: mapAnnotation.content, ignoreSafeArea: true)
 
         #if canImport(UIKit)
         controller.view.backgroundColor = .clear
@@ -54,6 +54,10 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
         
         self.controller = controller
         self.invalidateIntrinsicContentSize()
+        
+        if let anchor = mapAnnotation.anchor {
+            centerOffset = .init(x: anchor.x * intrinsicContentFrame.width / 2, y: anchor.y * intrinsicContentFrame.height / 2)
+        }
     }
 
     // MARK: Overrides
