@@ -11,12 +11,11 @@ import MapKit
 import SwiftUI
 import WatchKit
 
+@available(watchOS 6.1, *)
 extension Map: WKInterfaceObjectRepresentable {
-
     // MARK: Nested Types
 
     public class Coordinator {
-
         // MARK: Stored Properties
 
         private var view: Map?
@@ -30,16 +29,14 @@ extension Map: WKInterfaceObjectRepresentable {
             let animation = context.transaction.animation
             updateAnnotations(on: mapView, from: view, to: newView)
             updateRegion(on: mapView, from: view, to: newView)
-            if #available(watchOS 6.1, *) {
-                updateUserTracking(on: mapView, from: view, to: newView, animated: animation != nil)
-            }
+            updateUserTracking(on: mapView, from: view, to: newView, animated: animation != nil)
         }
 
         // MARK: Helpers
 
         private func updateAnnotations(on mapView: WKInterfaceMap, from previousView: Map?, to newView: Map) {
             let changes: CollectionDifference<AnnotationItems.Element>
-            if let previousView = previousView {
+            if let previousView {
                 changes = newView.annotationItems.difference(from: previousView.annotationItems) { $0.id == $1.id }
             } else {
                 changes = newView.annotationItems.difference(from: []) { $0.id == $1.id }
@@ -92,7 +89,6 @@ extension Map: WKInterfaceObjectRepresentable {
                 mapView.setUserTrackingMode(newView.userTrackingMode, animated: animated)
             }
         }
-
     }
 
     // MARK: Methods
@@ -110,7 +106,6 @@ extension Map: WKInterfaceObjectRepresentable {
     public func updateWKInterfaceObject(_ mapView: WKInterfaceMap, context: Context) {
         context.coordinator.update(mapView, from: self, context: context)
     }
-
 }
 
 #endif

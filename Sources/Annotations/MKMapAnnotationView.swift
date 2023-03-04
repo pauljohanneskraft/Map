@@ -22,7 +22,7 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
         annotation = mapAnnotation.annotation
         clusteringIdentifier = mapAnnotation.clusteringIdentifier
 
-        let controller = NativeHostingController(rootView: mapAnnotation.content)
+        let controller = NativeHostingController(rootView: mapAnnotation.content, ignoreSafeArea: true)
         addSubview(controller.view)
         bounds.size = controller.preferredContentSize
         self.controller = controller
