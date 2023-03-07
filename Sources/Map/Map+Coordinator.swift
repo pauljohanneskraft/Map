@@ -47,15 +47,16 @@ extension Map {
         func update(_ mapView: MKMapView, from newView: Map, context: Context) {
             defer { view = newView }
             let animation = context.transaction.animation
+            let animated = animation != nil
             updateAnnotations(on: mapView, from: view, to: newView)
-            updateCamera(on: mapView, context: context, animated: animation != nil)
+            updateCamera(on: mapView, context: context, animated: animated)
             updateInformationVisibility(on: mapView, from: view, to: newView)
             updateInteractionModes(on: mapView, from: view, to: newView)
             updateOverlays(on: mapView, from: view, to: newView)
             updatePointOfInterestFilter(on: mapView, from: view, to: newView)
-            updateRegion(on: mapView, from: view, to: newView, animated: animation != nil)
+            updateRegion(on: mapView, from: view, to: newView, animated: animated)
             updateType(on: mapView, from: view, to: newView)
-            updateUserTracking(on: mapView, from: view, to: newView)
+            updateUserTracking(on: mapView, from: view, to: newView, animated: animated)
 
             if let key = context.environment.mapKey {
                 MapRegistry[key] = mapView
@@ -238,11 +239,11 @@ extension Map {
             }
         }
 
-        private func updateUserTracking(on mapView: MKMapView, from previousView: Map?, to newView: Map) {
+        private func updateUserTracking(on mapView: MKMapView, from previousView: Map?, to newView: Map, animated: Bool) {
             if #available(macOS 11, *) {
                 let newTrackingMode = newView.userTrackingMode.actualValue
                 if newView.usesUserTrackingMode, mapView.userTrackingMode != newTrackingMode {
-                    mapView.setUserTrackingMode(newTrackingMode, animated: true)
+                    mapView.setUserTrackingMode(newTrackingMode, animated: animated)
                 }
             }
         }
