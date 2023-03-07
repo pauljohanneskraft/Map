@@ -253,8 +253,10 @@ extension Map {
             guard !regionIsChanging else {
                 return
             }
-            view?.coordinateRegion = mapView.region
-            view?.mapRect = mapView.visibleMapRect
+            DispatchQueue.main.async { [weak self] in
+                self?.view?.coordinateRegion = mapView.region
+                self?.view?.mapRect = mapView.visibleMapRect
+            }
         }
 
         @available(macOS 11, *)
@@ -262,19 +264,21 @@ extension Map {
             guard let view = view, view.usesUserTrackingMode else {
                 return
             }
-            switch mode {
-            case .none:
-                view.userTrackingMode = .none
-            case .follow:
-                view.userTrackingMode = .follow
-            case .followWithHeading:
-                #if os(macOS) || os(tvOS)
-                view.userTrackingMode = .follow
-                #else
-                view.userTrackingMode = .followWithHeading
-                #endif
-            @unknown default:
-                assertionFailure("Encountered unknown user tracking mode")
+            DispatchQueue.main.async {
+                switch mode {
+                case .none:
+                    view.userTrackingMode = .none
+                case .follow:
+                    view.userTrackingMode = .follow
+                case .followWithHeading:
+                    #if os(macOS) || os(tvOS)
+                    view.userTrackingMode = .follow
+                    #else
+                    view.userTrackingMode = .followWithHeading
+                    #endif
+                @unknown default:
+                    assertionFailure("Encountered unknown user tracking mode")
+                }
             }
         }
 
