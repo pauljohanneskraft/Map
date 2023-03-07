@@ -242,7 +242,7 @@ extension Map {
             if #available(macOS 11, *) {
                 let newTrackingMode = newView.userTrackingMode.actualValue
                 if newView.usesUserTrackingMode, mapView.userTrackingMode != newTrackingMode {
-                    mapView.userTrackingMode = newTrackingMode
+                    mapView.setUserTrackingMode(newTrackingMode, animated: true)
                 }
             }
         }
