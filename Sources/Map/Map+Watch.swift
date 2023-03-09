@@ -11,7 +11,6 @@ import MapKit
 import SwiftUI
 import WatchKit
 
-@available(watchOS 6.1, *)
 public struct Map<AnnotationItems: RandomAccessCollection> where AnnotationItems.Element: Identifiable {
 
     // MARK: Stored Properties
@@ -23,7 +22,8 @@ public struct Map<AnnotationItems: RandomAccessCollection> where AnnotationItems
 
     let informationVisibility: MapInformationVisibility
     let usesUserTrackingMode: Bool
-
+    
+    @available(watchOS 6.1, *)
     @Binding var userTrackingMode: WKInterfaceMap.UserTrackingMode
 
     let annotationItems: AnnotationItems
@@ -33,7 +33,6 @@ public struct Map<AnnotationItems: RandomAccessCollection> where AnnotationItems
 
 // MARK: - Initialization
 
-@available(watchOS 6.1, *)
 extension Map {
 
     public init(
@@ -116,7 +115,6 @@ extension Map {
 
 }
 
-@available(watchOS 6.1, *)
 extension Map where AnnotationItems == EmptyCollection<IdentifiableObject<NSObject>> {
 
     public init(

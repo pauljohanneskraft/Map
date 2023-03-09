@@ -11,7 +11,6 @@ import MapKit
 import SwiftUI
 import WatchKit
 
-@available(watchOS 6.1, *)
 extension Map: WKInterfaceObjectRepresentable {
     // MARK: Nested Types
 
@@ -29,7 +28,9 @@ extension Map: WKInterfaceObjectRepresentable {
             let animation = context.transaction.animation
             updateAnnotations(on: mapView, from: view, to: newView)
             updateRegion(on: mapView, from: view, to: newView)
-            updateUserTracking(on: mapView, from: view, to: newView, animated: animation != nil)
+            if #available(watchOS 6.1, *) {
+                updateUserTracking(on: mapView, from: view, to: newView, animated: animation != nil)
+            }
         }
 
         // MARK: Helpers
