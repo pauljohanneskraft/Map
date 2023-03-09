@@ -17,7 +17,6 @@ public struct Map<AnnotationItems: RandomAccessCollection, OverlayItems: RandomA
 
     @Binding var coordinateRegion: MKCoordinateRegion
     @Binding var mapRect: MKMapRect
-    @Binding var directionsRequest: DirectionRequest?
 
     let usesRegion: Bool
 
@@ -51,7 +50,6 @@ extension Map {
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
-        directionsRequest: Binding<DirectionRequest?>? = nil,
         annotationItems: AnnotationItems,
         @MapAnnotationBuilder annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation,
         @OptionalMapAnnotationBuilder clusterAnnotation: @escaping (MKClusterAnnotation, [AnnotationItems.Element]) -> MapAnnotation? = { _ in nil },
@@ -72,11 +70,6 @@ extension Map {
         self.clusterAnnotation = clusterAnnotation
         self.overlayItems = overlayItems
         self.overlayContent = overlayContent
-        if let directionsRequest = directionsRequest {
-            self._directionsRequest = directionsRequest
-        } else {
-            self._directionsRequest = .constant(nil)
-        }
     }
 
     public init(
@@ -85,7 +78,6 @@ extension Map {
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
-        directionsRequest: Binding<DirectionRequest?>? = nil,
         annotationItems: AnnotationItems,
         @MapAnnotationBuilder annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation,
         @OptionalMapAnnotationBuilder clusterAnnotation: @escaping (MKClusterAnnotation, [AnnotationItems.Element]) -> MapAnnotation? = { _, _ in nil },
@@ -106,11 +98,6 @@ extension Map {
         self.clusterAnnotation = clusterAnnotation
         self.overlayItems = overlayItems
         self.overlayContent = overlayContent
-        if let directionsRequest = directionsRequest {
-            self._directionsRequest = directionsRequest
-        } else {
-            self._directionsRequest = .constant(nil)
-        }
     }
 
     @available(macOS 11, *)
@@ -122,7 +109,6 @@ extension Map {
         interactionModes: MapInteractionModes = .all,
         showsUserLocation: Bool = false,
         userTrackingMode: Binding<UserTrackingMode>?,
-        directionsRequest: Binding<DirectionRequest?>? = nil,
         annotationItems: AnnotationItems,
         @MapAnnotationBuilder annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation,
         @OptionalMapAnnotationBuilder clusterAnnotation: @escaping (MKClusterAnnotation, [AnnotationItems.Element]) -> MapAnnotation? = { _, _ in nil },
@@ -148,11 +134,6 @@ extension Map {
         self.clusterAnnotation = clusterAnnotation
         self.overlayItems = overlayItems
         self.overlayContent = overlayContent
-        if let directionsRequest = directionsRequest {
-            self._directionsRequest = directionsRequest
-        } else {
-            self._directionsRequest = .constant(nil)
-        }
     }
 
     @available(macOS 11, *)
@@ -163,7 +144,6 @@ extension Map {
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
         userTrackingMode: Binding<UserTrackingMode>?,
-        directionsRequest: Binding<DirectionRequest?>? = nil,
         annotationItems: AnnotationItems,
         @MapAnnotationBuilder annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation,
         @OptionalMapAnnotationBuilder clusterAnnotation: @escaping (MKClusterAnnotation, [AnnotationItems.Element]) -> MapAnnotation? = { _, _ in nil },
@@ -189,11 +169,6 @@ extension Map {
         self.clusterAnnotation = clusterAnnotation
         self.overlayItems = overlayItems
         self.overlayContent = overlayContent
-        if let directionsRequest = directionsRequest {
-            self._directionsRequest = directionsRequest
-        } else {
-            self._directionsRequest = .constant(nil)
-        }
     }
 
 }
@@ -209,7 +184,6 @@ extension Map {
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
         userTrackingMode: Binding<UserTrackingMode>? = nil,
-        directionsRequest: Binding<DirectionRequest?>? = nil,
         annotationItems: AnnotationItems,
         @MapAnnotationBuilder annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation,
         @OptionalMapAnnotationBuilder clusterAnnotation: @escaping (MKClusterAnnotation, [AnnotationItems.Element]) -> MapAnnotation? = { _, _ in nil },
@@ -235,11 +209,6 @@ extension Map {
         self.clusterAnnotation = clusterAnnotation
         self.overlayItems = overlayItems
         self.overlayContent = overlayContent
-        if let directionsRequest = directionsRequest {
-            self._directionsRequest = directionsRequest
-        } else {
-            self._directionsRequest = .constant(nil)
-        }
     }
 
     public init(
@@ -249,7 +218,6 @@ extension Map {
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
         userTrackingMode: Binding<UserTrackingMode>? = nil,
-        directionsRequest: Binding<DirectionRequest?>? = nil,
         annotationItems: AnnotationItems,
         @MapAnnotationBuilder annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation,
         @OptionalMapAnnotationBuilder clusterAnnotation: @escaping (MKClusterAnnotation, [AnnotationItems.Element]) -> MapAnnotation? = { _, _ in nil },
@@ -275,11 +243,6 @@ extension Map {
         self.clusterAnnotation = clusterAnnotation
         self.overlayItems = overlayItems
         self.overlayContent = overlayContent
-        if let directionsRequest = directionsRequest {
-            self._directionsRequest = directionsRequest
-        } else {
-            self._directionsRequest = .constant(nil)
-        }
     }
 
 }
@@ -301,7 +264,6 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>] {
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
-        directionsRequest: Binding<DirectionRequest?>? = nil,
         annotations: [MKAnnotation] = [],
         @MapAnnotationBuilder annotationContent: @escaping (MKAnnotation) -> MapAnnotation = { annotation in
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
@@ -317,7 +279,6 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>] {
             pointOfInterestFilter: pointOfInterestFilter,
             informationVisibility: informationVisibility,
             interactionModes: interactionModes,
-            directionsRequest: directionsRequest,
             annotationItems: annotations.map(IdentifiableObject.init),
             annotationContent: { annotationContent($0.object) },
             clusterAnnotation: { annotation, _ in clusterAnnotation(annotation) },
@@ -333,7 +294,6 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>] {
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
-        directionsRequest: Binding<DirectionRequest?>? = nil,
         annotations: [MKAnnotation] = [],
         @MapAnnotationBuilder annotationContent: @escaping (MKAnnotation) -> MapAnnotation = { annotation in
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
@@ -349,7 +309,6 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>] {
             pointOfInterestFilter: pointOfInterestFilter,
             informationVisibility: informationVisibility,
             interactionModes: interactionModes,
-            directionsRequest: directionsRequest,
             annotationItems: annotations.map(IdentifiableObject.init),
             annotationContent: { annotationContent($0.object) },
             clusterAnnotation: { annotation, _ in clusterAnnotation(annotation) },
@@ -367,7 +326,6 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>] {
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
         userTrackingMode: Binding<UserTrackingMode>?,
-        directionsRequest: Binding<DirectionRequest?>? = nil,
         annotations: [MKAnnotation] = [],
         @MapAnnotationBuilder annotationContent: @escaping (MKAnnotation) -> MapAnnotation = { annotation in
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
@@ -384,7 +342,6 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>] {
             informationVisibility: informationVisibility,
             interactionModes: interactionModes,
             userTrackingMode: userTrackingMode,
-            directionsRequest: directionsRequest,
             annotationItems: annotations.map(IdentifiableObject.init),
             annotationContent: { annotationContent($0.object) },
             clusterAnnotation: { annotation, _ in clusterAnnotation(annotation) },
@@ -401,7 +358,6 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>] {
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
         userTrackingMode: Binding<UserTrackingMode>?,
-        directionsRequest: Binding<DirectionRequest?>? = nil,
         annotations: [MKAnnotation] = [],
         @MapAnnotationBuilder annotationContent: @escaping (MKAnnotation) -> MapAnnotation = { annotation in
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
@@ -418,7 +374,6 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>] {
             informationVisibility: informationVisibility,
             interactionModes: interactionModes,
             userTrackingMode: userTrackingMode,
-            directionsRequest: directionsRequest,
             annotationItems: annotations.map(IdentifiableObject.init),
             annotationContent: { annotationContent($0.object) },
             clusterAnnotation: { annotation, _ in clusterAnnotation(annotation) },
@@ -440,7 +395,6 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>] {
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
         userTrackingMode: Binding<UserTrackingMode>? = nil,
-        directionsRequest: Binding<DirectionRequest?>? = nil,
         annotations: [MKAnnotation] = [],
         @MapAnnotationBuilder annotationContent: @escaping (MKAnnotation) -> MapAnnotation = { annotation in
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
@@ -457,7 +411,6 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>] {
             informationVisibility: informationVisibility,
             interactionModes: interactionModes,
             userTrackingMode: userTrackingMode,
-            directionsRequest: directionsRequest,
             annotationItems: annotations.map(IdentifiableObject.init),
             annotationContent: { annotationContent($0.object) },
             clusterAnnotation: { annotation, _ in clusterAnnotation(annotation) },
@@ -473,7 +426,6 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>] {
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
         userTrackingMode: Binding<UserTrackingMode>? = nil,
-        directionsRequest: Binding<DirectionRequest?>? = nil,
         annotations: [MKAnnotation] = [],
         @MapAnnotationBuilder annotationContent: @escaping (MKAnnotation) -> MapAnnotation = { annotation in
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
@@ -490,7 +442,6 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>] {
             informationVisibility: informationVisibility,
             interactionModes: interactionModes,
             userTrackingMode: userTrackingMode,
-            directionsRequest: directionsRequest,
             annotationItems: annotations.map(IdentifiableObject.init),
             annotationContent: { annotationContent($0.object) },
             clusterAnnotation: { annotation, _ in clusterAnnotation(annotation) },
@@ -520,7 +471,6 @@ extension Map where OverlayItems == [IdentifiableObject<MKOverlay>] {
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
-        directionsRequest: Binding<DirectionRequest?>? = nil,
         annotationItems: AnnotationItems,
         @MapAnnotationBuilder annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation,
         @OptionalMapAnnotationBuilder clusterAnnotation: @escaping ([AnnotationItems.Element]) -> MapAnnotation? = { _ in nil },
@@ -538,7 +488,6 @@ extension Map where OverlayItems == [IdentifiableObject<MKOverlay>] {
             pointOfInterestFilter: pointOfInterestFilter,
             informationVisibility: informationVisibility,
             interactionModes: interactionModes,
-            directionsRequest: directionsRequest,
             annotationItems: annotationItems,
             annotationContent: annotationContent,
             clusterAnnotation: clusterAnnotation,
@@ -553,7 +502,6 @@ extension Map where OverlayItems == [IdentifiableObject<MKOverlay>] {
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
-        directionsRequest: Binding<DirectionRequest?>? = nil,
         annotationItems: AnnotationItems,
         @MapAnnotationBuilder annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation,
         @OptionalMapAnnotationBuilder clusterAnnotation: @escaping ([AnnotationItems.Element]) -> MapAnnotation? = { _ in nil },
@@ -571,7 +519,6 @@ extension Map where OverlayItems == [IdentifiableObject<MKOverlay>] {
             pointOfInterestFilter: pointOfInterestFilter,
             informationVisibility: informationVisibility,
             interactionModes: interactionModes,
-            directionsRequest: directionsRequest,
             annotationItems: annotationItems,
             annotationContent: annotationContent,
             clusterAnnotation: clusterAnnotation,
@@ -588,7 +535,6 @@ extension Map where OverlayItems == [IdentifiableObject<MKOverlay>] {
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
         userTrackingMode: Binding<UserTrackingMode>?,
-        directionsRequest: Binding<DirectionRequest?>? = nil,
         annotationItems: AnnotationItems,
         @MapAnnotationBuilder annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation,
         @OptionalMapAnnotationBuilder clusterAnnotation: @escaping ([AnnotationItems.Element]) -> MapAnnotation? = { _ in nil },
@@ -607,7 +553,6 @@ extension Map where OverlayItems == [IdentifiableObject<MKOverlay>] {
             informationVisibility: informationVisibility,
             interactionModes: interactionModes,
             userTrackingMode: userTrackingMode,
-            directionsRequest: directionsRequest,
             annotationItems: annotationItems,
             annotationContent: annotationContent,
             clusterAnnotation: clusterAnnotation,
@@ -624,7 +569,6 @@ extension Map where OverlayItems == [IdentifiableObject<MKOverlay>] {
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
         userTrackingMode: Binding<UserTrackingMode>?,
-        directionsRequest: Binding<DirectionRequest?>? = nil,
         annotationItems: AnnotationItems,
         @MapAnnotationBuilder annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation,
         @OptionalMapAnnotationBuilder clusterAnnotation: @escaping ([AnnotationItems.Element]) -> MapAnnotation? = { _ in nil },
@@ -643,7 +587,6 @@ extension Map where OverlayItems == [IdentifiableObject<MKOverlay>] {
             informationVisibility: informationVisibility,
             interactionModes: interactionModes,
             userTrackingMode: userTrackingMode,
-            directionsRequest: directionsRequest,
             annotationItems: annotationItems,
             annotationContent: annotationContent,
             clusterAnnotation: clusterAnnotation,
@@ -665,7 +608,6 @@ extension Map where OverlayItems == [IdentifiableObject<MKOverlay>] {
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
         userTrackingMode: Binding<UserTrackingMode>? = nil,
-        directionsRequest: Binding<DirectionRequest?>? = nil,
         annotationItems: AnnotationItems,
         @MapAnnotationBuilder annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation,
         @OptionalMapAnnotationBuilder clusterAnnotation: @escaping (MKClusterAnnotation, [AnnotationItems.Element]) -> MapAnnotation? = { _, _ in nil },
@@ -684,7 +626,6 @@ extension Map where OverlayItems == [IdentifiableObject<MKOverlay>] {
             informationVisibility: informationVisibility,
             interactionModes: interactionModes,
             userTrackingMode: userTrackingMode,
-            directionsRequest: directionsRequest,
             annotationItems: annotationItems,
             annotationContent: annotationContent,
             clusterAnnotation: clusterAnnotation,
@@ -700,7 +641,6 @@ extension Map where OverlayItems == [IdentifiableObject<MKOverlay>] {
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
         userTrackingMode: Binding<UserTrackingMode>? = nil,
-        directionsRequest: Binding<DirectionRequest?>? = nil,
         annotationItems: AnnotationItems,
         @MapAnnotationBuilder annotationContent: @escaping (AnnotationItems.Element) -> MapAnnotation,
         @OptionalMapAnnotationBuilder clusterAnnotation: @escaping (MKClusterAnnotation, [AnnotationItems.Element]) -> MapAnnotation? = { _, _ in nil },
@@ -719,7 +659,6 @@ extension Map where OverlayItems == [IdentifiableObject<MKOverlay>] {
             informationVisibility: informationVisibility,
             interactionModes: interactionModes,
             userTrackingMode: userTrackingMode,
-            directionsRequest: directionsRequest,
             annotationItems: annotationItems,
             annotationContent: annotationContent,
             clusterAnnotation: clusterAnnotation,
@@ -747,7 +686,6 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>], Overl
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
-        directionsRequest: Binding<DirectionRequest?>? = nil,
         annotations: [MKAnnotation] = [],
         @MapAnnotationBuilder annotationContent: @escaping (MKAnnotation) -> MapAnnotation = { annotation in
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
@@ -768,7 +706,6 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>], Overl
             pointOfInterestFilter: pointOfInterestFilter,
             informationVisibility: informationVisibility,
             interactionModes: interactionModes,
-            directionsRequest: directionsRequest,
             annotationItems: annotations.map(IdentifiableObject.init),
             annotationContent: { annotationContent($0.object) },
             clusterAnnotation: { clusterAnnotation($0.map(\.object)) },
@@ -783,7 +720,6 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>], Overl
         pointOfInterestFilter: MKPointOfInterestFilter? = nil,
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
-        directionsRequest: Binding<DirectionRequest?>? = nil,
         annotations: [MKAnnotation] = [],
         @MapAnnotationBuilder annotationContent: @escaping (MKAnnotation) -> MapAnnotation = { annotation in
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
@@ -804,7 +740,6 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>], Overl
             pointOfInterestFilter: pointOfInterestFilter,
             informationVisibility: informationVisibility,
             interactionModes: interactionModes,
-            directionsRequest: directionsRequest,
             annotationItems: annotations.map(IdentifiableObject.init),
             annotationContent: { annotationContent($0.object) },
             clusterAnnotation: { clusterAnnotation($0.map(\.object)) },
@@ -821,7 +756,6 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>], Overl
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
         userTrackingMode: Binding<UserTrackingMode>?,
-        directionsRequest: Binding<DirectionRequest?>? = nil,
         annotations: [MKAnnotation] = [],
         @MapAnnotationBuilder annotationContent: @escaping (MKAnnotation) -> MapAnnotation = { annotation in
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
@@ -843,7 +777,6 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>], Overl
             informationVisibility: informationVisibility,
             interactionModes: interactionModes,
             userTrackingMode: userTrackingMode,
-            directionsRequest: directionsRequest,
             annotationItems: annotations.map(IdentifiableObject.init),
             annotationContent: { annotationContent($0.object) },
             clusterAnnotation: { clusterAnnotation($0.map(\.object)) },
@@ -860,7 +793,6 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>], Overl
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
         userTrackingMode: Binding<UserTrackingMode>?,
-        directionsRequest: Binding<DirectionRequest?>? = nil,
         annotations: [MKAnnotation] = [],
         @MapAnnotationBuilder annotationContent: @escaping (MKAnnotation) -> MapAnnotation = { annotation in
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
@@ -882,7 +814,6 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>], Overl
             informationVisibility: informationVisibility,
             interactionModes: interactionModes,
             userTrackingMode: userTrackingMode,
-            directionsRequest: directionsRequest,
             annotationItems: annotations.map(IdentifiableObject.init),
             annotationContent: { annotationContent($0.object) },
             clusterAnnotation: { annotation, _ in clusterAnnotation(annotation) },
@@ -906,7 +837,6 @@ extension Map
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
         userTrackingMode: Binding<UserTrackingMode>? = nil,
-        directionsRequest: Binding<DirectionRequest?>? = nil,
         annotations: [MKAnnotation] = [],
         @MapAnnotationBuilder annotationContent: @escaping (MKAnnotation) -> MapAnnotation = { annotation in
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
@@ -928,7 +858,6 @@ extension Map
             informationVisibility: informationVisibility,
             interactionModes: interactionModes,
             userTrackingMode: userTrackingMode,
-            directionsRequest: directionsRequest,
             annotationItems: annotations.map(IdentifiableObject.init),
             annotationContent: { annotationContent($0.object) },
             clusterAnnotation: { annotation, _ in clusterAnnotation(annotation) },
@@ -944,7 +873,6 @@ extension Map
         informationVisibility: MapInformationVisibility = .default,
         interactionModes: MapInteractionModes = .all,
         userTrackingMode: Binding<UserTrackingMode>? = nil,
-        directionsRequest: Binding<DirectionRequest?>? = nil,
         annotations: [MKAnnotation] = [],
         @MapAnnotationBuilder annotationContent: @escaping (MKAnnotation) -> MapAnnotation = { annotation in
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
@@ -966,7 +894,6 @@ extension Map
             informationVisibility: informationVisibility,
             interactionModes: interactionModes,
             userTrackingMode: userTrackingMode,
-            directionsRequest: directionsRequest,
             annotationItems: annotations.map(IdentifiableObject.init),
             annotationContent: { annotationContent($0.object) },
             clusterAnnotation: { annotation, _ in clusterAnnotation(annotation) },

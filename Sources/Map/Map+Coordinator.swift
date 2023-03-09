@@ -23,12 +23,10 @@ extension Map {
         private var annotationContentByObject = [ObjectIdentifier: MapAnnotation]()
         private var annotationItemByObject = [ObjectIdentifier: AnnotationItems.Element]()
         private var annotationContentByID = [AnnotationItems.Element.ID: MapAnnotation]()
-        private var directionsAnnotations: [MKAnnotation] = []
-        
+
         private var overlayContentByObject = [ObjectIdentifier: MapOverlay]()
         private var overlayContentByID = [OverlayItems.Element.ID: MapOverlay]()
-        private var directionsOverlay: MapOverlay? = nil
-        
+
         private var previousBoundary: MKMapView.CameraBoundary?
         private var previousZoomRange: MKMapView.CameraZoomRange?
 
@@ -59,8 +57,7 @@ extension Map {
             updateRegion(on: mapView, from: view, to: newView, animated: animated)
             updateType(on: mapView, from: view, to: newView)
             updateUserTracking(on: mapView, from: view, to: newView, animated: animated)
-            updateDirections(on: mapView, from: view, to: newView, animated: animated)
-            
+
             if let key = context.environment.mapKey {
                 MapRegistry[key] = mapView
             }
@@ -250,52 +247,6 @@ extension Map {
                 }
             }
         }
-        
-        private func updateDirections(on mapView: MKMapView, from previousView: Map?, to newView: Map, animated: Bool) {
-            guard previousView?.directionsRequest != newView.directionsRequest else {
-                return
-            }
-            
-            let isNewDirection = newView.directionsRequest != nil && previousView?.directionsRequest != nil
-            
-            // Remove overlay and annotations from the mapView
-            if newView.directionsRequest == nil || isNewDirection {
-                if let directionsOverlay = directionsOverlay {
-                    mapView.removeOverlay(directionsOverlay.overlay)
-                }
-                mapView.removeAnnotations(directionsAnnotations)
-                directionsAnnotations = []
-                directionsOverlay = nil
-            }
-            
-            guard let directionsRequest = newView.directionsRequest,
-                  let mkRequest = newView.directionsRequest?.mkRequest else {
-                return
-            }
-            
-            let directions = MKDirections(request: mkRequest)
-            directions.calculate { response, error in
-                guard let route = response?.routes.first else { return }
-                let directionsOverlay = MapPolyline(
-                    polyline: route.polyline,
-                    strokeColor: directionsRequest.routeAppearance.strokeColor,
-                    lineWidth: directionsRequest.routeAppearance.lineWidth
-                )
-                self.directionsOverlay = directionsOverlay
-                self.directionsAnnotations = [
-                    directionsRequest.sourceAnnotation.annotation,
-                    directionsRequest.destinationAnnotation.annotation
-                ]
-                mapView.addAnnotations(self.directionsAnnotations)
-                
-                mapView.addOverlay(directionsOverlay.overlay)
-                mapView.setVisibleMapRect(
-                    route.polyline.boundingMapRect,
-                    edgePadding: UIEdgeInsets(top: 50, left: 50, bottom: 50, right: 50),
-                    animated: animated
-                )
-            }
-        }
 
         // MARK: MKMapViewDelegate
 
@@ -346,13 +297,9 @@ extension Map {
         }
 
         public func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-            if let directionsOverlay = directionsOverlay, ObjectIdentifier(directionsOverlay.overlay) == ObjectIdentifier(overlay) {
-                return directionsOverlay.renderer(for: mapView)
-            }
             guard let content = overlayContentByObject[ObjectIdentifier(overlay)] else {
                 assertionFailure("Somehow an unknown overlay appeared.")
                 return MKOverlayRenderer(overlay: overlay)
-                
             }
             return content.renderer(for: mapView)
         }
