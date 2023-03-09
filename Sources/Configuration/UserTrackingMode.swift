@@ -14,6 +14,7 @@ public enum UserTrackingMode {
     case none
     case follow
 
+    @available(tvOS, unavailable)
     @available(macOS, unavailable)
     case followWithHeading
 
@@ -26,10 +27,11 @@ public enum UserTrackingMode {
             return .none
         case .follow:
             return .follow
-        #if !os(macOS)
+        #if !os(macOS) && !os(tvOS)
         case .followWithHeading:
             return .followWithHeading
         #endif
+            
         }
     }
 

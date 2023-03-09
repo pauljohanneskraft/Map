@@ -5,7 +5,7 @@
 //  Created by Paul Kraft on 03.07.22.
 //
 
-#if canImport(UIKit) && !os(watchOS)
+#if canImport(UIKit) && !os(watchOS) && !os(tvOS)
 
 import SwiftUI
 import MapKit
