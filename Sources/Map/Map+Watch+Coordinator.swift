@@ -12,11 +12,11 @@ import SwiftUI
 import WatchKit
 
 extension Map: WKInterfaceObjectRepresentable {
-    
+
     // MARK: Nested Types
 
     public class Coordinator {
-        
+
         // MARK: Stored Properties
 
         private var view: Map?
@@ -92,8 +92,8 @@ extension Map: WKInterfaceObjectRepresentable {
                 mapView.setUserTrackingMode(newView.userTrackingMode, animated: animated)
             }
         }
+
     }
-    
 
     // MARK: Methods
 
@@ -110,7 +110,7 @@ extension Map: WKInterfaceObjectRepresentable {
     public func updateWKInterfaceObject(_ mapView: WKInterfaceMap, context: Context) {
         context.coordinator.update(mapView, from: self, context: context)
     }
-    
+
 }
 
 #endif
