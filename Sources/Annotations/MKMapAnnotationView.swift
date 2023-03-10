@@ -31,6 +31,9 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
     // MARK: Methods
 
     func setup(for mapAnnotation: ViewMapAnnotation<Content>) {
+        annotation = mapAnnotation.annotation
+        clusteringIdentifier = mapAnnotation.clusteringIdentifier
+        
         #if canImport(UIKit)
         backgroundColor = .clear
         #endif
