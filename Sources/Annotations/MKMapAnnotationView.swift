@@ -58,8 +58,11 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
         self.controller = controller
         self.invalidateIntrinsicContentSize()
         
-        if let anchor = mapAnnotation.anchor {
-            centerOffset = .init(x: anchor.x * intrinsicContentFrame.width / 2, y: anchor.y * intrinsicContentFrame.height / 2)
+        if let anchor = mapAnnotation.anchorPoint {
+            centerOffset = CGPoint(
+                x: (anchor.x - 0.5) * intrinsicContentFrame.width,
+                y: (anchor.y - 0.5) * intrinsicContentFrame.height
+            )
         }
     }
 
