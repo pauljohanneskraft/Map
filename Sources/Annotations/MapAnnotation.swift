@@ -33,6 +33,7 @@ public protocol MapAnnotation {
 
     func view(for mapView: MKMapView) -> MKAnnotationView?
 
+    func updateView(with associatedAnnotation: Any)
 }
 
 extension MapAnnotation {

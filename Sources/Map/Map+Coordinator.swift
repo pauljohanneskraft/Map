@@ -75,8 +75,10 @@ extension Map {
 
         private func updateAnnotations(on mapView: MKMapView, from previousView: Map?, to newView: Map) {
             let changes: CollectionDifference<AnnotationItems.Element>
+            var updates: [AnnotationItems.Element] = []
             if let previousView = previousView {
                 changes = newView.annotationItems.difference(from: previousView.annotationItems) { $0.id == $1.id }
+                updates = newView.annotationItems.filter { newItem in previousView.annotationItems.contains { newItem.id == $0.id } }
             } else {
                 changes = newView.annotationItems.difference(from: []) { $0.id == $1.id }
             }
@@ -110,6 +112,15 @@ extension Map {
                     annotationContentByObject.removeValue(forKey: objectKey)
                     annotationContentByID.removeValue(forKey: item.id)
                 }
+            }
+
+            // For SwiftUI, we need to forward the updated content to annotations so that values captured
+            // in the view builder can be updated. This is necessary for views that take inputs to update
+            for updatedItem in updates {
+                guard let oldAnnotationContent = annotationContentByID[updatedItem.id] else { continue }
+
+                // This is necessarily the best architecture long term, but it gets the job done
+                oldAnnotationContent.updateView(with: newView.annotationContent(updatedItem))
             }
         }
 

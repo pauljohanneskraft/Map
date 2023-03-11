@@ -10,7 +10,7 @@
 import MapKit
 import SwiftUI
 
-public struct ViewMapAnnotation<Content: View>: MapAnnotation {
+public final class ViewMapAnnotation<Content: View>: MapAnnotation {
 
     // MARK: Nested Types
 
@@ -42,28 +42,37 @@ public struct ViewMapAnnotation<Content: View>: MapAnnotation {
 
     public let annotation: MKAnnotation
     let clusteringIdentifier: String?
-    let content: Content
+    private (set) var content: Content
+    // The associated view last returned when requested via `view(for:)`
+    // Must be a weak reference because the view will also have a reference to
+    // this instance
+    private weak var associatedView: MKMapAnnotationView<Content>?
+    let anchorPoint: CGPoint
 
     // MARK: Initialization
 
     public init(
         coordinate: CLLocationCoordinate2D,
+        anchorPoint: CGPoint = CGPoint(x: 0.5, y: 0.5),
         title: String? = nil,
         subtitle: String? = nil,
         clusteringIdentifier: String? = nil,
         @ViewBuilder content: () -> Content
     ) {
         self.annotation = Annotation(coordinate: coordinate, title: title, subtitle: subtitle)
+        self.anchorPoint = anchorPoint
         self.clusteringIdentifier = clusteringIdentifier
         self.content = content()
     }
 
     public init(
         annotation: MKAnnotation,
+        anchorPoint: CGPoint = CGPoint(x: 0.5, y: 0.5),
         clusteringIdentifier: String? = nil,
         @ViewBuilder content: () -> Content
     ) {
         self.annotation = annotation
+        self.anchorPoint = anchorPoint
         self.clusteringIdentifier = clusteringIdentifier
         self.content = content()
     }
@@ -77,9 +86,17 @@ public struct ViewMapAnnotation<Content: View>: MapAnnotation {
         ) as? MKMapAnnotationView<Content>
 
         view?.setup(for: self)
+        associatedView = view
         return view
     }
 
+    public func updateView(with associatedAnnotation: Any) {
+        guard let updatedAnnotation = associatedAnnotation as? ViewMapAnnotation<Content> else { return }
+        guard let associatedView else { return }
+
+        content = updatedAnnotation.content
+        associatedView.update(for: self)
+    }
 }
 
 #endif
