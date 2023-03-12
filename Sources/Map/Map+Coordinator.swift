@@ -119,8 +119,11 @@ extension Map {
             for updatedItem in updates {
                 guard let oldAnnotationContent = annotationContentByID[updatedItem.id] else { continue }
 
-                // This is necessarily the best architecture long term, but it gets the job done
-                oldAnnotationContent.updateView(with: newView.annotationContent(updatedItem))
+                // This isn't necessarily the best architecture long term, but it gets the job done
+                guard let currentView = mapView.view(for: oldAnnotationContent.annotation) as? UpdatableAnnotationView else {
+                    continue
+                }
+                currentView.update(with: newView.annotationContent(updatedItem))
             }
         }
 

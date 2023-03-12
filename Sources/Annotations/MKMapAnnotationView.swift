@@ -10,7 +10,7 @@
 import MapKit
 import SwiftUI
 
-class MKMapAnnotationView<Content: View>: MKAnnotationView {
+class MKMapAnnotationView<Content: View>: MKAnnotationView, UpdatableAnnotationView {
 
     // MARK: Stored Properties
 
@@ -19,7 +19,13 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
 
     // MARK: Methods
 
-    func update(for mapAnnotation: ViewMapAnnotation<Content>) {
+    func update(with mapAnnotation: MapAnnotation) {
+        guard let mapAnnotation = mapAnnotation as? ViewMapAnnotation<Content> else {
+            assertionFailure("Attempting to update an MKMapAnnotationView with an incompatible type")
+            return
+        }
+        self.mapAnnotation = mapAnnotation
+
         controller?.rootView = mapAnnotation.content
         if #available(iOS 16.0, *) {
             anchorPoint = mapAnnotation.anchorPoint

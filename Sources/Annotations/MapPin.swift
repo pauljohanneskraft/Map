@@ -100,9 +100,6 @@ extension MapPin: MapAnnotation {
         return view
     }
 
-    public func updateView(with associatedAnnotation: Any) {
-        // Only necessary for hosting SwiftUI views
-    }
 }
 
 #endif

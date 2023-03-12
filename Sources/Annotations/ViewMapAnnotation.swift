@@ -10,7 +10,7 @@
 import MapKit
 import SwiftUI
 
-public final class ViewMapAnnotation<Content: View>: MapAnnotation {
+public struct ViewMapAnnotation<Content: View>: MapAnnotation {
 
     // MARK: Nested Types
 
@@ -42,11 +42,7 @@ public final class ViewMapAnnotation<Content: View>: MapAnnotation {
 
     public let annotation: MKAnnotation
     let clusteringIdentifier: String?
-    private (set) var content: Content
-    // The associated view last returned when requested via `view(for:)`
-    // Must be a weak reference because the view will also have a reference to
-    // this instance
-    private weak var associatedView: MKMapAnnotationView<Content>?
+    let content: Content
     let anchorPoint: CGPoint
 
     // MARK: Initialization
@@ -86,17 +82,9 @@ public final class ViewMapAnnotation<Content: View>: MapAnnotation {
         ) as? MKMapAnnotationView<Content>
 
         view?.setup(for: self)
-        associatedView = view
         return view
     }
 
-    public func updateView(with associatedAnnotation: Any) {
-        guard let updatedAnnotation = associatedAnnotation as? ViewMapAnnotation<Content> else { return }
-        guard let associatedView else { return }
-
-        content = updatedAnnotation.content
-        associatedView.update(for: self)
-    }
 }
 
 #endif
