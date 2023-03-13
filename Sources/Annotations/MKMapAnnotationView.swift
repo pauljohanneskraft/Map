@@ -16,6 +16,8 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView, UpdatableAnnotationV
 
     private var controller: NativeHostingController<Content>?
     private var mapAnnotation: ViewMapAnnotation<Content>?
+    private let deferAddingContentForPreviews: Bool = false
+    private let colorizeFramesForDebugging: Bool = false
 
     // MARK: Methods
 
@@ -30,7 +32,7 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView, UpdatableAnnotationV
         if #available(iOS 16.0, *) {
             anchorPoint = mapAnnotation.anchorPoint
         } else {
-            // Fallback on earlier versions
+            centerOffset = convertToCenterOffset(mapAnnotation.anchorPoint, in: bounds)
         }
         setNeedsLayout()
     }
@@ -39,6 +41,10 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView, UpdatableAnnotationV
         annotation = mapAnnotation.annotation
         clusteringIdentifier = mapAnnotation.clusteringIdentifier
         self.mapAnnotation = mapAnnotation
+
+        if !deferAddingContentForPreviews {
+            addContentIfNeeded()
+        }
     }
 
     private func addContentIfNeeded() {
@@ -46,15 +52,33 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView, UpdatableAnnotationV
         guard controller == nil else { return }
 
         let controller = NativeHostingController(rootView: mapAnnotation.content)
-        controller.view.backgroundColor = .clear
-        addSubview(controller.view)
-        bounds.size = controller.sizeThatFits(in: .init(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude))
         self.controller = controller
+
+        if colorizeFramesForDebugging {
+            backgroundColor = .red
+            controller.view.backgroundColor = .green
+        } else {
+            controller.view.backgroundColor = .clear
+        }
+        frame.size = controller.view.intrinsicContentSize
+        addSubview(controller.view)
+        controller.view.frame = bounds
+
         if #available(iOS 16.0, *) {
             anchorPoint = mapAnnotation.anchorPoint
         } else {
-            // Fallback on earlier versions
+            centerOffset = convertToCenterOffset(mapAnnotation.anchorPoint, in: bounds)
         }
+    }
+
+    func convertToCenterOffset(_ anchorPoint: CGPoint, in rect: CGRect) -> CGPoint {
+        assert((0.0...1.0).contains(anchorPoint.x), "Valid anchor point range is 0.0 to 1.0, received x value: \(anchorPoint.x)")
+        assert((0.0...1.0).contains(anchorPoint.y), "Valid anchor point range is 0.0 to 1.0, received y value: \(anchorPoint.y)")
+
+        return .init(
+            x: (0.5 - anchorPoint.x) * rect.width,
+            y: (0.5 - anchorPoint.y) * rect.height
+        )
     }
 
     // MARK: Overrides
@@ -64,20 +88,22 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView, UpdatableAnnotationV
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        // Deferring the addition of the SwiftUI hosting view until the layout pass
-        // Seems to guarantee more accurate sizes on the first view update
-        addContentIfNeeded()
-
-        if let controller = controller {
-            bounds.size = controller.sizeThatFits(in: .init(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude))
-            // Setting the frame to zero than immediately back triggers
-            // The SwiftUI frame to correctly follow the hosting view's frame in
-            // The map's coordinate space. I think SwiftUI cannot correctly hook into the parent
-            // view's coordinate updates because MKMapView moves the MKAnnotationView's around in
-            // non-standard ways.
-            controller.view.frame = .zero
-            controller.view.frame = bounds
+        // In previews, the height of the annotation view ends up being too big, I have no idea why there's a difference, but
+        // when run on device it's not noticeable
+        if deferAddingContentForPreviews && frame.origin != .zero {
+            addContentIfNeeded()
         }
+
+        guard let controller = controller else { return }
+
+        bounds.size = controller.view.intrinsicContentSize
+        // Setting the frame to zero than immediately back triggers
+        // The SwiftUI frame to correctly follow the hosting view's frame in
+        // The map's coordinate space. I think SwiftUI cannot correctly hook into the parent
+        // view's coordinate updates because MKMapView moves the MKAnnotationView's around in
+        // non-standard ways.
+        controller.view.frame = .zero
+        controller.view.frame = bounds
     }
 
     #endif
