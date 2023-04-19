@@ -40,20 +40,22 @@ extension MapPin: MapAnnotation {
 
 #else
 
-public struct MapPin {
+public struct MapPin<DetailCalloutAccessoryView: View> {
 
     // MARK: Nested Types
 
-    private class Annotation: NSObject, MKAnnotation {
+    private class Annotation<DetailCalloutAccessoryView: View>: NSObject, MKAnnotation {
 
         // MARK: Stored Properties
 
         let coordinate: CLLocationCoordinate2D
+        let detailCalloutAccessoryView: DetailCalloutAccessoryView?
 
         // MARK: Initialization
 
-        init(_ coordinate: CLLocationCoordinate2D) {
+        init(_ coordinate: CLLocationCoordinate2D, detailCalloutAccessoryView: DetailCalloutAccessoryView?) {
             self.coordinate = coordinate
+            self.detailCalloutAccessoryView = detailCalloutAccessoryView
         }
 
     }
@@ -66,17 +68,17 @@ public struct MapPin {
 
     // MARK: Initialization
 
-    public init(coordinate: CLLocationCoordinate2D) {
+    public init(coordinate: CLLocationCoordinate2D, detailCalloutAccessoryView: DetailCalloutAccessoryView? = nil) {
         self.coordinate = coordinate
         self.tint = nil
-        self.annotation = Annotation(coordinate)
+        self.annotation = Annotation(coordinate, detailCalloutAccessoryView: detailCalloutAccessoryView)
     }
 
     @available(iOS 14, macOS 11, tvOS 14, *)
-    public init(coordinate: CLLocationCoordinate2D, tint: Color?) {
+    public init(coordinate: CLLocationCoordinate2D, tint: Color?, detailCalloutAccessoryView: DetailCalloutAccessoryView? = nil) {
         self.coordinate = coordinate
         self.tint = tint
-        self.annotation = Annotation(coordinate)
+        self.annotation = Annotation(coordinate, detailCalloutAccessoryView: detailCalloutAccessoryView)
     }
 
 }
@@ -94,6 +96,10 @@ extension MapPin: MapAnnotation {
     public func view(for mapView: MKMapView) -> MKAnnotationView? {
         let view = mapView.dequeueReusableAnnotationView(withIdentifier: Self.reuseIdentifier, for: annotation)
         view.annotation = annotation
+        if let mapPinAnnotation = annotation as? MapPin.Annotation<DetailCalloutAccessoryView>, let detailCalloutAccessoryView = mapPinAnnotation.detailCalloutAccessoryView {
+            view.canShowCallout = true
+            view.detailCalloutAccessoryView = NativeHostingController(rootView: detailCalloutAccessoryView).view
+        }
         if #available(iOS 14, macOS 11, tvOS 14, *), let tint = tint, let pin = view as? MKPinAnnotationView {
             pin.pinTintColor = .init(tint)
         }
