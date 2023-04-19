@@ -40,20 +40,20 @@ extension MapPin: MapAnnotation {
 
 #else
 
-public struct MapPin<DetailCalloutAccessoryView: View> {
+public struct MapPin {
 
     // MARK: Nested Types
 
-    private class Annotation<DetailCalloutAccessoryView: View>: NSObject, MKAnnotation {
+    private class Annotation: NSObject, MKAnnotation {
 
         // MARK: Stored Properties
 
         let coordinate: CLLocationCoordinate2D
-        let detailCalloutAccessoryView: DetailCalloutAccessoryView?
+        let detailCalloutAccessoryView: AnyView?
 
         // MARK: Initialization
 
-        init(_ coordinate: CLLocationCoordinate2D, detailCalloutAccessoryView: DetailCalloutAccessoryView?) {
+        init(_ coordinate: CLLocationCoordinate2D, detailCalloutAccessoryView: AnyView?) {
             self.coordinate = coordinate
             self.detailCalloutAccessoryView = detailCalloutAccessoryView
         }
@@ -68,14 +68,14 @@ public struct MapPin<DetailCalloutAccessoryView: View> {
 
     // MARK: Initialization
 
-    public init(coordinate: CLLocationCoordinate2D, detailCalloutAccessoryView: DetailCalloutAccessoryView? = nil) {
+    public init(coordinate: CLLocationCoordinate2D, detailCalloutAccessoryView: AnyView? = nil) {
         self.coordinate = coordinate
         self.tint = nil
         self.annotation = Annotation(coordinate, detailCalloutAccessoryView: detailCalloutAccessoryView)
     }
 
     @available(iOS 14, macOS 11, tvOS 14, *)
-    public init(coordinate: CLLocationCoordinate2D, tint: Color?, detailCalloutAccessoryView: DetailCalloutAccessoryView? = nil) {
+    public init(coordinate: CLLocationCoordinate2D, tint: Color?, detailCalloutAccessoryView: AnyView? = nil) {
         self.coordinate = coordinate
         self.tint = tint
         self.annotation = Annotation(coordinate, detailCalloutAccessoryView: detailCalloutAccessoryView)
@@ -96,7 +96,7 @@ extension MapPin: MapAnnotation {
     public func view(for mapView: MKMapView) -> MKAnnotationView? {
         let view = mapView.dequeueReusableAnnotationView(withIdentifier: Self.reuseIdentifier, for: annotation)
         view.annotation = annotation
-        if let mapPinAnnotation = annotation as? MapPin.Annotation<DetailCalloutAccessoryView>, let detailCalloutAccessoryView = mapPinAnnotation.detailCalloutAccessoryView {
+        if let mapPinAnnotation = annotation as? MapPin.Annotation, let detailCalloutAccessoryView = mapPinAnnotation.detailCalloutAccessoryView {
             view.canShowCallout = true
             view.detailCalloutAccessoryView = NativeHostingController(rootView: detailCalloutAccessoryView).view
         }
