@@ -14,20 +14,22 @@ public struct ViewMapAnnotation<Content: View>: MapAnnotation {
 
     // MARK: Nested Types
 
-    private class Annotation: NSObject, MKAnnotation {
+    class Annotation: NSObject, MKAnnotation {
 
         // MARK: Stored Properties
 
         let coordinate: CLLocationCoordinate2D
         let title: String?
         let subtitle: String?
+        let detailCalloutAccessoryView: AnyView?
 
         // MARK: Initialization
 
-        init(coordinate: CLLocationCoordinate2D, title: String?, subtitle: String?) {
+        init(coordinate: CLLocationCoordinate2D, title: String?, subtitle: String?, detailCalloutAccessoryView: AnyView?) {
             self.coordinate = coordinate
             self.title = title
             self.subtitle = subtitle
+            self.detailCalloutAccessoryView = detailCalloutAccessoryView
         }
 
     }
@@ -50,10 +52,11 @@ public struct ViewMapAnnotation<Content: View>: MapAnnotation {
         coordinate: CLLocationCoordinate2D,
         title: String? = nil,
         subtitle: String? = nil,
+        detailCalloutAccessoryView: AnyView? = nil,
         clusteringIdentifier: String? = nil,
         @ViewBuilder content: () -> Content
     ) {
-        self.annotation = Annotation(coordinate: coordinate, title: title, subtitle: subtitle)
+        self.annotation = Annotation(coordinate: coordinate, title: title, subtitle: subtitle, detailCalloutAccessoryView: detailCalloutAccessoryView)
         self.clusteringIdentifier = clusteringIdentifier
         self.content = content()
     }

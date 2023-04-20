@@ -20,11 +20,13 @@ public struct MapMarker {
         // MARK: Stored Properties
 
         let coordinate: CLLocationCoordinate2D
+        let detailCalloutAccessoryView: AnyView?
 
         // MARK: Initialization
 
-        init(_ coordinate: CLLocationCoordinate2D) {
+        init(_ coordinate: CLLocationCoordinate2D, detailCalloutAccessoryView: AnyView?) {
             self.coordinate = coordinate
+            self.detailCalloutAccessoryView = detailCalloutAccessoryView
         }
 
     }
@@ -38,19 +40,19 @@ public struct MapMarker {
 
     // MARK: Initialization
 
-    public init(coordinate: CLLocationCoordinate2D, tint: NativeColor? = nil) {
+    public init(coordinate: CLLocationCoordinate2D, tint: NativeColor? = nil, detailCalloutAccessoryView: AnyView? = nil) {
         self.coordinate = coordinate
         self.tint = nil
         self.nativeTint = tint
-        self.annotation = Annotation(coordinate)
+        self.annotation = Annotation(coordinate, detailCalloutAccessoryView: detailCalloutAccessoryView)
     }
 
     @available(iOS 14, tvOS 14, *)
-    public init(coordinate: CLLocationCoordinate2D, tint: Color?) {
+    public init(coordinate: CLLocationCoordinate2D, tint: Color?, detailCalloutAccessoryView: AnyView? = nil) {
         self.coordinate = coordinate
         self.tint = tint
         self.nativeTint = nil
-        self.annotation = Annotation(coordinate)
+        self.annotation = Annotation(coordinate, detailCalloutAccessoryView: detailCalloutAccessoryView)
     }
 
 }
@@ -69,6 +71,10 @@ extension MapMarker: MapAnnotation {
     public func view(for mapView: MKMapView) -> MKAnnotationView? {
         let view = mapView.dequeueReusableAnnotationView(withIdentifier: Self.reuseIdentifier, for: annotation)
         view.annotation = annotation
+        if let mapMarkerAnnotation = annotation as? MapMarker.Annotation, let detailCalloutAccessoryView = mapMarkerAnnotation.detailCalloutAccessoryView {
+            view.canShowCallout = true
+            view.detailCalloutAccessoryView = NativeHostingController(rootView: detailCalloutAccessoryView).view
+        }
         if let marker = view as? MKMarkerAnnotationView {
             if #available(iOS 14, tvOS 14, *), let tint = tint {
                 marker.markerTintColor = .init(tint)

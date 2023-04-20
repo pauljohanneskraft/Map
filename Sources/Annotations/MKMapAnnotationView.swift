@@ -22,6 +22,11 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
         annotation = mapAnnotation.annotation
         clusteringIdentifier = mapAnnotation.clusteringIdentifier
 
+        if let viewMapAnnotation = annotation as? ViewMapAnnotation<Content>.Annotation, let detailCalloutAccessoryViewValue = viewMapAnnotation.detailCalloutAccessoryView {
+            canShowCallout = true
+            detailCalloutAccessoryView = NativeHostingController(rootView: detailCalloutAccessoryViewValue).view
+        }
+        
         let controller = NativeHostingController(rootView: mapAnnotation.content)
         addSubview(controller.view)
         bounds.size = controller.preferredContentSize
