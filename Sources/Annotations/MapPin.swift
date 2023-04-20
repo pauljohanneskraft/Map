@@ -40,7 +40,7 @@ extension MapPin: MapAnnotation {
 
 #else
 
-public struct MapPin {
+public struct MapPin<DetailCalloutAccessoryView: View> {
 
     // MARK: Nested Types
 
@@ -49,13 +49,11 @@ public struct MapPin {
         // MARK: Stored Properties
 
         let coordinate: CLLocationCoordinate2D
-        let detailCalloutAccessoryView: AnyView?
 
         // MARK: Initialization
 
-        init(_ coordinate: CLLocationCoordinate2D, detailCalloutAccessoryView: AnyView?) {
+        init(_ coordinate: CLLocationCoordinate2D) {
             self.coordinate = coordinate
-            self.detailCalloutAccessoryView = detailCalloutAccessoryView
         }
 
     }
@@ -64,21 +62,24 @@ public struct MapPin {
 
     private let coordinate: CLLocationCoordinate2D
     private let tint: Color?
+    private let detailCalloutAccessoryView: DetailCalloutAccessoryView?
     public let annotation: MKAnnotation
 
     // MARK: Initialization
 
-    public init(coordinate: CLLocationCoordinate2D, detailCalloutAccessoryView: AnyView? = nil) {
+    public init(coordinate: CLLocationCoordinate2D, detailCalloutAccessoryView: DetailCalloutAccessoryView? = nil) {
         self.coordinate = coordinate
         self.tint = nil
-        self.annotation = Annotation(coordinate, detailCalloutAccessoryView: detailCalloutAccessoryView)
+        self.detailCalloutAccessoryView = detailCalloutAccessoryView
+        self.annotation = Annotation(coordinate)
     }
 
     @available(iOS 14, macOS 11, tvOS 14, *)
-    public init(coordinate: CLLocationCoordinate2D, tint: Color?, detailCalloutAccessoryView: AnyView? = nil) {
+    public init(coordinate: CLLocationCoordinate2D, tint: Color?, detailCalloutAccessoryView: DetailCalloutAccessoryView? = nil) {
         self.coordinate = coordinate
         self.tint = tint
-        self.annotation = Annotation(coordinate, detailCalloutAccessoryView: detailCalloutAccessoryView)
+        self.detailCalloutAccessoryView = detailCalloutAccessoryView
+        self.annotation = Annotation(coordinate)
     }
 
 }
@@ -96,9 +97,9 @@ extension MapPin: MapAnnotation {
     public func view(for mapView: MKMapView) -> MKAnnotationView? {
         let view = mapView.dequeueReusableAnnotationView(withIdentifier: Self.reuseIdentifier, for: annotation)
         view.annotation = annotation
-        if let mapPinAnnotation = annotation as? MapPin.Annotation, let detailCalloutAccessoryView = mapPinAnnotation.detailCalloutAccessoryView {
+        if let detailCalloutAccessoryViewValue = detailCalloutAccessoryView {
             view.canShowCallout = true
-            view.detailCalloutAccessoryView = NativeHostingController(rootView: detailCalloutAccessoryView).view
+            view.detailCalloutAccessoryView = NativeHostingController(rootView: detailCalloutAccessoryViewValue).view
         }
         if #available(iOS 14, macOS 11, tvOS 14, *), let tint = tint, let pin = view as? MKPinAnnotationView {
             pin.pinTintColor = .init(tint)

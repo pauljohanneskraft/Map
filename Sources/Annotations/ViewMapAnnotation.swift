@@ -10,7 +10,7 @@
 import MapKit
 import SwiftUI
 
-public struct ViewMapAnnotation<Content: View>: MapAnnotation {
+public struct ViewMapAnnotation<Content: View, DetailCalloutAccessoryView: View>: MapAnnotation {
 
     // MARK: Nested Types
 
@@ -21,15 +21,13 @@ public struct ViewMapAnnotation<Content: View>: MapAnnotation {
         let coordinate: CLLocationCoordinate2D
         let title: String?
         let subtitle: String?
-        let detailCalloutAccessoryView: AnyView?
 
         // MARK: Initialization
 
-        init(coordinate: CLLocationCoordinate2D, title: String?, subtitle: String?, detailCalloutAccessoryView: AnyView?) {
+        init(coordinate: CLLocationCoordinate2D, title: String?, subtitle: String?) {
             self.coordinate = coordinate
             self.title = title
             self.subtitle = subtitle
-            self.detailCalloutAccessoryView = detailCalloutAccessoryView
         }
 
     }
@@ -37,13 +35,14 @@ public struct ViewMapAnnotation<Content: View>: MapAnnotation {
     // MARK: Static Functions
 
     public static func registerView(on mapView: MKMapView) {
-        mapView.register(MKMapAnnotationView<Content>.self, forAnnotationViewWithReuseIdentifier: reuseIdentifier)
+        mapView.register(MKMapAnnotationView<Content, DetailCalloutAccessoryView>.self, forAnnotationViewWithReuseIdentifier: reuseIdentifier)
     }
 
     // MARK: Stored Properties
 
     public let annotation: MKAnnotation
     let clusteringIdentifier: String?
+    let detailCalloutAccessoryView: DetailCalloutAccessoryView?
     let content: Content
 
     // MARK: Initialization
@@ -52,21 +51,24 @@ public struct ViewMapAnnotation<Content: View>: MapAnnotation {
         coordinate: CLLocationCoordinate2D,
         title: String? = nil,
         subtitle: String? = nil,
-        detailCalloutAccessoryView: AnyView? = nil,
+        detailCalloutAccessoryView: DetailCalloutAccessoryView? = nil,
         clusteringIdentifier: String? = nil,
         @ViewBuilder content: () -> Content
     ) {
-        self.annotation = Annotation(coordinate: coordinate, title: title, subtitle: subtitle, detailCalloutAccessoryView: detailCalloutAccessoryView)
+        self.annotation = Annotation(coordinate: coordinate, title: title, subtitle: subtitle)
+        self.detailCalloutAccessoryView = detailCalloutAccessoryView
         self.clusteringIdentifier = clusteringIdentifier
         self.content = content()
     }
 
     public init(
         annotation: MKAnnotation,
+        detailCalloutAccessoryView: DetailCalloutAccessoryView? = nil,
         clusteringIdentifier: String? = nil,
         @ViewBuilder content: () -> Content
     ) {
         self.annotation = annotation
+        self.detailCalloutAccessoryView = detailCalloutAccessoryView
         self.clusteringIdentifier = clusteringIdentifier
         self.content = content()
     }
@@ -77,7 +79,7 @@ public struct ViewMapAnnotation<Content: View>: MapAnnotation {
         let view = mapView.dequeueReusableAnnotationView(
             withIdentifier: Self.reuseIdentifier,
             for: annotation
-        ) as? MKMapAnnotationView<Content>
+        ) as? MKMapAnnotationView<Content, DetailCalloutAccessoryView>
 
         view?.setup(for: self)
         return view

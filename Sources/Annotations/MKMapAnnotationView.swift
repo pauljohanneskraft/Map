@@ -10,7 +10,7 @@
 import MapKit
 import SwiftUI
 
-class MKMapAnnotationView<Content: View>: MKAnnotationView {
+class MKMapAnnotationView<Content: View, DetailCalloutAccessoryView: View>: MKAnnotationView {
 
     // MARK: Stored Properties
 
@@ -18,11 +18,11 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
 
     // MARK: Methods
 
-    func setup(for mapAnnotation: ViewMapAnnotation<Content>) {
+    func setup(for mapAnnotation: ViewMapAnnotation<Content, DetailCalloutAccessoryView>) {
         annotation = mapAnnotation.annotation
         clusteringIdentifier = mapAnnotation.clusteringIdentifier
 
-        if let viewMapAnnotation = annotation as? ViewMapAnnotation<Content>.Annotation, let detailCalloutAccessoryViewValue = viewMapAnnotation.detailCalloutAccessoryView {
+        if let detailCalloutAccessoryViewValue = mapAnnotation.detailCalloutAccessoryView {
             canShowCallout = true
             detailCalloutAccessoryView = NativeHostingController(rootView: detailCalloutAccessoryViewValue).view
         }
