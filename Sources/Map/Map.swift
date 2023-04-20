@@ -398,7 +398,7 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>] {
         annotations: [MKAnnotation] = [],
         @MapAnnotationBuilder annotationContent: @escaping (MKAnnotation) -> MapAnnotation = { annotation in
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
-            return ViewMapAnnotation(annotation: annotation) {}
+            return ViewMapAnnotation<EmptyView, EmptyView>(annotation: annotation) {}
         },
         @OptionalMapAnnotationBuilder clusterAnnotation: @escaping (MKClusterAnnotation) -> MapAnnotation? = { _ in nil },
         overlayItems: OverlayItems,
@@ -429,7 +429,7 @@ extension Map where AnnotationItems == [IdentifiableObject<MKAnnotation>] {
         annotations: [MKAnnotation] = [],
         @MapAnnotationBuilder annotationContent: @escaping (MKAnnotation) -> MapAnnotation = { annotation in
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
-            return ViewMapAnnotation(annotation: annotation) {}
+            return ViewMapAnnotation<EmptyView, EmptyView>(annotation: annotation) {}
         },
         @OptionalMapAnnotationBuilder clusterAnnotation: @escaping (MKClusterAnnotation) -> MapAnnotation? = { _ in nil },
         overlayItems: OverlayItems,
@@ -840,7 +840,7 @@ extension Map
         annotations: [MKAnnotation] = [],
         @MapAnnotationBuilder annotationContent: @escaping (MKAnnotation) -> MapAnnotation = { annotation in
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
-            return ViewMapAnnotation(annotation: annotation) {}
+            return ViewMapAnnotation<EmptyView, EmptyView>(annotation: annotation) {}
         },
         @MapAnnotationBuilder clusterAnnotation: @escaping (MKClusterAnnotation) -> MapAnnotation? = { _ in nil },
         overlays: [MKOverlay] = [],
@@ -876,7 +876,7 @@ extension Map
         annotations: [MKAnnotation] = [],
         @MapAnnotationBuilder annotationContent: @escaping (MKAnnotation) -> MapAnnotation = { annotation in
             assertionFailure("Please provide an `annotationContent` closure for the values in `annotations`.")
-            return ViewMapAnnotation(annotation: annotation) {}
+            return ViewMapAnnotation<EmptyView, EmptyView>(annotation: annotation) {}
         },
         @MapAnnotationBuilder clusterAnnotation: @escaping (MKClusterAnnotation) -> MapAnnotation? = { _ in nil },
         overlays: [MKOverlay] = [],
