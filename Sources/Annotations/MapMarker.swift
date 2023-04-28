@@ -11,7 +11,7 @@ import MapKit
 import SwiftUI
 
 @available(macOS 11, *)
-public struct MapMarker<DetailCalloutAccessoryView: View> {
+public struct MapMarker<DetailCalloutAccessory: View> {
 
     // MARK: Nested Types
 
@@ -34,25 +34,33 @@ public struct MapMarker<DetailCalloutAccessoryView: View> {
     private let coordinate: CLLocationCoordinate2D
     private let tint: Color?
     private let nativeTint: NativeColor?
-    private let detailCalloutAccessoryView: DetailCalloutAccessoryView?
+    private let detailCalloutAccessory: DetailCalloutAccessory
     public let annotation: MKAnnotation
 
     // MARK: Initialization
 
-    public init(coordinate: CLLocationCoordinate2D, tint: NativeColor? = nil, detailCalloutAccessoryView: DetailCalloutAccessoryView? = nil) {
+    public init(
+        coordinate: CLLocationCoordinate2D,
+        tint: NativeColor? = nil,
+        @ViewBuilder detailCalloutAccessory: () -> DetailCalloutAccessory = { EmptyView() }
+    ) {
         self.coordinate = coordinate
         self.tint = nil
         self.nativeTint = tint
-        self.detailCalloutAccessoryView = detailCalloutAccessoryView
+        self.detailCalloutAccessory = detailCalloutAccessory()
         self.annotation = Annotation(coordinate)
     }
 
     @available(iOS 14, tvOS 14, *)
-    public init(coordinate: CLLocationCoordinate2D, tint: Color?, detailCalloutAccessoryView: DetailCalloutAccessoryView? = nil) {
+    public init(
+        coordinate: CLLocationCoordinate2D,
+        tint: Color?,
+        @ViewBuilder detailCalloutAccessory: () -> DetailCalloutAccessory = { EmptyView() }
+    ) {
         self.coordinate = coordinate
         self.tint = tint
         self.nativeTint = nil
-        self.detailCalloutAccessoryView = detailCalloutAccessoryView
+        self.detailCalloutAccessory = detailCalloutAccessory()
         self.annotation = Annotation(coordinate)
     }
 
@@ -72,9 +80,9 @@ extension MapMarker: MapAnnotation {
     public func view(for mapView: MKMapView) -> MKAnnotationView? {
         let view = mapView.dequeueReusableAnnotationView(withIdentifier: Self.reuseIdentifier, for: annotation)
         view.annotation = annotation
-        if let detailCalloutAccessoryViewValue = detailCalloutAccessoryView {
+        if DetailCalloutAccessory.self != EmptyView.self {
             view.canShowCallout = true
-            view.detailCalloutAccessoryView = NativeHostingController(rootView: detailCalloutAccessoryViewValue).view
+            view.detailCalloutAccessoryView = NativeHostingController(rootView: detailCalloutAccessory).view
         }
         if let marker = view as? MKMarkerAnnotationView {
             if #available(iOS 14, tvOS 14, *), let tint = tint {
