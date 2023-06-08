@@ -43,27 +43,32 @@ public struct ViewMapAnnotation<Content: View>: MapAnnotation {
     public let annotation: MKAnnotation
     let clusteringIdentifier: String?
     let content: Content
+    let anchorPoint: CGPoint
 
     // MARK: Initialization
 
     public init(
         coordinate: CLLocationCoordinate2D,
+        anchorPoint: CGPoint = CGPoint(x: 0.5, y: 0.5),
         title: String? = nil,
         subtitle: String? = nil,
         clusteringIdentifier: String? = nil,
         @ViewBuilder content: () -> Content
     ) {
         self.annotation = Annotation(coordinate: coordinate, title: title, subtitle: subtitle)
+        self.anchorPoint = anchorPoint
         self.clusteringIdentifier = clusteringIdentifier
         self.content = content()
     }
 
     public init(
         annotation: MKAnnotation,
+        anchorPoint: CGPoint = CGPoint(x: 0.5, y: 0.5),
         clusteringIdentifier: String? = nil,
         @ViewBuilder content: () -> Content
     ) {
         self.annotation = annotation
+        self.anchorPoint = anchorPoint
         self.clusteringIdentifier = clusteringIdentifier
         self.content = content()
     }

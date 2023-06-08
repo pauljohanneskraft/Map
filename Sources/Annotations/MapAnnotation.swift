@@ -35,6 +35,10 @@ public protocol MapAnnotation {
 
 }
 
+protocol UpdatableAnnotationView {
+    func update(with associatedAnnotation: MapAnnotation)
+}
+
 extension MapAnnotation {
 
     static var reuseIdentifier: String {
