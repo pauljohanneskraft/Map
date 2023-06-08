@@ -10,11 +10,11 @@
 import MapKit
 import SwiftUI
 
-public struct ViewMapAnnotation<Content: View>: MapAnnotation {
+public struct ViewMapAnnotation<Content: View, DetailCalloutAccessory: View>: MapAnnotation {
 
     // MARK: Nested Types
 
-    private class Annotation: NSObject, MKAnnotation {
+    class Annotation: NSObject, MKAnnotation {
 
         // MARK: Stored Properties
 
@@ -35,7 +35,7 @@ public struct ViewMapAnnotation<Content: View>: MapAnnotation {
     // MARK: Static Functions
 
     public static func registerView(on mapView: MKMapView) {
-        mapView.register(MKMapAnnotationView<Content>.self, forAnnotationViewWithReuseIdentifier: reuseIdentifier)
+        mapView.register(MKMapAnnotationView<Content, DetailCalloutAccessory>.self, forAnnotationViewWithReuseIdentifier: reuseIdentifier)
     }
 
     // MARK: Stored Properties
@@ -43,6 +43,7 @@ public struct ViewMapAnnotation<Content: View>: MapAnnotation {
     public let annotation: MKAnnotation
     let clusteringIdentifier: String?
     let content: Content
+    let detailCalloutAccessory: DetailCalloutAccessory
 
     // MARK: Initialization
 
@@ -51,9 +52,11 @@ public struct ViewMapAnnotation<Content: View>: MapAnnotation {
         title: String? = nil,
         subtitle: String? = nil,
         clusteringIdentifier: String? = nil,
-        @ViewBuilder content: () -> Content
+        @ViewBuilder content: () -> Content,
+        @ViewBuilder detailCalloutAccessory: () -> DetailCalloutAccessory = { EmptyView() }
     ) {
         self.annotation = Annotation(coordinate: coordinate, title: title, subtitle: subtitle)
+        self.detailCalloutAccessory = detailCalloutAccessory()
         self.clusteringIdentifier = clusteringIdentifier
         self.content = content()
     }
@@ -61,9 +64,11 @@ public struct ViewMapAnnotation<Content: View>: MapAnnotation {
     public init(
         annotation: MKAnnotation,
         clusteringIdentifier: String? = nil,
-        @ViewBuilder content: () -> Content
+        @ViewBuilder content: () -> Content,
+        @ViewBuilder detailCalloutAccessory: () -> DetailCalloutAccessory = { EmptyView() }
     ) {
         self.annotation = annotation
+        self.detailCalloutAccessory = detailCalloutAccessory()
         self.clusteringIdentifier = clusteringIdentifier
         self.content = content()
     }
@@ -74,7 +79,7 @@ public struct ViewMapAnnotation<Content: View>: MapAnnotation {
         let view = mapView.dequeueReusableAnnotationView(
             withIdentifier: Self.reuseIdentifier,
             for: annotation
-        ) as? MKMapAnnotationView<Content>
+        ) as? MKMapAnnotationView<Content, DetailCalloutAccessory>
 
         view?.setup(for: self)
         return view
