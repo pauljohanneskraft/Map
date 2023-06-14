@@ -28,7 +28,6 @@ public struct Map<AnnotationItems: RandomAccessCollection> where AnnotationItems
 
     let annotationItems: AnnotationItems
     let annotationContent: (AnnotationItems.Element) -> MapAnnotation
-
 }
 
 // MARK: - Initialization
