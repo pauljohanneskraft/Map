@@ -56,6 +56,8 @@ extension Map {
             updateRegion(on: mapView, from: view, to: newView, animated: animation != nil)
             updateType(on: mapView, from: view, to: newView)
             updateUserTracking(on: mapView, from: view, to: newView)
+            
+            mapView.layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: newView.bottomInset, right: 0)
 
             if let key = context.environment.mapKey {
                 MapRegistry[key] = mapView

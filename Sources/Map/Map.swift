@@ -35,6 +35,8 @@ public struct Map<AnnotationItems: RandomAccessCollection, OverlayItems: RandomA
 
     let overlayItems: OverlayItems
     let overlayContent: (OverlayItems.Element) -> MapOverlay
+    
+    var bottomInset: CGFloat = 0.0
 
 }
 
