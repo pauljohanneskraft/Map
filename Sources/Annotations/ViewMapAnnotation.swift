@@ -42,6 +42,8 @@ public struct ViewMapAnnotation<Content: View>: MapAnnotation {
 
     public let annotation: MKAnnotation
     let clusteringIdentifier: String?
+    let displayPriority: MKFeatureDisplayPriority
+    let collisionMode: MKAnnotationView.CollisionMode
     let content: Content
 
     // MARK: Initialization
@@ -51,20 +53,28 @@ public struct ViewMapAnnotation<Content: View>: MapAnnotation {
         title: String? = nil,
         subtitle: String? = nil,
         clusteringIdentifier: String? = nil,
+        displayPriority: MKFeatureDisplayPriority = .required,
+        collisionMode: MKAnnotationView.CollisionMode = .rectangle,
         @ViewBuilder content: () -> Content
     ) {
         self.annotation = Annotation(coordinate: coordinate, title: title, subtitle: subtitle)
         self.clusteringIdentifier = clusteringIdentifier
+        self.displayPriority = displayPriority
+        self.collisionMode = collisionMode
         self.content = content()
     }
 
     public init(
         annotation: MKAnnotation,
         clusteringIdentifier: String? = nil,
+        displayPriority: MKFeatureDisplayPriority = .required,
+        collisionMode: MKAnnotationView.CollisionMode = .rectangle,
         @ViewBuilder content: () -> Content
     ) {
         self.annotation = annotation
         self.clusteringIdentifier = clusteringIdentifier
+        self.displayPriority = displayPriority
+        self.collisionMode = collisionMode
         self.content = content()
     }
 

@@ -21,6 +21,8 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
     func setup(for mapAnnotation: ViewMapAnnotation<Content>) {
         annotation = mapAnnotation.annotation
         clusteringIdentifier = mapAnnotation.clusteringIdentifier
+        displayPriority = mapAnnotation.displayPriority
+        collisionMode = mapAnnotation.collisionMode
 
         let controller = NativeHostingController(rootView: mapAnnotation.content)
         addSubview(controller.view)
