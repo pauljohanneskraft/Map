@@ -38,11 +38,15 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
         controller.view.backgroundColor = .clear
         #endif
         
+        #if canImport(UIKit)
         if #available(iOS 16, *) {
             anchorPoint = mapAnnotation.anchorPoint.toCGPoint()
         } else {
             centerOffset = mapAnnotation.anchorPoint.toCenterOffset(in: bounds)
         }
+        #else
+        centerOffset = mapAnnotation.anchorPoint.toCenterOffset(in: bounds)
+        #endif
     }
 
     // MARK: Overrides
