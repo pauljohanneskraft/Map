@@ -28,9 +28,11 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
         collisionMode = mapAnnotation.collisionMode
 
         let controller = NativeHostingController(rootView: mapAnnotation.content)
-        addSubview(controller.view)
-        bounds.size = controller.preferredContentSize
         self.controller = controller
+
+        frame.size = controller.view.intrinsicContentSize
+        addSubview(controller.view)
+        controller.view.frame = bounds
         
         if #available(iOS 16, *) {
             anchorPoint = mapAnnotation.anchorPoint
@@ -49,7 +51,7 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
             y: (0.5 - anchorPoint.y) * rect.height
         )
     }
-
+    
 
     // MARK: Overrides
 
@@ -62,7 +64,14 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
             return
         }
 
-        bounds.size = controller.preferredContentSize
+        bounds.size = controller.view.intrinsicContentSize
+        // Setting the frame to zero than immediately back triggers the SwiftUI frame to correctly
+        // follow the hosting view's frame in The map's coordinate space. It seems SwiftUI cannot
+        // correctly hook into the parent view's coordinate updates because MKMapView moves the
+        // MKAnnotationView's around in non-standard ways.
+        controller.view.frame = .zero
+        controller.view.frame = bounds
+
         if #unavailable(iOS 16), let mapAnnotation {
             centerOffset = anchorPointToCenterOffset(mapAnnotation.anchorPoint, in: bounds)
         }
