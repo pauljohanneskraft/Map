@@ -33,6 +33,10 @@ class MKMapAnnotationView<Content: View>: MKAnnotationView {
         frame.size = controller.view.intrinsicContentSize
         addSubview(controller.view)
         controller.view.frame = bounds
+
+        #if canImport(UIKit)
+        controller.view.backgroundColor = .clear
+        #endif
         
         if #available(iOS 16, *) {
             anchorPoint = mapAnnotation.anchorPoint
